@@ -1,5 +1,5 @@
-// 서비스 워커: 최신 귀여운 모찌 루루 캐릭터 적용 버전 v9
-const VERSION = 'v9';
+// 서비스 워커: 음성 멘트 탑재 버전 v11
+const VERSION = 'v11';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 

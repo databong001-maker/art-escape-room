@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>마법 미술 방탈출 ✨</title>
 <meta name="theme-color" content="#FFD1E3">
-<meta name="description" content="마법사 고양이 루루와 함께하는 달콤 미술 방탈출">
+<meta name="description" content="마법사 고양이 루루의 목소리와 함께하는 달콤 미술 방탈출">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -210,7 +210,7 @@ html, body {
   position: relative; overflow: hidden;
 }
 
-/* ================= 귀여운 마법사 고양이 루루 캐릭터 스타일 ================= */
+/* ================= 귀여운 모찌 루루 캐릭터 ================= */
 .lulu-character-stage {
   display: flex; align-items: center; justify-content: center;
   gap: 10px; width: 100%; flex: none;
@@ -219,6 +219,7 @@ html, body {
   width: clamp(70px, 11vh, 96px); height: clamp(70px, 11vh, 96px);
   position: relative; filter: drop-shadow(0 4px 8px rgba(143, 85, 255, 0.25));
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
 }
 .lulu-speech {
   background: #FFF; border: 2.5px solid var(--pink-main);
@@ -233,24 +234,22 @@ html, body {
   border-color: transparent var(--pink-main) transparent transparent;
 }
 
-/* 루루 애니메이션: 평소 (고민 및 살랑살랑) */
 .lulu-svg-wrap.normal { animation: luluBreathe 3s ease-in-out infinite; }
 .lulu-svg-wrap.normal .cat-ear-l { transform-origin: 32px 38px; animation: earTwitch 3.2s infinite; }
 .lulu-svg-wrap.normal .cat-tail { transform-origin: 22px 76px; animation: tailWag 2s ease-in-out infinite; }
 .lulu-svg-wrap.normal .cat-wand { transform-origin: 75px 65px; animation: wandIdle 2.5s ease-in-out infinite; }
 
-/* 루루 애니메이션: 힌트 요정 마법 발동! */
 .lulu-svg-wrap.hinting { animation: luluCast 0.6s ease-in-out infinite alternate; }
 .lulu-svg-wrap.hinting .cat-wand { transform-origin: 75px 65px; animation: wandWave 0.35s ease-in-out infinite alternate; }
 .lulu-svg-wrap.hinting .magic-stars { display: block !important; animation: sparkleSpin 0.7s linear infinite; }
 .lulu-svg-wrap.hinting .cat-eye-open { display: none; }
 .lulu-svg-wrap.hinting .cat-eye-happy { display: block !important; }
 
-/* 루루 애니메이션: 5초 전 위기 (땀 뻘뻘, 허둥지둥) */
 .lulu-svg-wrap.panic { animation: luluPanic 0.25s infinite; }
 .lulu-svg-wrap.panic .cat-sweat { display: block !important; animation: sweatDrop 0.6s infinite; }
+.lulu-svg-wrap.panic .cat-eye-open { display: none; }
+.lulu-svg-wrap.panic .cat-eye-panic { display: block !important; }
 
-/* 루루 애니메이션: 방탈출 성공 댄스 */
 .lulu-svg-wrap.happy { animation: luluVictory 0.5s ease-in-out infinite alternate; }
 .lulu-svg-wrap.happy .cat-crown { display: block !important; }
 .lulu-svg-wrap.happy .cat-eye-open { display: none; }
@@ -299,13 +298,13 @@ html, body {
 
 .q-text {
   font-family: var(--font-text); font-weight: 900;
-  font-size: clamp(18px, 3vh, 30px); line-height: 1.35;
+  font-size: clamp(17px, 2.8vh, 28px); line-height: 1.35;
   color: var(--text-main); margin: 0;
   word-break: keep-all; text-wrap: balance;
 }
 .q-visual {
   font-family: var(--font-magic);
-  font-size: clamp(24px, 4vh, 42px);
+  font-size: clamp(22px, 3.8vh, 38px);
   background: linear-gradient(135deg, #FFF3F8, #F3EBFF);
   border: 3px dashed var(--pink-main);
   padding: clamp(4px, 1vh, 10px) clamp(14px, 2.2vw, 28px);
@@ -341,17 +340,17 @@ html, body {
   cursor: pointer; outline: none;
   padding: 0 clamp(14px, 2vw, 24px);
   display: flex; align-items: center; gap: clamp(10px, 1.5vw, 18px);
-  font-size: clamp(17px, 2.5vh, 25px); font-weight: 700; color: var(--text-main);
+  font-size: clamp(16px, 2.4vh, 24px); font-weight: 700; color: var(--text-main);
   transition: transform .12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .12s, background .12s;
   text-align: left;
 }
 .choice-btn:hover { background: #FFF8FC; transform: translateY(-2px); }
 .choice-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #DEC4E0; }
 .choice-badge {
-  width: clamp(30px, 4.2vh, 40px); height: clamp(30px, 4.2vh, 40px);
+  width: clamp(28px, 3.8vh, 38px); height: clamp(28px, 3.8vh, 38px);
   background: var(--pink-soft); color: var(--pink-main);
   border-radius: 50%; display: grid; place-items: center;
-  font-family: var(--font-magic); font-size: clamp(15px, 2.2vh, 20px);
+  font-family: var(--font-magic); font-size: clamp(14px, 2vh, 19px);
   flex: none;
 }
 
@@ -363,12 +362,12 @@ html, body {
 }
 .result-title {
   font-family: var(--font-magic);
-  font-size: clamp(32px, 5.5vh, 54px);
+  font-size: clamp(30px, 5vh, 50px);
   margin: 0; color: var(--pink-dark);
   text-shadow: 0 3px 0 #FFF;
 }
 .result-desc {
-  font-size: clamp(16px, 2.3vh, 22px); font-weight: 700;
+  font-size: clamp(15px, 2.2vh, 21px); font-weight: 700;
   margin: 0; color: var(--text-sub);
 }
 .result-btns {
@@ -376,8 +375,8 @@ html, body {
 }
 .action-btn {
   font-family: var(--font-magic);
-  font-size: clamp(19px, 2.6vh, 26px);
-  padding: clamp(12px, 1.8vh, 16px) clamp(26px, 3.6vw, 40px);
+  font-size: clamp(18px, 2.5vh, 25px);
+  padding: clamp(12px, 1.8vh, 16px) clamp(24px, 3.5vw, 38px);
   border-radius: 999px; border: none; cursor: pointer; outline: none;
   transition: transform .12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .12s;
 }
@@ -398,7 +397,7 @@ html, body {
 }
 
 @media (max-aspect-ratio: 1/1) {
-  .quiz-body { grid-template-columns: 1fr; grid-template-rows: 1.1fr 1.3fr; gap: 10px; }
+  .quiz-body { grid-template-columns: 1fr; grid-template-rows: 1.1fr 1.3fr; gap: 8px; }
   .cards-age { grid-template-columns: repeat(2, 1fr); }
   .cards-level { grid-template-columns: repeat(3, 1fr); }
   .lulu-character-stage { justify-content: center; }
@@ -411,8 +410,9 @@ html, body {
 <main id="app"></main>
 
 <script>
+/* 120개 기존 미술 퀴즈 + 할로윈 단서 암호 퀴즈 전 문항 보존 */
 const QUIZ_DATABASE = [
-  // [0] 5–7세
+  // [0] 5–7세 (유아)
   {
     하: [
       { q: "빨강 물감과 노랑 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + 🟡 = ?", a: "🟠 주황", w: ["🟢 초록", "🟣 보라"], hint: "새콤달콤 맛있는 오렌지와 당근 색깔이에요!" },
@@ -424,7 +424,10 @@ const QUIZ_DATABASE = [
       { q: "맛있는 토마토는 무슨 색일까요?", v: "🍅", a: "🔴 빨강", w: ["🟣 보라", "🟤 갈색"], hint: "사과와 딸기처럼 예쁘고 정열적인 색깔이에요." },
       { q: "뾰족뾰족한 꼭짓점이 3개 있는 모양은?", v: "📐", a: "🔺 세모", w: ["🔵 동그라미", "🟦 네모"], hint: "맛있는 피자 한 조각이나 고깔모자 모양이에요." },
       { q: "멋진 그림을 그리는 예술가 선생님을 무엇이라 할까요?", v: "🖼️", a: "🧑‍🎨 화가", w: ["🧑‍🍳 요리사", "🧑‍🚒 소방관"], hint: "붓과 팔레트를 들고 그림을 창작하는 분이에요." },
-      { q: "하늘에서 살랑살랑 내리는 하얀 눈은 무슨 색일까요?", v: "❄️", a: "⚪ 하양", w: ["🟣 보라", "🟤 갈색"], hint: "우유나 백설공주 옷처럼 깨끗한 색이에요." }
+      { q: "하늘에서 살랑살랑 내리는 하얀 눈은 무슨 색일까요?", v: "❄️", a: "⚪ 하양", w: ["🟣 보라", "🟤 갈색"], hint: "우유나 백설공주 옷처럼 깨끗한 색이에요." },
+      { q: "호박 마녀의 잭오랜턴! 뾰족한 눈 모양은 무엇일까요?", v: "🎃", a: "🔺 세모", w: ["🔵 동그라미", "🟦 네모"], hint: "꼭짓점이 세 개인 모양으로 조각되어 있어요!" },
+      { q: "마녀의 고양이는 다리가 모두 몇 개일까요?", v: "🐱", a: "4개", w: ["2개", "6개"], hint: "앞다리 2개, 뒷다리 2개를 더해보세요!" },
+      { q: "하늘을 훨훨 나는 마녀의 빗자루는 몇 개일까요?", v: "🧹", a: "1개", w: ["2개", "3개"], hint: "마녀가 타고 날아가는 신비한 빗자루 1자루예요!" }
     ],
     중: [
       { q: "파랑 물감과 노랑 물감을 섞으면 무슨 색이 될까요?", v: "🔵 + 🟡 = ?", a: "🟢 초록", w: ["🟠 주황", "🟣 보라"], hint: "푸릇푸릇 싱그러운 나뭇잎과 잔디밭 색깔이에요." },
@@ -436,7 +439,10 @@ const QUIZ_DATABASE = [
       { q: "물감의 기본 3가지 색! 빈칸에 들어갈 색은?", v: "🔴 🔵 ( )", a: "🟡 노랑", w: ["🟢 초록", "🟣 보라"], hint: "빨강, 파랑과 함께 색의 삼원색을 이루는 밝은 색이에요." },
       { q: "빨강 물감에 하양 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + ⚪ = ?", a: "🌸 분홍", w: ["🟢 초록", "⚫ 검정"], hint: "예쁜 벚꽃 잎이나 복숭아 같은 사랑스러운 색이에요." },
       { q: "검정 물감에 하양 물감을 섞으면 무슨 색이 될까요?", v: "⚫ + ⚪ = ?", a: "🐘 회색", w: ["🌸 분홍", "🟢 초록"], hint: "멋진 코끼리와 구름 낀 하늘의 은은한 색이에요." },
-      { q: "멋진 그림과 조각을 구경하러 가는 장소는?", v: "🖼️", a: "🏛️ 미술관", w: ["🏥 병원", "🚒 소방서"], hint: "아름다운 예술 작품들이 벽에 전시되어 있는 곳이에요." }
+      { q: "멋진 그림과 조각을 구경하러 가는 장소는?", v: "🖼️", a: "🏛️ 미술관", w: ["🏥 병원", "🚒 소방서"], hint: "아름다운 예술 작품들이 벽에 전시되어 있는 곳이에요." },
+      { q: "거미줄에 매달린 거미의 다리는 모두 몇 개일까요?", v: "🕷️", a: "8개", w: ["6개", "4개"], hint: "왼쪽에 4개, 오른쪽에 4개가 달려 있어요!" },
+      { q: "할로윈 밤, 동굴에 거꾸로 매달려 잠자는 날개 달린 동물은?", v: "🦇", a: "박쥐", w: ["호랑이", "코끼리"], hint: "거울 주문 속 비밀 친구! 밤에 날아다녀요." },
+      { q: "빨강 물약과 파랑 물약을 섞으면 나오는 마법 포션 색은?", v: "🧪 🔴 + 🔵 = ?", a: "🟣 보라 물약", w: ["🟢 초록 물약", "🟠 주황 물약"], hint: "마녀의 비밀 레시피 1번! 신비로운 포도색이에요." }
     ],
     상: [
       { q: "무지개에서 빨강 다음에 오는 두 번째 색은?", v: "🔴 → ( )", a: "🟠 주황", w: ["🟡 노랑", "🟢 초록"], hint: "'빨-주-노-초-파-남-보' 노래를 떠올려 보세요!" },
@@ -448,10 +454,13 @@ const QUIZ_DATABASE = [
       { q: "물감을 짜서 섞는 평평한 나무나 플라스틱 판은?", v: "🎨", a: "🎨 팔레트", w: ["🍽️ 쟁반", "🎒 가방"], hint: "가운데 엄지손가락을 끼우고 물감을 섞는 판이에요." },
       { q: "찰흙을 빚어 뜨거운 불에 구워 만든 전통 그릇은?", v: "🏺", a: "🏺 도자기", w: ["🍞 빵", "🧸 인형"], hint: "박물관에 가면 볼 수 있는 단단하고 고운 그릇이에요." },
       { q: "내 그림자가 생기려면 꼭 필요한 것은 무엇일까요?", v: "🧍", a: "💡 빛", w: ["🌧️ 비", "🍎 사과"], hint: "햇빛이나 전등불이 내 몸에 닿아야 그림자가 생겨요." },
-      { q: "모닥불처럼 따뜻한 느낌을 주는 색은 어느 것일까요?", v: "🔥", a: "🔴 빨강", w: ["🔵 파랑", "🟦 남색"], hint: "불꽃이나 태양처럼 활활 타오르는 색이에요." }
+      { q: "모닥불처럼 따뜻한 느낌을 주는 색은 어느 것일까요?", v: "🔥", a: "🔴 빨강", w: ["🔵 파랑", "🟦 남색"], hint: "불꽃이나 태양처럼 활활 타오르는 색이에요." },
+      { q: "호박 얼굴 조각! 세모 3개, 네모 3개, 별 5개를 합친 비밀 암호는?", v: "🎃 세모(3) 네모(3) 별(5)", a: "335", w: ["353", "533", "333"], hint: "차례대로 숫자를 나란히 적어보세요: 3 - 3 - 5" },
+      { q: "사람의 한 손가락 수(5)와 고양이의 다리 수(4)를 합치면?", v: "🖐️(5) + 🐱(4) = ?", a: "9", w: ["8", "10", "7"], hint: "5에 4를 손가락으로 더 세어보세요!" },
+      { q: "마녀의 화살표 암호! ↑ 다음에 → 가 왔어요. 다음 방향은?", v: "↑ → ( ) ←", a: "↓ (아래)", w: ["↑ (위)", "← (왼쪽)", "↗ (대각선)"], hint: "위 → 오른쪽 → 아래 → 왼쪽 순서로 돌아가요!" }
     ]
   },
-  // [1] 초 1–2학년
+  // [1] 초 1–2학년 (저학년)
   {
     하: [
       { q: "팔레트에 물감이 7개 있었는데 5개를 더 샀어요. 모두 몇 개일까요?", v: "🎨 7 + 5 = ?", a: "12개", w: ["11개", "13개", "10개"], hint: "7에 3을 더하면 10이 되고, 남은 2를 더해보세요!" },
@@ -463,7 +472,10 @@ const QUIZ_DATABASE = [
       { q: "노랑 물감과 파랑 물감을 섞으면 무슨 색이 될까요?", v: "🟡 + 🔵 = ?", a: "초록", w: ["보라", "주황", "분홍"], hint: "새싹과 풀잎처럼 푸른 자연의 색이에요." },
       { q: "멋진 그림이나 조각을 감상하러 가는 전시장소는?", v: "🖼️", a: "미술관", w: ["도서관", "우체국", "수영장"], hint: "아름다운 예술품이 걸려 있는 갤러리예요." },
       { q: "물감 묻은 붓을 깨끗이 씻을 때 꼭 필요한 것은?", v: "🖌️", a: "물", w: ["모래", "불", "연필"], hint: "물통에 담아 첨벙첨벙 흔들어 씻어내요." },
-      { q: "물감이 10개 있었는데 4개를 다 썼어요. 남은 물감은?", v: "🎨 10 − 4 = ?", a: "6개", w: ["5개", "7개", "4개"], hint: "10에서 4를 거꾸로 세어보세요!" }
+      { q: "물감이 10개 있었는데 4개를 다 썼어요. 남은 물감은?", v: "🎨 10 − 4 = ?", a: "6개", w: ["5개", "7개", "4개"], hint: "10에서 4를 거꾸로 세어보세요!" },
+      { q: "마녀의 포션! 파랑 물감과 노랑 물감을 섞어 만든 초록 포션의 번호는?", v: "🧪 🔵 + 🟡 = 🟢 (선반)", a: "초록색", w: ["보라색", "주황색", "검은색"], hint: "자연의 나뭇잎을 닮은 색상이에요!" },
+      { q: "거울에 거꾸로 비친 글자를 바르게 읽는 도구는?", v: "🪞", a: "손거울", w: ["돋보기", "지우개", "자"], hint: "빛의 반사를 이용해 반전된 글자를 똑바로 읽을 수 있어요." },
+      { q: "할로윈 데이는 매년 10월 며칠일까요? (박쥐 날짜 카드)", v: "🎃 10월 ( )일", a: "31일", w: ["15일", "25일", "1일"], hint: "10월의 가장 마지막 날이에요!" }
     ],
     중: [
       { q: "크레파스 12개를 두 친구가 똑같이 나누면 한 명당 몇 개일까요?", v: "🖍️ 12 ÷ 2 = ?", a: "6개", w: ["5개", "4개", "7개"], hint: "6 더하기 6은 12가 된답니다." },
@@ -475,7 +487,10 @@ const QUIZ_DATABASE = [
       { q: "물감 통마다 색이 2개씩 있어요. 3통이면 색은 모두 몇 개?", v: "🎨 2 × 3 = ?", a: "6개", w: ["5개", "8개", "4개"], hint: "2를 3번 더해보세요 (2 + 2 + 2)." },
       { q: "혼자만 색깔 계열이 다른 과일 하나는?", v: "🍎 🍓 🍅 🍌", a: "🍌 바나나", w: ["🍎 사과", "🍓 딸기", "🍅 토마토"], hint: "나머지 셋은 빨간색이지만, 이 과일은 노란색이에요." },
       { q: "색종이가 20장 있어요. 8장을 썼다면 남은 종이는?", v: "📄 20 − 8 = ?", a: "12장", w: ["10장", "13장", "28장"], hint: "20에서 8을 쏙 빼면 10과 2가 남아요." },
-      { q: "하얀 물감에 검정 물감을 조금 섞으면 만들어지는 색은?", v: "⚪ + ⚫ = ?", a: "회색", w: ["노랑", "빨강", "보라"], hint: "비둘기 깃털이나 먹구름 같은 차분한 중간색이에요." }
+      { q: "하얀 물감에 검정 물감을 조금 섞으면 만들어지는 색은?", v: "⚪ + ⚫ = ?", a: "회색", w: ["노랑", "빨강", "보라"], hint: "비둘기 깃털이나 먹구름 같은 차분한 중간색이에요." },
+      { q: "몬스터 연산 암호! [거미 다리(8)] + [고양이 다리(4)]의 합은?", v: "🕷️(8) + 🐱(4) = ?", a: "12", w: ["11", "13", "14"], hint: "8에 4를 더해보세요!" },
+      { q: "마녀의 포션 번호 4자리! 보라(7), 주황(4), 초록(2), 끝자리(1) 비밀번호는?", v: "🧪 7 - 4 - 2 - 1", a: "7421", w: ["7241", "4721", "7412"], hint: "네 숫자를 차례대로 이어서 누르면 서랍이 열려요!" },
+      { q: "호박 조각 암호! 세모 눈 3개와 별 입 5개의 차이(뺄셈)는?", v: "⭐(5) − 🔺(3) = ?", a: "2", w: ["1", "3", "8"], hint: "5에서 3을 빼보세요." }
     ],
     상: [
       { q: "빛나는 〈해바라기〉 명화를 그린 네덜란드의 대표 화가는?", v: "🌻", a: "빈센트 반 고흐", w: ["클로드 모네", "파블로 피카소", "레오나르도 다 빈치"], hint: "자신의 귀를 다치기도 했던 열정적인 후기 인상주의 화가예요." },
@@ -487,10 +502,13 @@ const QUIZ_DATABASE = [
       { q: "연필 끝으로 쭉 길게 그어 나타낸 조형 요소는?", v: "✏️ ───────", a: "선", w: ["점", "면", "원"], hint: "점이 연속해서 이어져 나아가는 길이에요." },
       { q: "화가들이 캔버스를 세워놓고 그릴 수 있게 받쳐주는 받침대는?", a: "이젤", w: ["접시", "신발", "우산"], hint: "나무나 쇠로 된 삼각대 모양의 미술 도구예요." },
       { q: "잡지나 색종이를 오려 붙여 화면을 구성하는 미술 기법은?", v: "✂️ + 🧴", a: "콜라주", w: ["판화", "조각", "소묘"], hint: "'풀로 붙이다'라는 뜻의 프랑스어에서 유래했어요." },
-      { q: "물감이 6개 있었는데 문구점에서 7개를 더 샀어요. 총합은?", v: "🎨 6 + 7 = ?", a: "13개", w: ["12개", "14개", "11개"], hint: "6과 6을 더하면 12인데, 거기에 1이 더 많아요." }
+      { q: "물감이 6개 있었는데 문구점에서 7개를 더 샀어요. 총합은?", v: "🎨 6 + 7 = ?", a: "13개", w: ["12개", "14개", "11개"], hint: "6과 6을 더하면 12인데, 거기에 1이 더 많아요." },
+      { q: "몬스터 신체 암호 4자리! 거미(8), 고양이(4), 한손가락(5), 빗자루(1) 비밀번호는?", v: "🕷️ 🐱 🖐️ 🧹", a: "8451", w: ["8415", "8541", "4851"], hint: "각 동물의 다리와 손가락, 빗자루 수를 순서대로 나열하세요." },
+      { q: "2장의 투명 OHP 거미줄 필름을 빨간 점(★)에 맞춰 겹쳤을 때 열리는 최종 탈출 방향은?", v: "🕸️ 마법 거미줄 필름", a: "↑ → ↓ ←", w: ["↓ ↑ ← →", "→ ← ↑ ↓", "← ↑ → ↓"], hint: "위(상) → 오른쪽(우) → 아래(하) → 왼쪽(좌) 시계 방향이에요!" },
+      { q: "거울에 비친 마법 글자 'IƐ0I'를 뒤집어 읽은 진짜 날짜 암호는?", v: "🪞 IƐ0I", a: "1031", w: ["1301", "1013", "3101"], hint: "10월 31일 할로윈 데이 날짜를 나타내요!" }
     ]
   },
-  // [2] 초 3–4학년
+  // [2] 초 3–4학년 (중학년)
   {
     하: [
       { q: "신비한 미소의 〈모나리자〉를 그린 르네상스 천재 예술가는?", a: "레오나르도 다 빈치", w: ["빈센트 반 고흐", "클로드 모네", "파블로 피카소"], hint: "이탈리아의 화가이자 과학자였던 만능 천재예요." },
@@ -502,7 +520,9 @@ const QUIZ_DATABASE = [
       { q: "물감을 짜서 농도를 조절하고 섞는 전용 판의 이름은?", v: "🎨", a: "팔레트", w: ["캔버스", "이젤", "붓"], hint: "화가들이 손가락을 쏙 끼우고 들고 있는 판이에요." },
       { q: "손으로 빚어서 입체적인 조각품을 만드는 찰진 흙은?", a: "찰흙(점토)", w: ["바람", "노래", "그림자"], hint: "부드럽고 끈기가 있어 조소나 도예에 써요." },
       { q: "초록색 물감을 만들려면 노랑에 어떤 색을 섞어야 할까요?", v: "🟡 + ( ) = 🟢", a: "파랑", w: ["빨강", "보라", "하양"], hint: "차가운 파란색 물감을 톡 떨어뜨려 섞어보세요." },
-      { q: "물에 물감을 풀어 맑고 투명한 느낌을 살리는 그림은?", a: "수채화", w: ["판화", "조각", "사진"], hint: "물의 양을 조절해서 농담을 표현하는 맑은 그림이에요." }
+      { q: "물에 물감을 풀어 맑고 투명한 느낌을 살리는 그림은?", a: "수채화", w: ["판화", "조각", "사진"], hint: "물의 양을 조절해서 농담을 표현하는 맑은 그림이에요." },
+      { q: "투명 필름에 유성펜으로 그림을 그려 겹쳐서 보는 마법 도구는?", v: "🎞️", a: "OHP 필름", w: ["골판지", "한지", "은박지"], hint: "빛이나 배경이 투과되는 투명한 플라스틱 필름이에요." },
+      { q: "마녀의 실험실에서 '빨강+파랑', '빨강+노랑', '파랑+노랑'으로 만든 3가지 2차색은?", a: "보라, 주황, 초록", w: ["검정, 회색, 갈색", "분홍, 하늘, 연두", "남색, 자주, 옥색"], hint: "원색 두 개를 1:1로 섞어 만든 세 가지 간색(2차색)이에요." }
     ],
     중: [
       { q: "무지개 색 순서의 빈칸에 알맞은 색은?", v: "빨강 주황 노랑 초록 파랑 ( ) 보라", a: "남색", w: ["하양", "분홍", "갈색"], hint: "파랑과 보라 사이의 짙은 밤하늘 같은 색이에요." },
@@ -514,7 +534,9 @@ const QUIZ_DATABASE = [
       { q: "벽에 소와 사슴이 생생하게 그려진 알타미라 동굴 벽화의 시대는?", a: "선사 시대", w: ["조선 시대", "현대", "르네상스"], hint: "아주아주 먼 옛날, 수렵과 채집을 하던 구석기 시대예요." },
       { q: "연필이나 숯(목탄)의 선과 명암만으로 대상을 정밀하게 그리는 것은?", a: "소묘(데생)", w: ["판화", "수채화", "자수"], hint: "형태감과 입체감을 기르는 미술의 기본 훈련이에요." },
       { q: "한 변이 4cm인 정삼각형의 둘레 길이는 모두 몇 cm일까요?", v: "🔺 4 + 4 + 4 = ?", a: "12cm", w: ["8cm", "16cm", "4cm"], hint: "길이가 같은 3개의 변을 곱해보세요 (4 × 3)." },
-      { q: "잡지, 사진, 신문 등 다양한 재료를 찢어 붙여 완성하는 기법은?", a: "콜라주", w: ["드리핑", "점묘법", "모자이크"], hint: "붙이기 기법을 통해 독특한 질감을 연출해요." }
+      { q: "잡지, 사진, 신문 등 다양한 재료를 찢어 붙여 완성하는 기법은?", a: "콜라주", w: ["드리핑", "점묘법", "모자이크"], hint: "붙이기 기법을 통해 독특한 질감을 연출해요." },
+      { q: "마녀의 실험실에 거미가 2마리, 고양이가 3마리 있어요. 다리는 총 몇 개?", v: "(8 × 2) + (4 × 3) = ?", a: "28개", w: ["24개", "30개", "26개"], hint: "거미 다리 16개 + 고양이 다리 12개를 합해보세요!" },
+      { q: "거울을 비추었을 때 좌우가 뒤집혀 보이는 대칭 현상을 미술에서 무엇이라 할까요?", a: "선대칭(거울 반전)", w: ["점대칭", "원근법", "여백의 미"], hint: "거울면을 기준으로 좌우가 서로 마주 보며 반전되는 대칭이에요." }
     ],
     상: [
       { q: "다리 위에서 귀를 막고 비명을 지르는 〈절규〉를 그린 노르웨이 화가는?", a: "에드바르 뭉크", w: ["빈센트 반 고흐", "폴 고갱", "살바도르 달리"], hint: "인간의 불안과 공포를 강렬한 색채로 표현한 표현주의 화가예요." },
@@ -526,10 +548,11 @@ const QUIZ_DATABASE = [
       { q: "색상환에서 서로 정반대 맞은편에 마주 보고 있는 짝꿍 색을 무엇이라 할까요?", a: "보색", w: ["유사색", "동일색", "원색"], hint: "함께 두면 서로를 가장 또렷하게 돋보이게 해주는 색이에요." },
       { q: "〈모나리자〉를 그린 레오나르도 다 빈치는 어느 나라 출신일까요?", a: "이탈리아", w: ["프랑스", "스페인", "네덜란드"], hint: "로마와 피렌체, 베네치아가 있는 지중해 나라예요." },
       { q: "색의 3원색 개수(3)와 무지개 색 개수(7)를 더한 숫자는?", v: "3 + 7 = ?", a: "10", w: ["9", "11", "12"], hint: "손가락 열 개를 모두 펴보세요!" },
-      { q: "먹의 짙고 옅은 농담으로 산과 강을 그린 우리나라 전통 산수 풍경화는?", a: "산수화", w: ["인물화", "풍속화", "추상화"], hint: "뫼 산(山)과 물 수(水)가 어우러진 그림이에요." }
+      { q: "먹의 짙고 옅은 농담으로 산과 강을 그린 우리나라 전통 산수 풍경화는?", a: "산수화", w: ["인물화", "풍속화", "추상화"], hint: "뫼 산(山)과 물 수(水)가 어우러진 그림이에요." },
+      { q: "마녀의 방향 자물쇠 암호(↑ → ↓ ←)는 360도를 몇 도씩 회전한 것일까요?", a: "90도씩 시계방향 회전", w: ["45도 회전", "180도 반전", "60도 회전"], hint: "직각 90도씩 오른쪽으로 돌아가는 원리예요!" }
     ]
   },
-  // [3] 초 5–6학년
+  // [3] 초 5–6학년 (고학년)
   {
     하: [
       { q: "소용돌이치는 밤하늘의 〈별이 빛나는 밤〉을 그린 화가는?", a: "빈센트 반 고흐", w: ["클로드 모네", "파블로 피카소", "살바도르 달리"], hint: "사이프러스 나무와 노란 별빛을 역동적으로 그린 후기 인상파 화가예요." },
@@ -541,7 +564,8 @@ const QUIZ_DATABASE = [
       { q: "돌, 나무, 점토 등을 깎거나 빚어서 3차원 입체 조형을 만드는 분야는?", a: "조각(소조)", w: ["판화", "소묘", "디자인"], hint: "평면이 아니라 사방에서 만질 수 있는 입체 미술이에요." },
       { q: "다른 어떤 색을 조합해도 만들 수 없는 순수하고 근본적인 원색은?", a: "1차색(원색)", w: ["보색", "무채색", "파스텔색"], hint: "모든 색의 출발점이 되는 색이에요." },
       { q: "물감이 한 튜브에 25ml씩 들어 있어요. 4통의 총용량은 몇 ml일까요?", v: "25 × 4 = ?", a: "100ml", w: ["90ml", "75ml", "125ml"], hint: "25를 두 번 더하면 50, 네 번 더하면?" },
-      { q: "유화나 아크릴 그림을 그리기 위해 틀에 팽팽하게 당겨 맨 두꺼운 천은?", a: "캔버스", w: ["모시", "실크스카프", "손수건"], hint: "린넨이나 면포로 만든 서양화 전용 바탕재예요." }
+      { q: "유화나 아크릴 그림을 그리기 위해 틀에 팽팽하게 당겨 맨 두꺼운 천은?", a: "캔버스", w: ["모시", "실크스카프", "손수건"], hint: "린넨이나 면포로 만든 서양화 전용 바탕재예요." },
+      { q: "미술에서 서로 다른 두 장의 투명 필름이나 이미지를 겹쳐 새로운 형상을 만드는 기법은?", a: "오버레이(중첩)", w: ["모자이크", "데칼코마니", "프로타주"], hint: "레이어를 포개어 하나의 완성된 이미지를 만드는 기법이에요." }
     ],
     중: [
       { q: "비 온 뒤 웅장한 바위산의 안개를 그린 〈인왕제색도〉의 조선 화가는?", a: "겸재 정선", w: ["단원 김홍도", "혜원 신윤복", "현동자 안견"], hint: "우리나라 산천을 직접 보고 그린 '진경산수화'의 대가예요." },
@@ -553,7 +577,8 @@ const QUIZ_DATABASE = [
       { q: "실제 사물의 구체적인 형태 대신 선, 색, 면 등의 순수 조형으로 감정을 나타낸 그림은?", a: "추상화", w: ["정밀묘사", "인물초상", "기록화"], hint: "칸딘스키와 몬드리안이 개척한 비구상 미술이에요." },
       { q: "버드나무 가지를 태워 만들어 부드럽고 깊은 흑백 농담을 표현하는 소묘 재료는?", a: "목탄", w: ["분필", "색연필", "크레용"], hint: "나무를 숯처럼 구워 만든 미술 전용 숯가루 막대예요." },
       { q: "수채화 물감 600ml를 3개의 팔레트에 똑같이 나누어 담으면 한 곳당 몇 ml?", v: "600 ÷ 3 = ?", a: "200ml", w: ["300ml", "150ml", "100ml"], hint: "6을 3으로 나눈 뒤 00을 붙여주세요." },
-      { q: "성형한 도자기나 점토를 1,000도 이상의 높은 고열로 구워내는 가열 장치는?", a: "가마", w: ["난로", "전자레인지", "이젤"], hint: "도예 공방이나 민속촌에 있는 전통 소성 설비예요." }
+      { q: "성형한 도자기나 점토를 1,000도 이상의 높은 고열로 구워내는 가열 장치는?", a: "가마", w: ["난로", "전자레인지", "이젤"], hint: "도예 공방이나 민속촌에 있는 전통 소성 설비예요." },
+      { q: "할로윈 암호 연산! [거미 다리수(8) × 고양이 다리수(4)] − [손가락수(5) × 빗자루(1)] = ?", v: "(8 × 4) − (5 × 1) = ?", a: "27", w: ["25", "29", "32"], hint: "32에서 5를 빼보세요!" }
     ],
     상: [
       { q: "논리 추리! 세 화가 A, B, C가 〈수련〉, 〈해바라기〉, 〈별이 빛나는 밤〉을 그렸어요. A는 〈해바라기〉와 〈별밤〉을 안 그렸고, C는 〈별밤〉을 안 그렸어요. 그럼 B가 그린 작품은?", a: "〈별이 빛나는 밤〉", w: ["〈수련〉", "〈해바라기〉"], hint: "A는 〈수련〉 확정! 그럼 남은 두 작품 중 C가 별밤을 안 그렸으니 별밤을 그린 사람은?" },
@@ -565,7 +590,8 @@ const QUIZ_DATABASE = [
       { q: "사물을 한 시점에서만 보지 않고 여러 시점을 한 화면에 입체적으로 재구성한 미술 사조는?", a: "입체주의(큐비즘)", w: ["초현실주의", "팝아트", "인상주의"], hint: "피카소와 브라크가 이끈 20세기 혁신적 미술 양식이에요." },
       { q: "캠벨 수프 통조림, 마릴린 먼로 등 대중문화와 소비사회의 이미지를 예술로 승화시킨 미술은?", a: "팝아트(Pop Art)", w: ["미니멀리즘", "행위예술", "다다이즘"], hint: "앤디 워홀과 로이 리히텐슈타인이 대표하는 대중 예술이에요." },
       { q: "암호 해독! 알파벳을 사전 순서로 한 글자씩 앞으로 당겨 원래 단어를 맞춰보세요: QBJOU", v: "Q(-1) B(-1) J(-1) O(-1) U(-1)", a: "PAINT", w: ["POINT", "PRINT", "PLANT"], hint: "Q 앞은 P, B 앞은 A, J 앞은 I 입니다!" },
-      { q: "물감 한 개에 2,500원이에요. 7개를 사고 20,000원을 냈다면 받게 될 거스름돈은 얼마?", v: "20,000 − (2,500 × 7) = ?", a: "2,500원", w: ["3,500원", "1,500원", "5,000원"], hint: "2,500 × 7 = 17,500원입니다. 2만 원에서 빼보세요!" }
+      { q: "물감 한 개에 2,500원이에요. 7개를 사고 20,000원을 냈다면 받게 될 거스름돈은 얼마?", v: "20,000 − (2,500 × 7) = ?", a: "2,500원", w: ["3,500원", "1,500원", "5,000원"], hint: "2,500 × 7 = 17,500원입니다. 2만 원에서 빼보세요!" },
+      { q: "레오나르도 다 빈치가 노트에 남긴, 거울에 비춰야만 바로 읽을 수 있는 독특한 필기법은?", a: "거울 글씨(경면 문자)", w: ["점자", "상형 문자", "설형 문자"], hint: "오른쪽에서 왼쪽으로 반전시켜 적어 비밀을 유지했던 암호 필기법이에요." }
     ]
   }
 ];
@@ -590,6 +616,20 @@ function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
+}
+
+/* ================= 📢 고양이 루루의 귀여운 음성 멘트 (Web Speech API) ================= */
+function speakLulu(text) {
+  if (!soundEnabled || !('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel(); // 이전 음성 정지
+    const cleanText = text.replace(/<[^>]*>/g, '').replace(/[🔴🟡🔵🟢🟣🟠⚫⚪🐘🌸💡✨🪄🐱]/g, '');
+    const utter = new SpeechSynthesisUtterance(cleanText);
+    utter.lang = 'ko-KR';
+    utter.pitch = 1.35; // 루루의 귀엽고 앙증맞은 하이톤
+    utter.rate = 1.05;  // 쾌활하고 발랄한 속도
+    window.speechSynthesis.speak(utter);
+  } catch(e) {}
 }
 
 function playSound(type) {
@@ -754,58 +794,46 @@ function getLuluSvg(mode = 'normal') {
       </radialGradient>
     </defs>
 
-    <!-- 통통하고 보들보들한 꼬리 -->
     <path class="cat-tail" d="M22 78 C8 78 8 62 16 58 C22 55 26 65 24 74" fill="none" stroke="#FFCEB8" stroke-width="7" stroke-linecap="round"/>
     <path class="cat-tail" d="M16 58 C18 55 22 57 23 60" fill="none" stroke="#FFAE8C" stroke-width="6" stroke-linecap="round"/>
 
-    <!-- 몸통 (모찌 체형) -->
     <ellipse cx="50" cy="76" rx="25" ry="18" fill="#FFF7F2"/>
     <ellipse cx="50" cy="78" rx="17" ry="12" fill="#FFEAE0"/>
 
-    <!-- 마법 케이프 (핑크빛 리본 망토) -->
     <path d="M28 66 C42 75 58 75 72 66 L68 83 C50 89 50 89 32 83 Z" fill="url(#luluCapeGrad)"/>
     <circle cx="50" cy="69" r="4" fill="#FFDC49" stroke="#FFF" stroke-width="1.2"/>
 
-    <!-- 발 (솜방망이) -->
     <ellipse cx="38" cy="88" rx="6" ry="4" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.2"/>
     <ellipse cx="62" cy="88" rx="6" ry="4" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.2"/>
 
-    <!-- 귀 (양쪽) -->
     <path class="cat-ear-l" d="M26 38 L34 16 C39 26 42 32 44 36 Z" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.5"/>
     <path class="cat-ear-l" d="M29 35 L35 22 C38 28 40 32 41 34 Z" fill="#FFABC1"/>
     <path class="cat-ear-r" d="M74 38 L66 16 C61 26 58 32 56 36 Z" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.5"/>
     <path class="cat-ear-r" d="M71 35 L65 22 C62 28 60 32 59 34 Z" fill="#FFABC1"/>
 
-    <!-- 동글동글 사랑스러운 얼굴 -->
     <ellipse cx="50" cy="48" rx="26" ry="23" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.5"/>
 
-    <!-- 핑크 볼터치 (사랑스러움 강조) -->
     <ellipse cx="33" cy="55" rx="6.5" ry="4" fill="url(#blushGlow)"/>
     <ellipse cx="67" cy="55" rx="6.5" ry="4" fill="url(#blushGlow)"/>
     <text x="31" y="56" font-size="6" fill="#FF4E8E" opacity="0.8">♥</text>
     <text x="65" y="56" font-size="6" fill="#FF4E8E" opacity="0.8">♥</text>
 
-    <!-- [눈 1] 평소 만화 눈 (초롱초롱 보석 하이라이트) -->
     <g class="cat-eye-open">
       <ellipse cx="38" cy="47" rx="4.5" ry="5.8" fill="#321D38"/>
       <ellipse cx="62" cy="47" rx="4.5" ry="5.8" fill="#321D38"/>
-      <!-- 반짝이 하이라이트 -->
       <circle cx="39.5" cy="45" r="2.2" fill="#FFFFFF"/>
       <circle cx="36.5" cy="49.5" r="1.1" fill="#FFFFFF"/>
       <circle cx="63.5" cy="45" r="2.2" fill="#FFFFFF"/>
       <circle cx="60.5" cy="49.5" r="1.1" fill="#FFFFFF"/>
-      <!-- 속눈썹 -->
       <path d="M34 43 Q38 40 42 43" fill="none" stroke="#321D38" stroke-width="1.5" stroke-linecap="round"/>
       <path d="M58 43 Q62 40 66 43" fill="none" stroke="#321D38" stroke-width="1.5" stroke-linecap="round"/>
     </g>
 
-    <!-- [눈 2] 마법/기쁠 때 반달 웃음 눈 -->
     <g class="cat-eye-happy" style="display:none;">
       <path d="M33 48 Q38 41 43 48" fill="none" stroke="#321D38" stroke-width="3" stroke-linecap="round"/>
       <path d="M57 48 Q62 41 67 48" fill="none" stroke="#321D38" stroke-width="3" stroke-linecap="round"/>
     </g>
 
-    <!-- [눈 3] 위기/놀람 동공지진 눈 -->
     <g class="cat-eye-panic" style="display:none;">
       <circle cx="38" cy="47" r="5" fill="#FFF" stroke="#321D38" stroke-width="1.8"/>
       <circle cx="38" cy="47" r="2.2" fill="#321D38"/>
@@ -815,22 +843,18 @@ function getLuluSvg(mode = 'normal') {
       <path d="M67 40 L58 42" stroke="#321D38" stroke-width="1.6" stroke-linecap="round"/>
     </g>
 
-    <!-- 핑크빛 앙증맞은 코 & 토끼 고양이 입 (ω) -->
     <polygon points="48.5,52 51.5,52 50,54" fill="#FF5B84"/>
     <path d="M46 54.5 Q48 57.5 50 55 Q52 57.5 54 54.5" fill="none" stroke="#321D38" stroke-width="1.8" stroke-linecap="round"/>
 
-    <!-- 볼 수염 -->
     <line x1="22" y1="52" x2="16" y2="51" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
     <line x1="22" y1="55" x2="15" y2="56" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
     <line x1="78" y1="52" x2="84" y2="51" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
     <line x1="78" y1="55" x2="85" y2="56" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
 
-    <!-- 마법사 고깔 모자 (리본 + 별 퐁퐁) -->
     <path d="M28 29 Q50 35 72 29 Q63 12 68 2 Q47 10 28 29 Z" fill="url(#luluHatGrad)"/>
     <path d="M29 30 Q50 36 71 30" stroke="#FFDC49" stroke-width="3" fill="none"/>
     <circle cx="68" cy="2" r="4.5" fill="#FFF385" stroke="#FFAE00" stroke-width="1.2"/>
 
-    <!-- 황금 왕관 (방탈출 성공 시) -->
     <g class="cat-crown" style="display:none;">
       <polygon points="34,16 41,2 50,11 59,2 66,16" fill="#FFB800" stroke="#FFF" stroke-width="1.8"/>
       <circle cx="41" cy="3" r="2.5" fill="#FF2E7E"/>
@@ -838,12 +862,10 @@ function getLuluSvg(mode = 'normal') {
       <circle cx="59" cy="3" r="2.5" fill="#00D2D3"/>
     </g>
 
-    <!-- 땀방울 (위기 시) -->
     <g class="cat-sweat" style="display:none;">
       <path d="M74 38 Q78 30 82 38 Q82 43 78 43 Q74 43 74 38 Z" fill="#48CAE4"/>
     </g>
 
-    <!-- 마법봉을 쥔 솜방망이 손 -->
     <g class="cat-wand">
       <ellipse cx="70" cy="67" rx="5" ry="4.5" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.2"/>
       <line x1="70" y1="67" x2="87" y2="44" stroke="#D89A12" stroke-width="3" stroke-linecap="round"/>
@@ -851,7 +873,6 @@ function getLuluSvg(mode = 'normal') {
       <circle cx="87" cy="46" r="2.2" fill="#FFF"/>
     </g>
 
-    <!-- 마법 스파크 파티클 (힌트 시) -->
     <g class="magic-stars" style="display:none;">
       <text x="82" y="34" font-size="13">✨</text>
       <text x="69" y="30" font-size="11">⭐</text>
@@ -884,6 +905,7 @@ function drawQuiz(age, level) {
 
 function stopTimer() {
   if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }
 
 function renderSelect() {
@@ -893,7 +915,7 @@ function renderSelect() {
     <div class="screen">
       <div class="topbar">
         <h1 style="margin:0;font-family:var(--font-magic);font-size:clamp(22px,3.2vh,30px);color:var(--pink-main);">🎨 마법 미술 방탈출</h1>
-        <button class="sfx-toggle" id="sfx-btn" style="background:#FFF;border:2px solid #E2D6EB;color:var(--purple-dark);">${soundEnabled ? '🔊 소리 켬' : '🔈 조용히'}</button>
+        <button class="sfx-toggle" id="sfx-btn" style="background:#FFF;border:2px solid #E2D6EB;color:var(--purple-dark);">${soundEnabled ? '🔊 소리·음성 켬' : '🔈 조용히'}</button>
       </div>
       <div class="select-screen">
         <div style="display:flex;flex-direction:column;gap:clamp(8px,1.5vh,14px);">
@@ -926,6 +948,7 @@ function renderSelect() {
   `;
   document.getElementById('sfx-btn').addEventListener('click', () => {
     soundEnabled = !soundEnabled;
+    if (!soundEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
     renderSelect();
   });
 }
@@ -956,9 +979,8 @@ function renderQuiz() {
 
       <div class="quiz-body">
         <div class="question-card">
-          <!-- 살아 움직이는 고양이 마법사 루루 무대 -->
           <div class="lulu-character-stage">
-            <div class="lulu-svg-wrap normal" id="lulu-mascot">
+            <div class="lulu-svg-wrap normal" id="lulu-mascot" title="루루를 누르면 문제를 다시 읽어줘요!">
               ${getLuluSvg('normal')}
             </div>
             <div class="lulu-speech" id="lulu-speech">비밀 암호를 함께 풀어보자냥! ✨</div>
@@ -985,6 +1007,11 @@ function renderQuiz() {
     </div>
   `;
 
+  // 루루의 질문 음성 낭독
+  setTimeout(() => {
+    speakLulu(q.q);
+  }, 250);
+
   let remain = TIME_LIMIT;
   const fill = document.getElementById('timer-fill');
   const text = document.getElementById('timer-text');
@@ -998,16 +1025,19 @@ function renderQuiz() {
     text.textContent = remain;
     fill.style.width = `${(remain / TIME_LIMIT) * 100}%`;
 
-    // 5초 이하 위기 애니메이션
-    if (remain <= 5) {
+    if (remain === 5) {
       box.classList.add('danger');
       ico.textContent = '💓';
       if (lulu) {
         lulu.className = 'lulu-svg-wrap panic';
         speech.textContent = '으앙, 시간이 얼마 안 남았다냥! 💦';
       }
+      speakLulu("으앙, 시간이 얼마 안 남았다냥! 서둘러냥!");
+      playSound('tick');
+    } else if (remain < 5 && remain > 0) {
       playSound('tick');
     }
+
     if (remain <= 0) {
       stopTimer();
       renderResult(false, true);
@@ -1020,8 +1050,10 @@ function renderResult(isSuccess, isTimeOut = false) {
   if (isSuccess) {
     playSound('success');
     fireMagnificentFireworks();
+    speakLulu("와아! 마법 방탈출 대성공이다냥! 정말 멋지다냥!");
   } else {
     playSound('fail');
+    speakLulu(isTimeOut ? "시간이 끝나버렸다냥! 다시 힘내서 도전해보자냥!" : "아쉽다냥! 조금만 더 신중하게 단서를 찾아보자냥!");
   }
 
   app.innerHTML = `
@@ -1046,6 +1078,13 @@ function renderResult(isSuccess, isTimeOut = false) {
 }
 
 app.addEventListener('click', (e) => {
+  const luluClick = e.target.closest('#lulu-mascot');
+  if (luluClick && session && session.item) {
+    playSound('pop');
+    speakLulu(session.item.q);
+    return;
+  }
+
   const btn = e.target.closest('[data-act]');
   if (!btn) return;
   const act = btn.dataset.act;
@@ -1073,9 +1112,11 @@ app.addEventListener('click', (e) => {
         if (isOpen) {
           lulu.className = 'lulu-svg-wrap hinting';
           speech.textContent = '루루의 마법 힌트를 줄게냥! 🪄';
+          speakLulu("루루의 힌트다냥! " + session.item.hint);
         } else {
           lulu.className = 'lulu-svg-wrap normal';
           speech.textContent = '비밀 암호를 함께 풀어보자냥! ✨';
+          if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         }
       }
     }
