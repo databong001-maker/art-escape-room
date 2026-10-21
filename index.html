@@ -3,481 +3,356 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>방탈출 질문지</title>
-<meta name="theme-color" content="#12262F">
-<meta name="description" content="미술을 주제로 한 연령별 방탈출 질문지">
+<title>미술 방탈출</title>
+<meta name="theme-color" content="#FFF8E1">
+<meta name="description" content="미술을 주제로 한 연령별 방탈출 질문">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;700&display=swap">
 <style>
-/* Layout: 한 줄 단계 탭 → 문 4개 진행바 → 문제 카드 → 선택 패널. 모바일 한 손 조작 기준. */
+/* 화면: 선택(나이·난이도) → 질문 → 결과. 태블릿·노트북 화면을 가득 채우는 구성. */
 :root {
   color-scheme: light;
-  --bg: #EAF0F3;
-  --surface: #FFFFFF;
-  --ink: #12262F;
-  --muted: #586E77;
-  --line: #CBD8DE;
-  --accent: #A56A00;
-  --on-accent: #FFFFFF;
-  --accent-soft: #F7E8C8;
-  --ok: #1B7F54;
-  --ok-soft: #D6EFE2;
-  --bad: #BF3B3B;
-  --bad-soft: #F8DCDC;
-  --ring: #1D6FA5;
+  --ink: #1F2430;
+  --ring: #0B5FFF;
   --font-display: 'Jua', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --font-body: 'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --pad: clamp(14px, 2.6vw, 36px);
+  --scale: 1;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0F1B21;
-    --surface: #172830;
-    --ink: #E8F0F3;
-    --muted: #93A9B1;
-    --line: #2A404A;
-    --accent: #E6A93A;
-    --on-accent: #1B1300;
-    --accent-soft: #3A2E12;
-    --ok: #55C58E;
-    --ok-soft: #173A2C;
-    --bad: #F08080;
-    --bad-soft: #3D1E1E;
-    --ring: #6DB6E8;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0F1B21;
-  --surface: #172830;
-  --ink: #E8F0F3;
-  --muted: #93A9B1;
-  --line: #2A404A;
-  --accent: #E6A93A;
-  --on-accent: #1B1300;
-  --accent-soft: #3A2E12;
-  --ok: #55C58E;
-  --ok-soft: #173A2C;
-  --bad: #F08080;
-  --bad-soft: #3D1E1E;
-  --ring: #6DB6E8;
-  color-scheme: dark;
-}
+
+/* 연령별 색 */
+[data-age="0"] { --main: #D6336C; --dark: #A61E4D; --soft: #FFE3EC; --scale: 1.25; }
+[data-age="1"] { --main: #2B8A3E; --dark: #1E6B2E; --soft: #DDF4D8; --scale: 1.1; }
+[data-age="2"] { --main: #1971C2; --dark: #12529A; --soft: #DCEEFF; --scale: 1; }
+[data-age="3"] { --main: #7048E8; --dark: #5130B8; --soft: #E9E1FF; --scale: 1; }
+/* 난이도 색 (신호등) */
+[data-lv="하"] { --lv: #2F9E44; --lvs: #D3F9D8; --lvd: #1E6B2E; --lvon: #FFFFFF; }
+[data-lv="중"] { --lv: #F59F00; --lvs: #FFF3BF; --lvd: #8A5A00; --lvon: #1F2430; }
+[data-lv="상"] { --lv: #E03131; --lvs: #FFE3E3; --lvd: #A61E1E; --lvon: #FFFFFF; }
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--bg);
+  min-height: 100dvh;
+  background: #FFF8E1;
   color: var(--ink);
   font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.55;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 20px 56px;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-x: hidden;
 }
-button { font-family: inherit; color: inherit; }
-:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+body[data-screen="quiz"] { background: var(--soft); }
+body[data-screen="result"][data-ok="yes"] { background: linear-gradient(160deg, var(--soft), #FFF3BF 75%); }
+body[data-screen="result"][data-ok="no"] { background: #27324B; color: #FFFFFF; }
+button { font-family: inherit; color: inherit; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 4px solid var(--ring); outline-offset: 3px; }
+[tabindex="-1"]:focus { outline: none; }
 
-.wrap { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
-h1, h2, h3 { font-family: var(--font-display); font-weight: 400; margin: 0; text-wrap: balance; }
-h1 { font-size: 32px; line-height: 1.2; }
-h2 { font-size: 22px; }
-h3 { font-size: 17px; }
-.label { font-size: 12.5px; letter-spacing: .04em; color: var(--muted); font-weight: 700; }
-.lead { margin: 6px 0 0; color: var(--muted); max-width: 60ch; }
-header { display: flex; flex-direction: column; gap: 4px; }
+.screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 2.4vw, 32px);
+  padding-top: max(var(--pad), env(safe-area-inset-top, 0px));
+  padding-right: max(var(--pad), env(safe-area-inset-right, 0px));
+  padding-bottom: max(var(--pad), env(safe-area-inset-bottom, 0px));
+  padding-left: max(var(--pad), env(safe-area-inset-left, 0px));
+  animation: enter .25s ease-out;
+}
+@keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-/* 단계 탭 */
-.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.tab { text-align: left; background: var(--surface); border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; display: flex; flex-direction: column; min-width: 0; }
-.tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent-soft); }
-.tab-n { font-family: var(--font-display); font-size: 18px; line-height: 1.25; }
-.tab-s { font-size: 12px; color: var(--muted); }
-@media (max-width: 520px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
+/* ① 선택 화면 */
+.select .block { display: flex; flex-direction: column; gap: clamp(10px, 1.6vw, 22px); min-height: 0; }
+.select .block.ages-block { flex: 3; }
+.select .block.lv-block { flex: 2; }
+.ask { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(28px, 4.2vw, 58px); line-height: 1.2; text-wrap: balance; }
+.ages, .levels { flex: 1; display: grid; gap: clamp(12px, 2.2vw, 30px); padding-bottom: 10px; }
+.ages { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.levels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 820px) { .ages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-/* 단계 소개 */
-.info { display: flex; flex-direction: column; gap: 8px; }
-.info p { margin: 0; color: var(--muted); }
-.chips { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.chips li, .chip { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 2px 11px; font-size: 12.5px; }
+.agebtn, .lvbtn {
+  appearance: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  min-height: 130px;
+  padding: 14px;
+  border-radius: 34px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform .12s, box-shadow .12s, background-color .12s;
+}
+.agebtn { border: 6px solid var(--main); background: var(--soft); box-shadow: 0 10px 0 var(--dark); color: var(--ink); }
+.agebtn .ic { font-size: clamp(48px, 8vw, 112px); line-height: 1.05; }
+.agebtn .nm { font-family: var(--font-display); font-size: clamp(24px, 3.4vw, 48px); line-height: 1.15; }
+.agebtn .sb { font-size: clamp(14px, 1.8vw, 24px); font-weight: 700; color: var(--dark); }
+.agebtn:hover { transform: translateY(-3px); }
+.agebtn:active, .agebtn[aria-pressed="true"] { transform: translateY(6px); box-shadow: 0 4px 0 var(--dark); }
+.agebtn[aria-pressed="true"] { background: var(--main); color: #FFFFFF; }
+.agebtn[aria-pressed="true"] .sb { color: #FFFFFF; }
 
-/* 문 진행바 */
-.doors { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.door { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px 8px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--muted); cursor: pointer; min-width: 0; }
-.door.now { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
-.door.done { border-color: var(--ok); background: var(--ok-soft); color: var(--ok); }
-.door:disabled { cursor: default; opacity: 1; }
-.dlab { font-size: 12px; font-weight: 700; }
+.lvbtn { border: 6px solid var(--lv); background: var(--lvs); box-shadow: 0 10px 0 var(--lvd); color: var(--ink); }
+.lvbtn .lk { font-family: var(--font-display); font-size: clamp(44px, 7vw, 96px); line-height: 1; }
+.lvbtn .st { font-size: clamp(20px, 3vw, 40px); letter-spacing: .1em; line-height: 1.2; }
+.lvbtn .wd { font-size: clamp(14px, 1.9vw, 26px); font-weight: 700; }
+.lvbtn:hover { transform: translateY(-3px); }
+.lvbtn:active, .lvbtn[aria-pressed="true"] { transform: translateY(6px); box-shadow: 0 4px 0 var(--lvd); }
+.lvbtn[aria-pressed="true"] { background: var(--lv); color: var(--lvon); }
 
-/* 문제 카드 */
-.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
-.qhead { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-.fmt { background: var(--accent-soft); border-radius: 8px; padding: 2px 10px; font-weight: 700; font-size: 13px; }
-.qno { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
-.prompt { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.45; text-wrap: balance; }
-.big .prompt { font-size: 24px; }
-.visual { font-family: var(--font-display); font-size: 34px; text-align: center; letter-spacing: .05em; padding: 12px; background: var(--bg); border-radius: 12px; overflow-wrap: anywhere; line-height: 1.3; }
-.big .visual { font-size: 46px; }
-.clues { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
-.clues li { background: var(--bg); border-radius: 10px; padding: 8px 12px; font-variant-numeric: tabular-nums; }
+/* 위쪽 바 (뒤로 + 칩) */
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.back {
+  min-height: 52px; padding: 0 24px; border-radius: 999px;
+  border: 4px solid var(--main); background: #FFFFFF; color: var(--ink);
+  font: 700 clamp(16px, 1.8vw, 22px) var(--font-body);
+  cursor: pointer;
+}
+.back:hover { background: var(--soft); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { padding: 6px 18px; border-radius: 999px; background: #FFFFFF; color: var(--ink); border: 3px solid var(--main); font-weight: 700; font-size: clamp(14px, 1.7vw, 22px); }
+.chip.lvchip { border-color: var(--lv); background: var(--lvs); }
 
-.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
-.choices.two { grid-template-columns: repeat(2, 1fr); }
-.choice, .card { min-height: 56px; font-size: 18px; font-weight: 700; border: 2px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 14px; padding: 12px; cursor: pointer; }
-.choice:hover:not(:disabled), .card:hover:not(:disabled) { border-color: var(--accent); }
-.choice:disabled, .card:disabled { cursor: default; color: var(--ink); }
-.choices.emo .choice { font-size: 54px; line-height: 1.1; }
-.choice.right { border-color: var(--ok); background: var(--ok-soft); }
-.choice.wrong { border-color: var(--bad); background: var(--bad-soft); opacity: .75; }
+/* ② 질문 화면 */
+.quiz .stage { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(14px, 2.6vw, 40px); }
+@media (max-width: 800px), (max-aspect-ratio: 1/1) { .quiz .stage { grid-template-columns: minmax(0, 1fr); } }
+.qbox {
+  background: #FFFFFF; border: 6px solid var(--main); border-radius: 36px; box-shadow: 0 10px 0 var(--dark);
+  padding: clamp(18px, 3vw, 44px);
+  display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2vw, 28px);
+  text-align: center;
+}
+.prompt { margin: 0; font-weight: 700; font-size: calc(clamp(22px, 3.3vw, 52px) * var(--scale)); line-height: 1.4; word-break: keep-all; text-wrap: balance; }
+.visual { font-family: var(--font-display); font-size: calc(clamp(38px, 6.6vw, 100px) * var(--scale)); line-height: 1.25; letter-spacing: .05em; overflow-wrap: anywhere; background: var(--soft); border-radius: 26px; padding: .15em .3em; }
+.choices { display: grid; grid-auto-rows: minmax(76px, 1fr); gap: clamp(10px, 1.6vw, 22px); padding-bottom: 8px; }
+.choice {
+  appearance: none; display: flex; align-items: center; gap: clamp(12px, 1.8vw, 26px); text-align: left;
+  background: #FFFFFF; color: var(--ink);
+  border: 5px solid var(--main); border-radius: 28px; box-shadow: 0 7px 0 var(--dark);
+  padding: 10px clamp(14px, 2vw, 30px);
+  font-weight: 700; font-size: calc(clamp(20px, 2.7vw, 42px) * var(--scale)); line-height: 1.3; word-break: keep-all;
+  cursor: pointer; transition: transform .12s, box-shadow .12s, background-color .12s;
+}
+.choice .num { flex: none; width: 1.7em; height: 1.7em; border-radius: 50%; background: var(--main); color: #FFFFFF; display: grid; place-items: center; font-family: var(--font-display); font-size: .8em; font-weight: 400; }
+.choice .mark { margin-left: auto; font-size: 1.2em; }
+.choice:hover:not(:disabled) { background: var(--soft); }
+.choice:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 2px 0 var(--dark); }
+.choice:disabled { cursor: default; color: var(--ink); }
+.choice.dim { opacity: .55; }
+.choice.right { background: #D3F9D8; border-color: #2F9E44; box-shadow: 0 7px 0 #1E6B2E; }
+.choice.wrong { background: #FFE3E3; border-color: #E03131; box-shadow: 0 7px 0 #A61E1E; }
+.review { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.review p { margin: 0; font-weight: 700; font-size: clamp(16px, 1.9vw, 24px); }
 
-.padout { font-family: var(--font-display); font-size: 40px; text-align: center; background: var(--bg); border-radius: 12px; min-height: 64px; line-height: 64px; font-variant-numeric: tabular-nums; }
-.keys { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 320px; margin: 0 auto; }
-.key { min-height: 52px; font-family: var(--font-display); font-size: 22px; border: 2px solid var(--line); background: var(--surface); border-radius: 12px; cursor: pointer; }
-.key.go { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.key.sm { font-family: var(--font-body); font-size: 15px; font-weight: 700; }
-.key:disabled { opacity: .5; cursor: default; }
-
-.slots, .pool { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-.slot { min-width: 68px; height: 68px; border: 2px dashed var(--line); border-radius: 12px; display: grid; place-items: center; font-family: var(--font-display); font-size: 26px; background: var(--surface); padding: 0 8px; }
-.slot.filled { border-style: solid; border-color: var(--accent); background: var(--accent-soft); color: var(--ink); cursor: pointer; }
-.slot.filled:disabled { cursor: default; color: var(--ink); }
-.card { font-family: var(--font-display); font-size: 24px; min-width: 68px; }
-
-.dials { display: flex; justify-content: center; gap: 14px; }
-.dial { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.dial button { width: 56px; height: 42px; border: 2px solid var(--line); background: var(--surface); border-radius: 10px; cursor: pointer; display: grid; place-items: center; }
-.dial button:disabled { opacity: .5; cursor: default; }
-.dial output { font-family: var(--font-display); font-size: 40px; width: 56px; text-align: center; background: var(--bg); border-radius: 10px; line-height: 1.3; }
-
-.textrow { display: flex; gap: 8px; }
-.textrow input { flex: 1; min-width: 0; font: inherit; font-size: 18px; padding: 12px; border: 2px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink); }
-
-.btn { min-height: 48px; padding: 0 20px; border: 0; border-radius: 12px; background: var(--accent); color: var(--on-accent); font-weight: 700; font-size: 16px; cursor: pointer; }
-.btn.ghost { background: var(--surface); color: var(--ink); border: 2px solid var(--line); }
-.link { background: none; border: 0; padding: 4px 0; text-decoration: underline; cursor: pointer; font-size: 14px; }
-.hintbar { display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: center; }
-.hint { margin: 0; flex-basis: 100%; background: var(--accent-soft); padding: 10px 12px; border-radius: 10px; }
-.fb { margin: 0; min-height: 1.6em; font-weight: 700; }
-.fb.ok { color: var(--ok); }
-.fb.no { color: var(--bad); }
-.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
-.like { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font-size: 14px; cursor: pointer; }
-.like[aria-pressed="true"] { background: var(--ok-soft); border-color: var(--ok); font-weight: 700; }
-.reset { align-self: flex-start; }
-
-.donecard { background: var(--ok-soft); border: 2px solid var(--ok); border-radius: 16px; padding: 22px 18px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
-.donecard h2 { font-size: 28px; color: var(--ok); }
-.donecard p { margin: 0; }
-
-.shake { animation: shake .35s; }
-@keyframes shake { 0%,100% { transform: translateX(0); } 20% { transform: translateX(-9px); } 40% { transform: translateX(9px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
-@media (prefers-reduced-motion: reduce) { .shake { animation: none; } }
-
-/* 선택 패널 */
-.decide { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 16px; }
-fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-legend { font-weight: 700; padding: 0; margin-bottom: 8px; }
-.opts { display: flex; flex-wrap: wrap; gap: 8px; }
-.opt { position: relative; display: inline-flex; }
-.opt input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
-.opt span { border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; font-size: 14px; background: var(--bg); }
-.opt input:checked + span { background: var(--ink); color: var(--bg); border-color: var(--ink); font-weight: 700; }
-.opt input:focus-visible + span { outline: 3px solid var(--ring); outline-offset: 2px; }
-.likelist { display: flex; flex-wrap: wrap; gap: 6px; }
-.muted { color: var(--muted); font-size: 14px; }
-#summary { width: 100%; min-width: 0; font: inherit; font-size: 14px; line-height: 1.6; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--bg); color: var(--ink); resize: vertical; }
-.copyrow { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+/* ③ 결과 화면 */
+.result .center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: clamp(12px, 2vw, 28px); position: relative; z-index: 1; }
+.result .big { font-size: clamp(90px, 18vw, 220px); line-height: 1; }
+.result h1 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 8vw, 112px); line-height: 1.15; text-wrap: balance; }
+.result .sub { margin: 0; font-size: clamp(18px, 2.6vw, 38px); font-weight: 700; text-wrap: balance; }
+body[data-ok="yes"] .result h1 { color: var(--dark); }
+.btns { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; margin-top: 8px; }
+.cta, .ghost { min-height: 68px; padding: 0 clamp(24px, 3.2vw, 48px); border-radius: 999px; font: 700 clamp(18px, 2.3vw, 32px) var(--font-body); cursor: pointer; border: 5px solid; transition: transform .12s, box-shadow .12s; }
+.cta:hover, .ghost:hover { transform: translateY(-3px); }
+.cta:active, .ghost:active { transform: translateY(4px); }
+body[data-ok="yes"] .cta { background: var(--main); color: #FFFFFF; border-color: var(--dark); box-shadow: 0 8px 0 var(--dark); }
+body[data-ok="yes"] .ghost { background: #FFFFFF; color: var(--ink); border-color: var(--main); }
+body[data-ok="no"] .cta { background: #FFD43B; color: #1F2430; border-color: #E0A800; box-shadow: 0 8px 0 #B58500; }
+body[data-ok="no"] .ghost { background: transparent; color: #FFFFFF; border-color: #FFFFFF; }
+.wob { animation: wob .7s ease-in-out; }
+@keyframes wob { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-14deg); } 40% { transform: rotate(12deg); } 60% { transform: rotate(-8deg); } 80% { transform: rotate(5deg); } }
+.confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.confetti span { position: absolute; top: -12%; animation: fall linear infinite; }
+@keyframes fall { to { transform: translateY(120vh) rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .screen, .wob { animation: none; }
+  .confetti { display: none; }
+  .agebtn, .lvbtn, .choice, .cta, .ghost { transition: none; }
+}
 </style>
 </head>
-<body>
-<main class="wrap">
-  <header>
-    <span class="label">미술 방탈출 · 연령별 샘플</span>
-    <h1>방탈출 질문지</h1>
-    <p class="lead">색, 그림 도구, 화가를 주제로 한 문제예요. 연령 단계를 고르고 직접 풀어 보세요. 정답을 맞춰야 자물쇠가 열리고 다음 방으로 갈 수 있어요. 마음에 드는 형태는 아래에서 골라 주세요.</p>
-  </header>
-
-  <nav class="tabs" id="tabs" role="tablist" aria-label="연령 단계"></nav>
-  <section class="info" id="info"></section>
-  <section id="stage" aria-live="polite"></section>
-
-  <section class="decide" id="decide">
-    <div>
-      <h2>이렇게 정할래요</h2>
-      <p class="lead">힌트와 오답 처리는 위 샘플에 바로 적용돼요. 나머지는 선택만 기록해요.</p>
-    </div>
-    <div id="groups" style="display:flex;flex-direction:column;gap:16px"></div>
-    <div>
-      <h3>마음에 든 문제 유형</h3>
-      <div class="likelist" id="likelist" style="margin-top:8px"></div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <label for="summary" style="font-weight:700">선택 내용</label>
-      <textarea id="summary" rows="9" readonly></textarea>
-      <div class="copyrow">
-        <button class="btn" id="copy" type="button">선택 내용 복사</button>
-        <span class="muted" id="copymsg">복사한 내용을 채팅에 붙여 넣으면 그대로 앱을 만들어 드려요.</span>
-      </div>
-    </div>
-  </section>
-</main>
+<body data-screen="select">
+<main id="app"></main>
 
 <script>
-const LOCK = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-const OPEN = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="currentColor"/><path d="M8 11V8a4 4 0 0 1 7.6-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
-const EXIT = '<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const UP = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 15l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const DOWN = '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const Q = [{"하":[{"q":"빨강 물감과 노랑 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + 🟡 = ?","a":"🟠 주황","w":["🟢 초록","🟣 보라"]},{"q":"그림을 그릴 때 쓰는 도구는 어느 것일까요?","v":"🎨","a":"🖌️ 붓","w":["🍴 포크","👟 신발"]},{"q":"바나나는 무슨 색일까요?","v":"🍌","a":"🟡 노랑","w":["🔵 파랑","⚫ 검정"]},{"q":"맑은 날 하늘은 무슨 색일까요?","v":"☀️","a":"🔵 파랑","w":["🔴 빨강","⚫ 검정"]},{"q":"동그라미 모양은 어느 것일까요?","a":"🔵 동그라미","w":["🔺 세모","🟦 네모"]},{"q":"종이에 색칠할 때 쓰는 것은 어느 것일까요?","v":"📄","a":"🖍️ 크레파스","w":["🥄 숟가락","🧦 양말"]},{"q":"토마토는 무슨 색일까요?","v":"🍅","a":"🔴 빨강","w":["🟣 보라","🟤 갈색"]},{"q":"뾰족한 곳이 3개 있는 모양은 어느 것일까요?","a":"🔺 세모","w":["🔵 동그라미","🟦 네모"]},{"q":"그림을 그리는 사람을 무엇이라고 부를까요?","v":"🖼️","a":"🧑‍🎨 화가","w":["🧑‍🍳 요리사","🧑‍🚒 소방관"]},{"q":"눈은 무슨 색일까요?","v":"❄️","a":"⚪ 하양","w":["🟣 보라","🟤 갈색"]}],"중":[{"q":"파랑 물감과 노랑 물감을 섞으면 무슨 색이 될까요?","v":"🔵 + 🟡 = ?","a":"🟢 초록","w":["🟠 주황","🟣 보라"]},{"q":"빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + 🔵 = ?","a":"🟣 보라","w":["🟢 초록","🟠 주황"]},{"q":"다른 모양 하나는 어느 것일까요?","v":"🔺 🔺 🔵 🔺","a":"🔵 동그라미","w":["🔺 세모","🟦 네모"]},{"q":"물감을 물에 적셔서 칠하는 도구는 어느 것일까요?","v":"💧","a":"🖌️ 붓","w":["✏️ 연필","✂️ 가위"]},{"q":"종이를 자를 때 쓰는 도구는 어느 것일까요?","v":"📄","a":"✂️ 가위","w":["🖌️ 붓","🖍️ 크레파스"]},{"q":"종이를 붙일 때 쓰는 것은 어느 것일까요?","v":"📄 + 📄","a":"🧴 풀","w":["🧽 지우개","✏️ 연필"]},{"q":"그림 물감의 기본 색이에요. 빈칸에 알맞은 색은?","v":"🔴 🔵 ( )","a":"🟡 노랑","w":["🟢 초록","🟣 보라"]},{"q":"빨강 물감에 하양 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + ⚪ = ?","a":"🌸 분홍","w":["🟢 초록","⚫ 검정"]},{"q":"검정 물감에 하양 물감을 섞으면 무슨 색이 될까요?","v":"⚫ + ⚪ = ?","a":"🐘 회색","w":["🌸 분홍","🟢 초록"]},{"q":"그림을 구경하러 가는 곳은 어디일까요?","v":"🖼️","a":"🏛️ 미술관","w":["🏥 병원","🚒 소방서"]}],"상":[{"q":"무지개에서 빨강 다음에 오는 색은 무엇일까요?","v":"🔴 → ( )","a":"🟠 주황","w":["🟡 노랑","🟢 초록"]},{"q":"무지개 색의 순서예요. 빈칸에 알맞은 색은?","v":"🔴 🟠 🟡 ( )","a":"🟢 초록","w":["🟣 보라","🔵 파랑"]},{"q":"규칙을 찾아서 빈칸에 알맞은 것을 골라요.","v":"🔴 🔵 🔴 🔵 🔴 ( )","a":"🔵 파랑","w":["🔴 빨강","🟡 노랑"]},{"q":"규칙을 찾아서 빈칸에 알맞은 모양을 골라요.","v":"🟦 🟦 🔺 🟦 🟦 ( )","a":"🔺 세모","w":["🟦 네모","🔵 동그라미"]},{"q":"〈해바라기〉 그림에서 꽃은 무슨 색일까요?","v":"🌻","a":"🟡 노랑","w":["🔵 파랑","🟣 보라"]},{"q":"보라색을 만들려면 어떤 두 색을 섞어야 할까요?","v":"🟣","a":"🔴 빨강 + 🔵 파랑","w":["🔴 빨강 + 🟡 노랑","🟡 노랑 + 🔵 파랑"]},{"q":"물감을 짜서 색을 섞는 판은 무엇일까요?","v":"🎨","a":"🎨 팔레트","w":["🍽️ 쟁반","🎒 가방"]},{"q":"흙을 빚어 불에 구워 만든 그릇은 무엇일까요?","v":"🏺","a":"🏺 도자기","w":["🍞 빵","🧸 인형"]},{"q":"그림자는 무엇이 있어야 생길까요?","v":"🧍","a":"💡 빛","w":["🌧️ 비","🍎 사과"]},{"q":"따뜻한 느낌이 드는 색은 어느 것일까요?","v":"🔥","a":"🔴 빨강","w":["🔵 파랑","🟦 남색"]}]},{"하":[{"q":"팔레트에 물감이 7개 있었는데 5개를 더 샀어요. 모두 몇 개일까요?","v":"🎨 7 + 5 = ?","a":"12","w":["11","13","10"]},{"q":"색의 기본이 되는 세 가지 색이에요. 빈칸에 알맞은 색은?","v":"빨강 · 노랑 · ( )","a":"파랑","w":["초록","보라","주황"]},{"q":"빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + 🔵 = ?","a":"보라","w":["초록","주황","분홍"]},{"q":"다음 중 색칠하는 도구가 아닌 것은 무엇일까요?","a":"가위","w":["크레파스","색연필","물감"]},{"q":"연필로 그린 그림을 지울 때 쓰는 것은 무엇일까요?","a":"지우개","w":["풀","물감","자"]},{"q":"색종이를 접어서 학이나 비행기를 만드는 활동은 무엇일까요?","v":"📄","a":"종이접기","w":["줄넘기","노래 부르기","달리기"]},{"q":"노랑 물감과 파랑 물감을 섞으면 무슨 색이 될까요?","v":"🟡 + 🔵 = ?","a":"초록","w":["보라","주황","분홍"]},{"q":"그림이나 조각 작품을 구경하는 곳은 어디일까요?","v":"🖼️","a":"미술관","w":["도서관","우체국","수영장"]},{"q":"붓을 깨끗이 씻을 때 필요한 것은 무엇일까요?","v":"🖌️","a":"물","w":["모래","불","연필"]},{"q":"물감이 10개 있었는데 4개를 썼어요. 남은 물감은 몇 개일까요?","v":"🎨 10 − 4 = ?","a":"6","w":["5","7","4"]}],"중":[{"q":"크레파스 12개를 두 친구가 똑같이 나누면 한 친구가 몇 개를 가질까요?","v":"🖍️ × 12","a":"6","w":["5","4","7"]},{"q":"빨강 크레파스 8개와 파랑 크레파스 6개가 있어요. 모두 몇 개일까요?","v":"🖍️ 8 + 6 = ?","a":"14","w":["13","15","12"]},{"q":"주황색을 만들려면 빨강에 어떤 색을 섞어야 할까요?","v":"🔴 + ( ) = 🟠","a":"노랑","w":["파랑","초록","하양"]},{"q":"무지개 색의 순서예요. 빈칸에 알맞은 색은?","v":"빨강 주황 노랑 ( ) 파랑 남색 보라","a":"초록","w":["하양","검정","분홍"]},{"q":"그림을 그리는 하얀 천 판의 이름은 무엇일까요?","a":"캔버스","w":["커튼","방석","식탁보"]},{"q":"섞지 않은 기본 색을 '원색'이라고 해요. 다음 중 원색은 무엇일까요?","a":"노랑","w":["초록","주황","보라"]},{"q":"물감 한 통에 색이 2개씩 들어 있어요. 3통이면 색은 모두 몇 개일까요?","v":"🎨 2 + 2 + 2 = ?","a":"6","w":["5","8","4"]},{"q":"색이 다른 하나를 찾아요.","v":"🍎 🍓 🍅 🍌","a":"🍌 바나나","w":["🍎 사과","🍓 딸기","🍅 토마토"]},{"q":"색종이가 20장 있어요. 8장을 접었어요. 접지 않은 색종이는 몇 장일까요?","v":"📄 20 − 8 = ?","a":"12","w":["10","13","28"]},{"q":"하얀 물감에 검정 물감을 조금 섞으면 어떤 색이 될까요?","v":"⚪ + ⚫ = ?","a":"회색","w":["노랑","빨강","보라"]}],"상":[{"q":"〈해바라기〉를 그린 화가는 누구일까요?","v":"🌻","a":"빈센트 반 고흐","w":["클로드 모네","파블로 피카소","레오나르도 다 빈치"]},{"q":"그림이 완성되는 순서예요. 빈칸에 알맞은 것은?","v":"밑그림 → 색칠 → ( ) → 전시","a":"말리기","w":["시작하기","잠자기","지우기"]},{"q":"규칙을 찾아서 빈칸에 알맞은 색을 골라요.","v":"🔴 🔵 🟡 🔴 🔵 🟡 🔴 🔵 ( )","a":"🟡 노랑","w":["🔴 빨강","🔵 파랑","⚪ 하양"]},{"q":"차갑게 느껴지는 색은 어느 것일까요?","a":"파랑","w":["빨강","주황","노랑"]},{"q":"물감이 15개 있었는데 7개를 썼어요. 남은 물감은 몇 개일까요?","v":"🎨 15 − 7 = ?","a":"8","w":["7","9","22"]},{"q":"네모(정사각형)에는 변이 모두 몇 개 있을까요?","v":"🟦","a":"4개","w":["3개","5개","6개"]},{"q":"연필로 쭉 길게 그은 것을 무엇이라고 할까요?","v":"✏️ ───────","a":"선","w":["점","면","원"]},{"q":"이젤 위에는 무엇을 세워 놓고 그림을 그릴까요?","a":"그림 그리는 판(캔버스)","w":["접시","신발","우산"]},{"q":"종이를 가위로 오려서 풀로 붙여 만드는 미술 활동은 무엇일까요?","v":"✂️ + 🧴","a":"콜라주","w":["판화","조각","소묘"]},{"q":"팔레트에 물감이 6개 있었는데 7개를 더 샀어요. 모두 몇 개일까요?","v":"🎨 6 + 7 = ?","a":"13","w":["12","14","11"]}]},{"하":[{"q":"〈모나리자〉를 그린 화가는 누구일까요?","a":"레오나르도 다 빈치","w":["빈센트 반 고흐","클로드 모네","파블로 피카소"]},{"q":"다음 중 색의 3원색이 아닌 것은 무엇일까요?","a":"초록","w":["빨강","노랑","파랑"]},{"q":"무지개 색은 모두 몇 가지일까요?","v":"🌈","a":"7가지","w":["5가지","6가지","8가지"]},{"q":"정사각형의 꼭짓점은 모두 몇 개일까요?","v":"🟦","a":"4개","w":["3개","5개","6개"]},{"q":"그림을 그릴 때 연필로 가장 먼저 그리는 것은 무엇일까요?","a":"밑그림","w":["전시","액자","서명"]},{"q":"다음 중 미술 도구가 아닌 것은 무엇일까요?","a":"계산기","w":["붓","물감","팔레트"]},{"q":"물감을 짜서 섞어 쓰는 판을 무엇이라고 할까요?","v":"🎨","a":"팔레트","w":["캔버스","이젤","붓"]},{"q":"다음 중 조각 작품을 만들 때 쓰는 재료는 무엇일까요?","a":"찰흙","w":["바람","노래","그림자"]},{"q":"초록색을 만들려면 노랑에 어떤 색을 섞어야 할까요?","v":"🟡 + ( ) = 🟢","a":"파랑","w":["빨강","보라","하양"]},{"q":"물을 섞어 맑고 투명하게 칠하는 그림을 무엇이라고 할까요?","a":"수채화","w":["판화","조각","사진"]}],"중":[{"q":"무지개 색의 순서예요. 빈칸에 알맞은 색은 무엇일까요?","v":"빨강 주황 노랑 초록 파랑 ( ) 보라","a":"남색","w":["하양","분홍","갈색"]},{"q":"연못에 핀 〈수련〉을 여러 점 그린 화가는 누구일까요?","a":"클로드 모네","w":["빈센트 반 고흐","파블로 피카소","레오나르도 다 빈치"]},{"q":"〈게르니카〉를 그린 화가는 누구일까요?","a":"파블로 피카소","w":["클로드 모네","빈센트 반 고흐","레오나르도 다 빈치"]},{"q":"김홍도의 〈씨름〉처럼 서민들의 생활 모습을 그린 우리나라 전통 그림을 무엇이라고 할까요?","a":"풍속화","w":["산수화","초상화","추상화"]},{"q":"빨강, 노랑, 파랑 물감을 모두 섞으면 어떤 색에 가까워질까요?","a":"어두운 검은빛","w":["하얀색","노란색","분홍색"]},{"q":"지름이 10cm인 원을 그리려면 컴퍼스를 몇 cm로 벌려야 할까요?","v":"⭕ 지름 10cm","a":"5cm","w":["10cm","20cm","2cm"]},{"q":"알타미라 동굴 벽화는 아주 오래전 어느 시대 사람들이 그린 그림일까요?","a":"선사 시대","w":["조선 시대","현대","르네상스 시대"]},{"q":"연필이나 목탄으로 선과 밝고 어두움만 사용해 그리는 그림을 무엇이라고 할까요?","a":"소묘(데생)","w":["판화","수채화","자수"]},{"q":"한 변이 4cm인 정삼각형의 세 변을 모두 더하면 몇 cm일까요?","v":"🔺 4 + 4 + 4 = ?","a":"12cm","w":["8cm","16cm","4cm"]},{"q":"콜라주는 어떤 방법으로 작품을 만들까요?","a":"여러 재료를 오려 붙여요","w":["물감을 흩뿌려요","찰흙을 빚어요","판에 새겨 찍어요"]}],"상":[{"q":"〈절규〉를 그린 노르웨이 화가는 누구일까요?","a":"에드바르 뭉크","w":["빈센트 반 고흐","폴 고갱","살바도르 달리"]},{"q":"녹아내리는 시계가 나오는 〈기억의 지속〉을 그린 화가는 누구일까요?","a":"살바도르 달리","w":["클로드 모네","파블로 피카소","앙리 마티스"]},{"q":"미술관 입장료가 한 명에 3,000원이에요. 4명이 들어가면 모두 얼마일까요?","v":"🏛️ 3,000 × 4 = ?","a":"12,000원","w":["9,000원","10,000원","7,000원"]},{"q":"물감이 반 통 남았어요. 그중 반을 썼어요. 쓴 양은 한 통의 얼마일까요?","v":"1/2의 반 = ?","a":"1/4통","w":["1/2통","1/3통","3/4통"]},{"q":"빨강, 주황, 노랑처럼 따뜻한 느낌을 주는 색을 무엇이라고 할까요?","a":"난색","w":["한색","무채색","보색"]},{"q":"흰색, 회색, 검정처럼 색깔이 느껴지지 않는 색을 무엇이라고 할까요?","a":"무채색","w":["유채색","난색","보색"]},{"q":"색상환에서 빨강의 맞은편에 있는 보색은 무엇일까요?","a":"초록","w":["파랑","노랑","주황"]},{"q":"〈모나리자〉를 그린 레오나르도 다 빈치는 어느 나라 사람일까요?","a":"이탈리아","w":["프랑스","스페인","네덜란드"]},{"q":"색의 3원색의 수와 무지개 색의 수를 더하면 얼마일까요?","v":"3 + 7 = ?","a":"10","w":["9","11","12"]},{"q":"먹으로 산과 물이 어우러진 경치를 그린 우리나라 전통 그림은 무엇일까요?","a":"산수화","w":["인물화","풍속화","추상화"]}]},{"하":[{"q":"〈별이 빛나는 밤〉을 그린 화가는 누구일까요?","a":"빈센트 반 고흐","w":["클로드 모네","파블로 피카소","살바도르 달리"]},{"q":"빛의 3원색은 빨강, 초록, ( )이에요. 빈칸에 알맞은 색은?","a":"파랑","w":["노랑","보라","주황"]},{"q":"미술에서 '명암'은 무엇의 차이를 말할까요?","a":"밝고 어두움","w":["크고 작음","길고 짧음","빠르고 느림"]},{"q":"도화지를 가로 4칸, 세로 3칸으로 나누면 칸은 모두 몇 개일까요?","v":"4 × 3 = ?","a":"12개","w":["7개","10개","14개"]},{"q":"자기 자신의 얼굴을 그린 그림을 무엇이라고 할까요?","a":"자화상","w":["풍경화","정물화","추상화"]},{"q":"꽃병이나 과일처럼 움직이지 않는 물건을 그린 그림을 무엇이라고 할까요?","a":"정물화","w":["자화상","풍경화","추상화"]},{"q":"찰흙, 돌, 나무 등으로 입체 작품을 만드는 미술 분야는 무엇일까요?","a":"조각","w":["판화","소묘","사진"]},{"q":"다른 색과 섞지 않은 순수한 색을 무엇이라고 할까요?","a":"원색","w":["보색","무채색","파스텔색"]},{"q":"물감이 한 통에 25ml씩 들어 있어요. 4통이면 모두 몇 ml일까요?","v":"25 × 4 = ?","a":"100ml","w":["90ml","75ml","125ml"]},{"q":"그림을 그리는 바탕이 되는 천을 무엇이라고 할까요?","a":"캔버스","w":["앞치마","커튼","손수건"]}],"중":[{"q":"〈인왕제색도〉를 그린 조선 시대 화가는 누구일까요?","a":"정선","w":["김홍도","신윤복","안견"]},{"q":"르네상스 미술이 처음 시작된 나라는 어디일까요?","a":"이탈리아","w":["영국","중국","미국"]},{"q":"빨강과 초록, 파랑과 주황처럼 색상환에서 서로 맞은편에 있는 색을 무엇이라고 할까요?","a":"보색","w":["유사색","무채색","원색"]},{"q":"빨강 물감 1/3통과 파랑 물감 1/4통을 섞었어요. 모두 몇 통일까요?","v":"1/3 + 1/4 = ?","a":"7/12통","w":["2/7통","5/12통","1/7통"]},{"q":"알파벳을 한 칸씩 앞으로 당기면 그림을 그리는 천의 이름이 나와요.","v":"DBOWBT","a":"CANVAS","w":["PAINTS","ARTIST","EASELS"]},{"q":"한 변이 6cm인 정사각형 액자의 둘레는 몇 cm일까요?","v":"🖼️ 6 + 6 + 6 + 6 = ?","a":"24cm","w":["12cm","36cm","18cm"]},{"q":"추상화는 어떤 그림일까요?","a":"색, 선, 모양으로 느낌을 표현한 그림","w":["사진처럼 똑같이 그린 그림","사람 얼굴을 그린 그림","음식만 그린 그림"]},{"q":"소묘에 쓰는, 나무를 태워 만든 검은 재료는 무엇일까요?","a":"목탄","w":["크레파스","분필","물감"]},{"q":"물감 600ml를 3명이 똑같이 나누어 가지면 한 명이 몇 ml를 가질까요?","v":"600 ÷ 3 = ?","a":"200ml","w":["300ml","100ml","150ml"]},{"q":"찰흙 작품을 높은 열에 구워 단단하게 만드는 기구는 무엇일까요?","a":"가마","w":["이젤","팔레트","액자"]}],"상":[{"q":"화가 A, B, C가 〈수련〉, 〈해바라기〉, 〈별이 빛나는 밤〉을 한 점씩 그렸어요. A는 〈해바라기〉도 〈별이 빛나는 밤〉도 그리지 않았고, C는 〈별이 빛나는 밤〉을 그리지 않았어요. B가 그린 그림은 무엇일까요?","a":"〈별이 빛나는 밤〉","w":["〈수련〉","〈해바라기〉"]},{"q":"가까운 것은 크게, 먼 것은 작게 그려서 깊이를 나타내는 방법은 무엇일까요?","a":"원근법","w":["점묘법","명암법","콜라주"]},{"q":"작은 점을 수없이 찍어서 그림을 완성하는 점묘법으로 유명한 화가는 누구일까요?","a":"조르주 쇠라","w":["클로드 모네","폴 고갱","앙리 마티스"]},{"q":"'인상파'라는 이름은 모네의 어떤 작품에서 비롯되었을까요?","a":"〈인상, 해돋이〉","w":["〈절규〉","〈모나리자〉","〈게르니카〉"]},{"q":"세계에서 가장 많은 사람이 찾는 프랑스 파리의 미술관은 어디일까요?","a":"루브르 박물관","w":["프라도 미술관","우피치 미술관","대영 박물관"]},{"q":"다음 중 가장 큰 수는 무엇일까요?","v":"1/2   2/3   3/4   1/4","a":"3/4","w":["1/2","2/3","1/4"]},{"q":"여러 방향에서 본 모습을 한 화면에 함께 그리는, 피카소가 시작한 미술 양식은 무엇일까요?","a":"입체주의(큐비즘)","w":["인상주의","초현실주의","팝아트"]},{"q":"만화, 광고, 유명인 등을 소재로 한 앤디 워홀이 대표하는 미술은 무엇일까요?","a":"팝아트","w":["입체주의","점묘법","인상주의"]},{"q":"알파벳을 한 칸씩 앞으로 당기면 어떤 낱말이 될까요?","v":"QBJOU","a":"PAINT","w":["POINT","PRINT","PLANT"]},{"q":"물감 한 통이 2,500원이에요. 7통을 사고 20,000원을 냈다면 거스름돈은 얼마일까요?","v":"20,000 − (2,500 × 7) = ?","a":"2,500원","w":["3,500원","1,500원","5,000원"]}]}];
 
-const TIERS = [
-  {
-    name: '5–7세', sub: '유아', big: true,
-    tag: '색, 모양, 그림 도구를 그림으로 맞히는 미술 방',
-    specs: ['글자 아주 크게', '색·모양 중심', '보기 3~4개', '어른이 읽어주기 가능'],
-    qs: [
-      { fmt: '색 고르기', type: 'pick', emoji: true, prompt: '빨강 물감과 노랑 물감을 섞으면 무슨 색이 될까요?', choices: ['🟠', '🟢', '🟣'], ans: 0, hint: '당근과 같은 색이에요.' },
-      { fmt: '다른 모양 찾기', type: 'pick', emoji: true, two: true, prompt: '다른 모양 하나를 찾아요.', choices: ['🔺', '🔺', '🔵', '🔺'], ans: 2, hint: '뾰족한 곳이 없는 동글동글한 모양이에요.' },
-      { fmt: '도구 고르기', type: 'pick', emoji: true, prompt: '그림을 그릴 때 쓰는 도구는 어느 거예요?', choices: ['🖌️', '🍴', '👟'], ans: 0, hint: '물감을 묻혀서 쓱쓱 칠해요.' }
-    ]
-  },
-  {
-    name: '초 1–2학년', sub: '저학년', big: true,
-    tag: '물감 계산, 도구 이름 만들기, 기본 색 알기',
-    specs: ['글자 크게', '한 자리·두 자리 계산', '낱말 카드 만들기', '방마다 2~3분'],
-    qs: [
-      { fmt: '숫자 자물쇠', type: 'pad', prompt: '팔레트에 물감이 7개 있었는데 5개를 더 샀어요. 물감은 모두 몇 개일까요?', visual: '🎨 7 + 5 = ?', ans: '12', hint: '7에서 5번 이어서 세어 봐요.' },
-      { fmt: '낱말 만들기', type: 'build', prompt: '카드를 순서대로 눌러 색칠 도구 이름을 만들어요.', visual: '🖍️', pool: ['파', '크', '스', '레'], ans: ['크', '레', '파', '스'], hint: '막대 모양이고 색깔이 여러 가지예요. 첫 글자는 "크"예요.' },
-      { fmt: '빈칸 채우기', type: 'pick', prompt: '색의 기본이 되는 3원색이에요. 빈칸에 알맞은 색은?', visual: '빨강 · 노랑 · ( )', choices: ['초록', '파랑', '보라'], ans: 1, hint: '맑은 하늘과 바다의 색이에요.' }
-    ]
-  },
-  {
-    name: '초 3–4학년', sub: '중학년', big: false,
-    tag: '색·모양 지식과 유명 작품, 그림 순서를 조합해서 푸는 방',
-    specs: ['글자 보통', '색·작품·순서', '단서를 모아 비밀번호', '방마다 3~4분'],
-    qs: [
-      { fmt: '단서 비밀번호', type: 'dial', prompt: '미술 단서를 풀어서 세 자리 비밀번호를 맞춰요.', clues: ['첫째 자리 : 색의 3원색은 몇 가지?', '둘째 자리 : 무지개 색은 몇 가지?', '셋째 자리 : 정사각형의 꼭짓점은 몇 개?'], ans: '374', hint: '무지개는 빨주노초파남보예요.' },
-      { fmt: '작품 퀴즈', type: 'pick', prompt: '〈모나리자〉를 그린 화가는 누구일까요?', choices: ['레오나르도 다 빈치', '빈센트 반 고흐', '클로드 모네', '파블로 피카소'], ans: 0, hint: '르네상스 시대에 활동한 화가이자 발명가예요.' },
-      { fmt: '순서 맞추기', type: 'build', prompt: '그림이 완성되는 순서대로 카드를 눌러요.', pool: ['색칠', '전시', '밑그림', '말리기'], ans: ['밑그림', '색칠', '말리기', '전시'], hint: '연필로 윤곽을 먼저 잡아요.' }
-    ]
-  },
-  {
-    name: '초 5–6학년', sub: '고학년', big: false,
-    tag: '미술 용어 암호, 물감 분수 계산, 화가 논리 추리를 직접 입력해서 푸는 방',
-    specs: ['글자 보통', '암호·분수·논리', '직접 입력', '방마다 5분'],
-    qs: [
-      { fmt: '암호 해독', type: 'text', prompt: '알파벳을 한 칸씩 앞으로 당기면 그림을 그리는 천의 이름이 나와요.', visual: 'DBOWBT', ans: ['CANVAS'], ph: '영어 6글자', hint: 'D의 한 칸 앞은 C예요. 캔버스라고 읽어요.' },
-      { fmt: '물감 분수', type: 'text', prompt: '보라색을 만들려고 빨강 물감 1/3통과 파랑 물감 1/4통을 섞었어요. 모두 몇 통일까요? 기약분수로 써요.', visual: '1/3 + 1/4 = ?', ans: ['7/12'], ph: '분수로 입력', hint: '분모를 12로 통분해요.' },
-      { fmt: '화가 추리', type: 'pick', prompt: '화가 A, B, C가 〈수련〉, 〈해바라기〉, 〈별이 빛나는 밤〉을 한 점씩 그렸어요. A는 〈해바라기〉도 〈별이 빛나는 밤〉도 그리지 않았고, C는 〈별이 빛나는 밤〉을 그리지 않았어요. B가 그린 그림은?', choices: ['수련', '해바라기', '별이 빛나는 밤'], ans: 2, hint: 'A가 그린 그림부터 정해 보세요.' }
-    ]
-  }
+const AGES = [
+  { name: '5–7세', sub: '유아', icon: '🌈' },
+  { name: '초 1–2학년', sub: '저학년', icon: '🖍️' },
+  { name: '초 3–4학년', sub: '중학년', icon: '🎨' },
+  { name: '초 5–6학년', sub: '고학년', icon: '🖼️' }
+];
+const LEVELS = [
+  { k: '하', stars: '⭐', word: '쉬워요' },
+  { k: '중', stars: '⭐⭐', word: '보통이에요' },
+  { k: '상', stars: '⭐⭐⭐', word: '어려워요' }
 ];
 
-const GROUPS = [
-  { k: 'ages', label: '연령 단계', opts: [['4', '4단계 · 5–7세 / 초1–2 / 초3–4 / 초5–6'], ['3', '3단계 · 유아 / 초저 / 초고']] },
-  { k: 'rooms', label: '단계별 방 개수', opts: [['3', '3개'], ['5', '5개'], ['7', '7개']] },
-  { k: 'hint', label: '힌트', opts: [['on', '힌트 버튼 있음'], ['none', '힌트 없음']] },
-  { k: 'wrong', label: '오답일 때', opts: [['retry', '바로 다시 풀기'], ['hint', '3번 틀리면 힌트 자동 공개'], ['time', '틀릴 때마다 시간 −10초']] },
-  { k: 'limit', label: '제한 시간', opts: [['none', '없음'], ['room', '방마다 3분'], ['all', '전체 15분']] },
-  { k: 'voice', label: '유아 단계 읽어주기 음성', opts: [['yes', '넣기'], ['no', '안 넣기']] }
-];
-
-let S = { ages: '4', rooms: '5', hint: 'on', wrong: 'retry', limit: 'none', voice: 'yes' };
-let likes = {};
-try {
-  const j = JSON.parse(localStorage.getItem('escape-sample-v2') || 'null');
-  if (j) { Object.assign(S, j.S || {}); likes = j.likes || {}; }
-} catch (_) {}
-function save() { try { localStorage.setItem('escape-sample-v2', JSON.stringify({ S, likes })); } catch (_) {} }
-
-const $ = s => document.querySelector(s);
+const app = document.getElementById('app');
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const norm = s => s.replace(/\s+/g, '').toUpperCase();
-
-const st = { tier: 0, progress: [0, 0, 0, 0], wrong: [0, 0, 0, 0] };
-function fresh() { return { sel: new Set(), pad: '', slots: [], dial: [0, 0, 0], text: '', hint: false, solved: false, msg: '', kind: '', tries: 0, shake: false, focus: false }; }
-let cur = fresh();
-const curQ = () => TIERS[st.tier].qs[st.progress[st.tier]];
-
-function renderTabs() {
-  $('#tabs').innerHTML = TIERS.map((t, i) =>
-    `<button class="tab" role="tab" type="button" aria-selected="${i === st.tier}" data-act="tier" data-i="${i}"><span class="tab-n">${t.name}</span><span class="tab-s">${t.sub}</span></button>`
-  ).join('');
+function shuffle(a) {
+  a = a.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
 }
 
-function renderInfo() {
-  const t = TIERS[st.tier];
-  $('#info').innerHTML = `<h2>${t.name} <span class="muted" style="font-family:var(--font-body)">${t.sub}</span></h2><p>${t.tag}</p><ul class="chips">${t.specs.map(s => `<li>${s}</li>`).join('')}</ul>`;
-}
-
-function doorsHtml() {
-  const t = TIERS[st.tier], p = st.progress[st.tier];
-  const all = p >= t.qs.length;
-  const items = t.qs.map((q, i) => {
-    const done = i < p || (i === p && cur.solved);
-    const s = done ? 'done' : i === p ? 'now' : 'lock';
-    return `<button class="door ${s}" type="button" data-act="door" data-i="${i}"><span>${s === 'done' ? OPEN : LOCK}</span><span class="dlab">${i + 1}번 방</span></button>`;
-  }).join('');
-  return `<div class="doors">${items}<button class="door ${all ? 'done' : 'lock'}" type="button" disabled><span>${EXIT}</span><span class="dlab">탈출</span></button></div>`;
-}
-
-function bodyHtml(q) {
-  let h = '';
-  if (q.visual) h += `<div class="visual">${q.visual}</div>`;
-  if (q.clues) h += `<ul class="clues">${q.clues.map(c => `<li>${c}</li>`).join('')}</ul>`;
-  const dis = cur.solved ? 'disabled' : '';
-  if (q.type === 'pick') {
-    const cls = ['choices', (q.two || q.choices.length === 4) ? 'two' : '', q.emoji ? 'emo' : ''].join(' ');
-    h += `<div class="${cls}">${q.choices.map((c, i) => {
-      const state = cur.sel.has(i) ? (i === q.ans ? 'right' : 'wrong') : '';
-      return `<button class="choice ${state}" type="button" data-act="pick" data-i="${i}" ${cur.solved || cur.sel.has(i) ? 'disabled' : ''}>${c}</button>`;
-    }).join('')}</div>`;
-  } else if (q.type === 'pad') {
-    h += `<div class="padout" aria-label="입력한 숫자">${cur.pad || '&nbsp;'}</div><div class="keys">`;
-    for (let n = 1; n <= 9; n++) h += `<button class="key" type="button" data-act="pad" data-v="${n}" ${dis}>${n}</button>`;
-    h += `<button class="key sm" type="button" data-act="pad" data-v="del" ${dis}>지우기</button><button class="key" type="button" data-act="pad" data-v="0" ${dis}>0</button><button class="key go sm" type="button" data-act="submit" ${dis}>열기</button></div>`;
-  } else if (q.type === 'build') {
-    h += `<div class="slots">${q.ans.map((_, k) => cur.slots[k] !== undefined
-      ? `<button class="slot filled" type="button" data-act="remove" data-k="${k}" ${dis}>${q.pool[cur.slots[k]]}</button>`
-      : '<span class="slot"></span>').join('')}</div>`;
-    h += `<div class="pool">${q.pool.map((c, i) => `<button class="card" type="button" data-act="add" data-i="${i}" ${cur.slots.includes(i) || cur.solved ? 'disabled' : ''}>${c}</button>`).join('')}</div>`;
-    h += `<div style="display:flex;justify-content:center"><button class="btn" type="button" data-act="submit" ${cur.solved || cur.slots.length < q.ans.length ? 'disabled' : ''}>열기</button></div>`;
-  } else if (q.type === 'dial') {
-    h += `<div class="dials">${cur.dial.map((d, k) => `<div class="dial"><button type="button" aria-label="${k + 1}번째 숫자 올리기" data-act="dial" data-pos="${k}" data-d="1" ${dis}>${UP}</button><output>${d}</output><button type="button" aria-label="${k + 1}번째 숫자 내리기" data-act="dial" data-pos="${k}" data-d="-1" ${dis}>${DOWN}</button></div>`).join('')}</div>`;
-    h += `<div style="display:flex;justify-content:center"><button class="btn" type="button" data-act="submit" ${dis}>열기</button></div>`;
-  } else if (q.type === 'text') {
-    h += `<div class="textrow"><input id="ans" type="text" autocomplete="off" autocapitalize="characters" placeholder="${q.ph}" value="${esc(cur.text)}" aria-label="정답 입력" ${dis}><button class="btn" type="button" data-act="submit" ${dis}>열기</button></div>`;
+/* 같은 연령·난이도에서는 10개를 한 바퀴 돌 때까지 겹치지 않게 뽑는다 */
+const decks = {}, lastPick = {};
+function draw(age, level) {
+  const key = age + level, n = Q[age][level].length;
+  if (!decks[key] || !decks[key].length) {
+    decks[key] = shuffle([...Array(n).keys()]);
+    if (decks[key][decks[key].length - 1] === lastPick[key] && n > 1) decks[key].unshift(decks[key].pop());
   }
-  return h;
+  lastPick[key] = decks[key].pop();
+  return Q[age][level][lastPick[key]];
 }
 
-function renderStage() {
-  const t = TIERS[st.tier], p = st.progress[st.tier], n = t.qs.length;
-  let h = doorsHtml();
-  if (p >= n) {
-    const next = st.tier < TIERS.length - 1;
-    h += `<div class="donecard"><h2>탈출 성공</h2><p>${t.name} 방탈출을 모두 풀었어요. 틀린 횟수는 ${st.wrong[st.tier]}번이에요.</p><div class="actions" style="justify-content:flex-start"><button class="btn" type="button" data-act="reset">처음부터 다시</button>${next ? `<button class="btn ghost" type="button" data-act="tier" data-i="${st.tier + 1}">${TIERS[st.tier + 1].name} 해 보기</button>` : ''}</div></div>`;
+const sessions = {};
+let sid = 0, cur = { s: 'select', idx: 0 }, sel = { age: null, level: null }, starting = false;
+
+function makeSession(age, level) {
+  const q = draw(age, level);
+  const choices = shuffle([q.a, ...q.w]);
+  return { age, level, q, choices, ans: choices.indexOf(q.a), picked: null };
+}
+
+/* 화면 이동: 선택 → 질문 → 결과. 브라우저(기기) 뒤로가기가 이전 화면으로 돌아간다 */
+function go(state) { history.pushState(state, ''); show(state); }
+function show(st) {
+  const s = st && sessions[st.id];
+  if (!st || st.s === 'select' || !s) {
+    st = { s: 'select', idx: 0 };
+    history.replaceState(st, '');
+    cur = st;
+    renderSelect();
   } else {
-    const q = t.qs[p];
-    const liked = !!likes[st.tier + '-' + p];
-    const limit = S.limit === 'room' ? '<span class="chip">방마다 3분 (표시만)</span>' : S.limit === 'all' ? '<span class="chip">전체 15분 (표시만)</span>' : '';
-    const speak = (st.tier === 0 && S.voice === 'yes' && 'speechSynthesis' in window) ? '<button class="link" type="button" data-act="speak">소리로 듣기</button>' : '';
-    const hintBtn = (S.hint !== 'none' && !cur.solved && !cur.hint) ? '<button class="link" type="button" data-act="hint">힌트 보기</button>' : '';
-    const hintTxt = (S.hint !== 'none' && cur.hint) ? `<p class="hint">${q.hint}</p>` : '';
-    h += `<div class="qcard ${t.big ? 'big' : ''} ${cur.shake ? 'shake' : ''}">
-      <div class="qhead"><span class="fmt">${q.fmt}</span><span style="display:flex;gap:8px;align-items:center">${limit}<span class="qno">${p + 1} / ${n}</span></span></div>
-      <p class="prompt">${q.prompt}</p>
-      ${bodyHtml(q)}
-      <div class="hintbar">${speak}${hintBtn}${hintTxt}</div>
-      <p class="fb ${cur.kind}" role="status">${cur.msg}</p>
-      <div class="actions">
-        <button class="like" type="button" data-act="like" aria-pressed="${liked}">${liked ? '이 유형 쓰기로 했어요' : '이 유형 쓸래요'}</button>
-        ${cur.solved ? `<button class="btn" type="button" data-act="next">${p + 1 < n ? '다음 방으로' : '문 밖으로 나가기'}</button>` : ''}
+    cur = st;
+    if (st.s === 'quiz') renderQuiz(s); else renderResult(s);
+  }
+  window.scrollTo(0, 0);
+  const f = app.querySelector('[data-focus]');
+  if (f) f.focus({ preventScroll: true });
+}
+window.addEventListener('popstate', e => show(e.state));
+
+function topbar(s) {
+  const L = LEVELS.find(l => l.k === s.level);
+  return `<div class="topbar"><button class="back" type="button" data-act="back">← 뒤로</button>
+    <div class="chips"><span class="chip">${AGES[s.age].icon} ${AGES[s.age].name}</span><span class="chip lvchip" data-lv="${s.level}">${L.stars} ${L.k}</span></div></div>`;
+}
+
+function renderSelect() {
+  sel = { age: null, level: null }; starting = false;
+  const b = document.body;
+  b.dataset.screen = 'select'; delete b.dataset.age; delete b.dataset.ok;
+  app.innerHTML = `<div class="screen select">
+    <section class="block ages-block" aria-labelledby="h-age">
+      <h1 class="ask" id="h-age" tabindex="-1" data-focus>몇 살이에요?</h1>
+      <div class="ages">${AGES.map((a, i) => `<button class="agebtn" type="button" data-act="age" data-age="${i}" aria-pressed="false"><span class="ic" aria-hidden="true">${a.icon}</span><span class="nm">${a.name}</span><span class="sb">${a.sub}</span></button>`).join('')}</div>
+    </section>
+    <section class="block lv-block" aria-labelledby="h-lv">
+      <h2 class="ask" id="h-lv">얼마나 어려운 방에 도전할까요?</h2>
+      <div class="levels">${LEVELS.map(l => `<button class="lvbtn" type="button" data-act="level" data-lv="${l.k}" aria-pressed="false"><span class="lk">${l.k}</span><span class="st" aria-hidden="true">${l.stars}</span><span class="wd">${l.word}</span></button>`).join('')}</div>
+    </section>
+  </div>`;
+}
+
+function renderQuiz(s) {
+  const b = document.body;
+  b.dataset.screen = 'quiz'; b.dataset.age = s.age; delete b.dataset.ok;
+  const done = s.picked !== null, q = s.q;
+  app.innerHTML = `<div class="screen quiz">
+    ${topbar(s)}
+    <div class="stage">
+      <div class="qbox">
+        <p class="prompt" id="prompt" tabindex="-1" data-focus>${esc(q.q)}</p>
+        ${q.v ? `<div class="visual" aria-hidden="false">${esc(q.v)}</div>` : ''}
       </div>
+      <div class="choices" role="group" aria-labelledby="prompt">${s.choices.map((c, i) => {
+        const state = done ? (i === s.picked ? (i === s.ans ? 'right' : 'wrong') : 'dim') : '';
+        const mark = done && i === s.picked ? `<span class="mark" aria-label="${i === s.ans ? '정답' : '오답'}">${i === s.ans ? '⭕' : '❌'}</span>` : '';
+        return `<button class="choice ${state}" type="button" data-act="choose" data-i="${i}" ${done ? 'disabled' : ''}><span class="num" aria-hidden="true">${i + 1}</span><span>${esc(c)}</span>${mark}</button>`;
+      }).join('')}</div>
     </div>
-    <button class="link reset" type="button" data-act="reset">이 단계 처음부터</button>`;
-  }
-  $('#stage').innerHTML = h;
-  cur.shake = false;
-  if (cur.focus) {
-    const el = $('#ans');
-    if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
-    cur.focus = false;
-  }
+    ${done ? `<div class="review"><p>이미 푼 문제예요.</p><button class="back" type="button" data-act="toresult">결과 화면으로</button></div>` : ''}
+  </div>`;
 }
 
-function solve() { cur.solved = true; cur.kind = 'ok'; cur.msg = '철컥! 자물쇠가 열렸어요.'; }
-function miss(q) {
-  cur.tries++; st.wrong[st.tier]++;
-  cur.kind = 'no'; cur.shake = true; cur.msg = '아직 잠겨 있어요. 다시 해 봐요.';
-  if (S.wrong === 'time') cur.msg += ' 시간 −10초';
-  if (S.wrong === 'hint' && cur.tries >= 3 && S.hint !== 'none' && !cur.hint) { cur.hint = true; cur.msg += ' 힌트를 열어 줬어요.'; }
+function renderResult(s) {
+  const ok = s.picked === s.ans;
+  const b = document.body;
+  b.dataset.screen = 'result'; b.dataset.age = s.age; b.dataset.ok = ok ? 'yes' : 'no';
+  let confetti = '';
+  if (ok) {
+    const bits = ['🎉', '🎨', '✨', '🖍️', '⭐', '🖌️', '🎊'];
+    confetti = '<div class="confetti" aria-hidden="true">' + Array.from({ length: 30 }, (_, i) =>
+      `<span style="left:${Math.random() * 100}%;animation-duration:${4 + Math.random() * 4}s;animation-delay:${-Math.random() * 6}s;font-size:${20 + Math.random() * 28}px">${bits[i % bits.length]}</span>`).join('') + '</div>';
+  }
+  app.innerHTML = `${confetti}<div class="screen result">
+    ${topbar(s)}
+    <div class="center" role="status">
+      ${ok
+        ? `<div class="big" aria-hidden="true">🎉</div><h1 tabindex="-1" data-focus>방탈출하셨습니다!</h1><p class="sub">축하합니다! 자물쇠를 모두 풀고 문을 활짝 열었어요.</p>
+           <div class="btns"><button class="cta" type="button" data-act="retry">다른 문제 도전하기</button><button class="ghost" type="button" data-act="home">처음으로</button></div>`
+        : `<div class="big wob" aria-hidden="true">🔒</div><h1 tabindex="-1" data-focus>방에 갇혔습니다</h1><p class="sub">다음 기회에 도전하겠습니까?</p>
+           <div class="btns"><button class="cta" type="button" data-act="retry">네, 다시 도전할래요</button><button class="ghost" type="button" data-act="home">아니요, 처음으로</button></div>`}
+    </div>
+  </div>`;
 }
 
-function submit() {
-  const q = curQ();
-  if (!q || cur.solved) return;
-  let ok = false;
-  if (q.type === 'pad') { if (!cur.pad) return; ok = cur.pad === q.ans; }
-  else if (q.type === 'build') { if (cur.slots.length < q.ans.length) return; ok = cur.slots.map(i => q.pool[i]).join('|') === q.ans.join('|'); }
-  else if (q.type === 'dial') { ok = cur.dial.join('') === q.ans; }
-  else if (q.type === 'text') { if (!cur.text.trim()) return; ok = q.ans.includes(norm(cur.text)); }
-  if (ok) solve();
-  else {
-    miss(q);
-    if (q.type === 'pad') cur.pad = '';
-    if (q.type === 'build') cur.slots = [];
-    cur.focus = q.type === 'text';
-  }
-  renderStage();
+function pushSession(age, level, idx) {
+  sessions[++sid] = makeSession(age, level);
+  go({ s: 'quiz', id: sid, idx });
 }
 
-document.addEventListener('click', e => {
-  const b = e.target.closest('[data-act]');
-  if (!b || b.disabled) return;
-  const a = b.dataset.act, t = TIERS[st.tier], p = st.progress[st.tier], q = t.qs[p];
-  if (a === 'tier') { st.tier = +b.dataset.i; cur = fresh(); renderTabs(); renderInfo(); renderStage(); }
-  else if (a === 'door') {
-    const i = +b.dataset.i;
-    if (i > p) { cur.kind = 'no'; cur.msg = '앞의 방을 먼저 열어야 해요.'; cur.shake = true; renderStage(); }
+app.addEventListener('click', e => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn || btn.disabled) return;
+  const a = btn.dataset.act;
+  if (a === 'age' || a === 'level') {
+    if (starting) return;
+    const key = a === 'age' ? 'age' : 'level';
+    sel[key] = a === 'age' ? +btn.dataset.age : btn.dataset.lv;
+    app.querySelectorAll(a === 'age' ? '.agebtn' : '.lvbtn').forEach(x => x.setAttribute('aria-pressed', String(x === btn)));
+    if (sel.age !== null && sel.level !== null) {
+      starting = true;
+      setTimeout(() => { if (cur.s === 'select') pushSession(sel.age, sel.level, 1); }, 380);
+    }
+  } else if (a === 'choose') {
+    const s = sessions[cur.id];
+    if (s.picked !== null) return;
+    s.picked = +btn.dataset.i;
+    go({ s: 'result', id: cur.id, idx: cur.idx + 1 });
+  } else if (a === 'toresult') {
+    go({ s: 'result', id: cur.id, idx: cur.idx + 1 });
+  } else if (a === 'retry') {
+    const s = sessions[cur.id];
+    pushSession(s.age, s.level, cur.idx + 1);
+  } else if (a === 'home') {
+    if (cur.idx > 0) history.go(-cur.idx); else show(null);
+  } else if (a === 'back') {
+    history.back();
   }
-  else if (a === 'pick') { if (cur.solved) return; const i = +b.dataset.i; cur.sel.add(i); if (i === q.ans) solve(); else miss(q); renderStage(); }
-  else if (a === 'pad') { if (b.dataset.v === 'del') cur.pad = cur.pad.slice(0, -1); else if (cur.pad.length < 3) cur.pad += b.dataset.v; renderStage(); }
-  else if (a === 'submit') submit();
-  else if (a === 'add') { if (cur.slots.length < q.ans.length) cur.slots.push(+b.dataset.i); renderStage(); }
-  else if (a === 'remove') { cur.slots.splice(+b.dataset.k, 1); renderStage(); }
-  else if (a === 'dial') { const k = +b.dataset.pos; cur.dial[k] = (cur.dial[k] + (+b.dataset.d) + 10) % 10; renderStage(); }
-  else if (a === 'hint') { cur.hint = true; renderStage(); }
-  else if (a === 'speak') { try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(q.prompt); u.lang = 'ko-KR'; u.rate = 0.9; speechSynthesis.speak(u); } catch (_) {} }
-  else if (a === 'like') { const key = st.tier + '-' + p; if (likes[key]) delete likes[key]; else likes[key] = true; save(); renderStage(); renderSummary(); }
-  else if (a === 'next') { st.progress[st.tier]++; cur = fresh(); renderStage(); }
-  else if (a === 'reset') { st.progress[st.tier] = 0; st.wrong[st.tier] = 0; cur = fresh(); renderStage(); }
 });
 
-document.addEventListener('input', e => { if (e.target.id === 'ans') cur.text = e.target.value; });
-document.addEventListener('keydown', e => { if (e.target.id === 'ans' && e.key === 'Enter') { e.preventDefault(); submit(); } });
-
-function buildGroups() {
-  $('#groups').innerHTML = GROUPS.map(g => `<fieldset><legend>${g.label}</legend><div class="opts">${g.opts.map(([v, text]) =>
-    `<label class="opt"><input type="radio" name="g-${g.k}" value="${v}" ${S[g.k] === v ? 'checked' : ''}><span>${text}</span></label>`).join('')}</div></fieldset>`).join('');
-}
-document.addEventListener('change', e => {
-  const r = e.target;
-  if (r.name && r.name.indexOf('g-') === 0) { S[r.name.slice(2)] = r.value; save(); renderSummary(); renderStage(); }
+/* 노트북: 숫자 키 1~4로 보기 선택 */
+document.addEventListener('keydown', e => {
+  if (cur.s !== 'quiz' || e.ctrlKey || e.metaKey || e.altKey) return;
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 4) {
+    const b = app.querySelector(`.choice[data-i="${n - 1}"]`);
+    if (b && !b.disabled) b.click();
+  }
 });
 
-function likedList() {
-  const out = [];
-  TIERS.forEach((t, ti) => t.qs.forEach((q, qi) => { if (likes[ti + '-' + qi]) out.push(t.name + ' ' + q.fmt); }));
-  return out;
-}
-function renderSummary() {
-  const lines = ['방탈출 질문지 선택'];
-  GROUPS.forEach(g => { const o = g.opts.find(o => o[0] === S[g.k]); lines.push('- ' + g.label + ': ' + (o ? o[1] : '')); });
-  const L = likedList();
-  lines.push('- 마음에 든 문제 유형: ' + (L.length ? L.join(', ') : '아직 고르지 않음'));
-  $('#summary').value = lines.join('\n');
-  $('#likelist').innerHTML = L.length ? L.map(x => `<span class="chip">${x}</span>`).join('') : '<span class="muted">문제 카드의 "이 유형 쓸래요"를 눌러 담아 보세요.</span>';
-}
-
-$('#copy').addEventListener('click', () => {
-  const ta = $('#summary'), msg = $('#copymsg');
-  const fallback = () => { ta.focus(); ta.select(); msg.textContent = '내용이 선택됐어요. 길게 눌러서 복사해 주세요.'; };
-  try {
-    navigator.clipboard.writeText(ta.value).then(() => { msg.textContent = '복사했어요. 채팅에 붙여 넣어 주세요.'; }).catch(fallback);
-  } catch (_) { fallback(); }
-});
-
-buildGroups();
-renderTabs();
-renderInfo();
-renderStage();
-renderSummary();
+history.replaceState({ s: 'select', idx: 0 }, '');
+show(history.state);
 </script>
 <script>
 if ('serviceWorker' in navigator) {
