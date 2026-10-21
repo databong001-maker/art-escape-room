@@ -1,5 +1,5 @@
-// 서비스 워커: 음성 멘트 탑재 버전 v11
-const VERSION = 'v11';
+// 서비스 워커: 덱 순환 중복 방지 & 초쉬운 힌트 탑재 버전 v13
+const VERSION = 'v13';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
