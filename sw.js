@@ -1,5 +1,5 @@
-// 서비스 워커: 성공/실패 TTS 제거 버전 v16
-const VERSION = 'v16';
+// 서비스 워커: 생각 유도형 힌트 업데이트 버전 v17
+const VERSION = 'v17';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
