@@ -76,7 +76,6 @@ button { font-family: inherit; color: inherit; -webkit-tap-highlight-color: tran
 .ages, .levels { flex: 1; display: grid; gap: clamp(12px, 2.2vw, 30px); padding-bottom: 10px; }
 .ages { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .levels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-@media (max-width: 820px) { .ages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .agebtn, .lvbtn {
   appearance: none;
@@ -118,9 +117,16 @@ button { font-family: inherit; color: inherit; -webkit-tap-highlight-color: tran
 .chip { padding: 6px 18px; border-radius: 999px; background: #FFFFFF; color: var(--ink); border: 3px solid var(--main); font-weight: 700; font-size: clamp(14px, 1.7vw, 22px); }
 .chip.lvchip { border-color: var(--lv); background: var(--lvs); }
 
+/* 시간 카운트 */
+.timer { flex: 1; min-width: 150px; display: flex; align-items: center; gap: 10px; }
+.timer .tnum { font-family: var(--font-display); font-size: clamp(22px, 2.8vw, 38px); min-width: 2.4em; text-align: right; line-height: 1; }
+.timer .track { flex: 1; height: clamp(16px, 2vw, 24px); border-radius: 999px; background: #FFFFFF; border: 3px solid var(--main); overflow: hidden; }
+.timer .fill { height: 100%; width: 100%; background: var(--main); transition: width .12s linear; }
+.timer.low .fill { background: #E03131; }
+.timer.low .tnum { color: #C92A2A; }
+
 /* ② 질문 화면 */
 .quiz .stage { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(14px, 2.6vw, 40px); }
-@media (max-width: 800px), (max-aspect-ratio: 1/1) { .quiz .stage { grid-template-columns: minmax(0, 1fr); } }
 .qbox {
   background: #FFFFFF; border: 6px solid var(--main); border-radius: 36px; box-shadow: 0 10px 0 var(--dark);
   padding: clamp(18px, 3vw, 44px);
@@ -168,6 +174,20 @@ body[data-ok="no"] .ghost { background: transparent; color: #FFFFFF; border-colo
 .confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
 .confetti span { position: absolute; top: -12%; animation: fall linear infinite; }
 @keyframes fall { to { transform: translateY(120vh) rotate(360deg); } }
+/* 폰을 세로로 들고 있어도 가로 배치를 유지하도록 글자·여백만 줄임 */
+@media (max-aspect-ratio: 1/1) {
+  .agebtn, .lvbtn { border-width: 4px; border-radius: 22px; padding: 6px; min-height: 110px; box-shadow: 0 6px 0 var(--dark); }
+  .lvbtn { box-shadow: 0 6px 0 var(--lvd); }
+  .agebtn .ic { font-size: clamp(30px, 11vw, 60px); }
+  .agebtn .nm { font-size: clamp(13px, 4vw, 22px); }
+  .agebtn .sb { font-size: clamp(11px, 3vw, 16px); }
+  .lvbtn .lk { font-size: clamp(34px, 12vw, 64px); }
+  .qbox { border-width: 4px; border-radius: 24px; padding: 12px; }
+  .prompt { font-size: calc(clamp(16px, 4.4vw, 26px) * var(--scale)); }
+  .visual { font-size: calc(clamp(24px, 7vw, 44px) * var(--scale)); }
+  .choice { border-width: 4px; border-radius: 20px; padding: 8px 10px; gap: 8px; font-size: calc(clamp(15px, 4vw, 24px) * var(--scale)); }
+  .choice .num { width: 1.5em; height: 1.5em; }
+}
 @media (prefers-reduced-motion: reduce) {
   .screen, .wob { animation: none; }
   .confetti { display: none; }
@@ -180,6 +200,8 @@ body[data-ok="no"] .ghost { background: transparent; color: #FFFFFF; border-colo
 
 <script>
 const Q = [{"하":[{"q":"빨강 물감과 노랑 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + 🟡 = ?","a":"🟠 주황","w":["🟢 초록","🟣 보라"]},{"q":"그림을 그릴 때 쓰는 도구는 어느 것일까요?","v":"🎨","a":"🖌️ 붓","w":["🍴 포크","👟 신발"]},{"q":"바나나는 무슨 색일까요?","v":"🍌","a":"🟡 노랑","w":["🔵 파랑","⚫ 검정"]},{"q":"맑은 날 하늘은 무슨 색일까요?","v":"☀️","a":"🔵 파랑","w":["🔴 빨강","⚫ 검정"]},{"q":"동그라미 모양은 어느 것일까요?","a":"🔵 동그라미","w":["🔺 세모","🟦 네모"]},{"q":"종이에 색칠할 때 쓰는 것은 어느 것일까요?","v":"📄","a":"🖍️ 크레파스","w":["🥄 숟가락","🧦 양말"]},{"q":"토마토는 무슨 색일까요?","v":"🍅","a":"🔴 빨강","w":["🟣 보라","🟤 갈색"]},{"q":"뾰족한 곳이 3개 있는 모양은 어느 것일까요?","a":"🔺 세모","w":["🔵 동그라미","🟦 네모"]},{"q":"그림을 그리는 사람을 무엇이라고 부를까요?","v":"🖼️","a":"🧑‍🎨 화가","w":["🧑‍🍳 요리사","🧑‍🚒 소방관"]},{"q":"눈은 무슨 색일까요?","v":"❄️","a":"⚪ 하양","w":["🟣 보라","🟤 갈색"]}],"중":[{"q":"파랑 물감과 노랑 물감을 섞으면 무슨 색이 될까요?","v":"🔵 + 🟡 = ?","a":"🟢 초록","w":["🟠 주황","🟣 보라"]},{"q":"빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + 🔵 = ?","a":"🟣 보라","w":["🟢 초록","🟠 주황"]},{"q":"다른 모양 하나는 어느 것일까요?","v":"🔺 🔺 🔵 🔺","a":"🔵 동그라미","w":["🔺 세모","🟦 네모"]},{"q":"물감을 물에 적셔서 칠하는 도구는 어느 것일까요?","v":"💧","a":"🖌️ 붓","w":["✏️ 연필","✂️ 가위"]},{"q":"종이를 자를 때 쓰는 도구는 어느 것일까요?","v":"📄","a":"✂️ 가위","w":["🖌️ 붓","🖍️ 크레파스"]},{"q":"종이를 붙일 때 쓰는 것은 어느 것일까요?","v":"📄 + 📄","a":"🧴 풀","w":["🧽 지우개","✏️ 연필"]},{"q":"그림 물감의 기본 색이에요. 빈칸에 알맞은 색은?","v":"🔴 🔵 ( )","a":"🟡 노랑","w":["🟢 초록","🟣 보라"]},{"q":"빨강 물감에 하양 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + ⚪ = ?","a":"🌸 분홍","w":["🟢 초록","⚫ 검정"]},{"q":"검정 물감에 하양 물감을 섞으면 무슨 색이 될까요?","v":"⚫ + ⚪ = ?","a":"🐘 회색","w":["🌸 분홍","🟢 초록"]},{"q":"그림을 구경하러 가는 곳은 어디일까요?","v":"🖼️","a":"🏛️ 미술관","w":["🏥 병원","🚒 소방서"]}],"상":[{"q":"무지개에서 빨강 다음에 오는 색은 무엇일까요?","v":"🔴 → ( )","a":"🟠 주황","w":["🟡 노랑","🟢 초록"]},{"q":"무지개 색의 순서예요. 빈칸에 알맞은 색은?","v":"🔴 🟠 🟡 ( )","a":"🟢 초록","w":["🟣 보라","🔵 파랑"]},{"q":"규칙을 찾아서 빈칸에 알맞은 것을 골라요.","v":"🔴 🔵 🔴 🔵 🔴 ( )","a":"🔵 파랑","w":["🔴 빨강","🟡 노랑"]},{"q":"규칙을 찾아서 빈칸에 알맞은 모양을 골라요.","v":"🟦 🟦 🔺 🟦 🟦 ( )","a":"🔺 세모","w":["🟦 네모","🔵 동그라미"]},{"q":"〈해바라기〉 그림에서 꽃은 무슨 색일까요?","v":"🌻","a":"🟡 노랑","w":["🔵 파랑","🟣 보라"]},{"q":"보라색을 만들려면 어떤 두 색을 섞어야 할까요?","v":"🟣","a":"🔴 빨강 + 🔵 파랑","w":["🔴 빨강 + 🟡 노랑","🟡 노랑 + 🔵 파랑"]},{"q":"물감을 짜서 색을 섞는 판은 무엇일까요?","v":"🎨","a":"🎨 팔레트","w":["🍽️ 쟁반","🎒 가방"]},{"q":"흙을 빚어 불에 구워 만든 그릇은 무엇일까요?","v":"🏺","a":"🏺 도자기","w":["🍞 빵","🧸 인형"]},{"q":"그림자는 무엇이 있어야 생길까요?","v":"🧍","a":"💡 빛","w":["🌧️ 비","🍎 사과"]},{"q":"따뜻한 느낌이 드는 색은 어느 것일까요?","v":"🔥","a":"🔴 빨강","w":["🔵 파랑","🟦 남색"]}]},{"하":[{"q":"팔레트에 물감이 7개 있었는데 5개를 더 샀어요. 모두 몇 개일까요?","v":"🎨 7 + 5 = ?","a":"12","w":["11","13","10"]},{"q":"색의 기본이 되는 세 가지 색이에요. 빈칸에 알맞은 색은?","v":"빨강 · 노랑 · ( )","a":"파랑","w":["초록","보라","주황"]},{"q":"빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?","v":"🔴 + 🔵 = ?","a":"보라","w":["초록","주황","분홍"]},{"q":"다음 중 색칠하는 도구가 아닌 것은 무엇일까요?","a":"가위","w":["크레파스","색연필","물감"]},{"q":"연필로 그린 그림을 지울 때 쓰는 것은 무엇일까요?","a":"지우개","w":["풀","물감","자"]},{"q":"색종이를 접어서 학이나 비행기를 만드는 활동은 무엇일까요?","v":"📄","a":"종이접기","w":["줄넘기","노래 부르기","달리기"]},{"q":"노랑 물감과 파랑 물감을 섞으면 무슨 색이 될까요?","v":"🟡 + 🔵 = ?","a":"초록","w":["보라","주황","분홍"]},{"q":"그림이나 조각 작품을 구경하는 곳은 어디일까요?","v":"🖼️","a":"미술관","w":["도서관","우체국","수영장"]},{"q":"붓을 깨끗이 씻을 때 필요한 것은 무엇일까요?","v":"🖌️","a":"물","w":["모래","불","연필"]},{"q":"물감이 10개 있었는데 4개를 썼어요. 남은 물감은 몇 개일까요?","v":"🎨 10 − 4 = ?","a":"6","w":["5","7","4"]}],"중":[{"q":"크레파스 12개를 두 친구가 똑같이 나누면 한 친구가 몇 개를 가질까요?","v":"🖍️ × 12","a":"6","w":["5","4","7"]},{"q":"빨강 크레파스 8개와 파랑 크레파스 6개가 있어요. 모두 몇 개일까요?","v":"🖍️ 8 + 6 = ?","a":"14","w":["13","15","12"]},{"q":"주황색을 만들려면 빨강에 어떤 색을 섞어야 할까요?","v":"🔴 + ( ) = 🟠","a":"노랑","w":["파랑","초록","하양"]},{"q":"무지개 색의 순서예요. 빈칸에 알맞은 색은?","v":"빨강 주황 노랑 ( ) 파랑 남색 보라","a":"초록","w":["하양","검정","분홍"]},{"q":"그림을 그리는 하얀 천 판의 이름은 무엇일까요?","a":"캔버스","w":["커튼","방석","식탁보"]},{"q":"섞지 않은 기본 색을 '원색'이라고 해요. 다음 중 원색은 무엇일까요?","a":"노랑","w":["초록","주황","보라"]},{"q":"물감 한 통에 색이 2개씩 들어 있어요. 3통이면 색은 모두 몇 개일까요?","v":"🎨 2 + 2 + 2 = ?","a":"6","w":["5","8","4"]},{"q":"색이 다른 하나를 찾아요.","v":"🍎 🍓 🍅 🍌","a":"🍌 바나나","w":["🍎 사과","🍓 딸기","🍅 토마토"]},{"q":"색종이가 20장 있어요. 8장을 접었어요. 접지 않은 색종이는 몇 장일까요?","v":"📄 20 − 8 = ?","a":"12","w":["10","13","28"]},{"q":"하얀 물감에 검정 물감을 조금 섞으면 어떤 색이 될까요?","v":"⚪ + ⚫ = ?","a":"회색","w":["노랑","빨강","보라"]}],"상":[{"q":"〈해바라기〉를 그린 화가는 누구일까요?","v":"🌻","a":"빈센트 반 고흐","w":["클로드 모네","파블로 피카소","레오나르도 다 빈치"]},{"q":"그림이 완성되는 순서예요. 빈칸에 알맞은 것은?","v":"밑그림 → 색칠 → ( ) → 전시","a":"말리기","w":["시작하기","잠자기","지우기"]},{"q":"규칙을 찾아서 빈칸에 알맞은 색을 골라요.","v":"🔴 🔵 🟡 🔴 🔵 🟡 🔴 🔵 ( )","a":"🟡 노랑","w":["🔴 빨강","🔵 파랑","⚪ 하양"]},{"q":"차갑게 느껴지는 색은 어느 것일까요?","a":"파랑","w":["빨강","주황","노랑"]},{"q":"물감이 15개 있었는데 7개를 썼어요. 남은 물감은 몇 개일까요?","v":"🎨 15 − 7 = ?","a":"8","w":["7","9","22"]},{"q":"네모(정사각형)에는 변이 모두 몇 개 있을까요?","v":"🟦","a":"4개","w":["3개","5개","6개"]},{"q":"연필로 쭉 길게 그은 것을 무엇이라고 할까요?","v":"✏️ ───────","a":"선","w":["점","면","원"]},{"q":"이젤 위에는 무엇을 세워 놓고 그림을 그릴까요?","a":"그림 그리는 판(캔버스)","w":["접시","신발","우산"]},{"q":"종이를 가위로 오려서 풀로 붙여 만드는 미술 활동은 무엇일까요?","v":"✂️ + 🧴","a":"콜라주","w":["판화","조각","소묘"]},{"q":"팔레트에 물감이 6개 있었는데 7개를 더 샀어요. 모두 몇 개일까요?","v":"🎨 6 + 7 = ?","a":"13","w":["12","14","11"]}]},{"하":[{"q":"〈모나리자〉를 그린 화가는 누구일까요?","a":"레오나르도 다 빈치","w":["빈센트 반 고흐","클로드 모네","파블로 피카소"]},{"q":"다음 중 색의 3원색이 아닌 것은 무엇일까요?","a":"초록","w":["빨강","노랑","파랑"]},{"q":"무지개 색은 모두 몇 가지일까요?","v":"🌈","a":"7가지","w":["5가지","6가지","8가지"]},{"q":"정사각형의 꼭짓점은 모두 몇 개일까요?","v":"🟦","a":"4개","w":["3개","5개","6개"]},{"q":"그림을 그릴 때 연필로 가장 먼저 그리는 것은 무엇일까요?","a":"밑그림","w":["전시","액자","서명"]},{"q":"다음 중 미술 도구가 아닌 것은 무엇일까요?","a":"계산기","w":["붓","물감","팔레트"]},{"q":"물감을 짜서 섞어 쓰는 판을 무엇이라고 할까요?","v":"🎨","a":"팔레트","w":["캔버스","이젤","붓"]},{"q":"다음 중 조각 작품을 만들 때 쓰는 재료는 무엇일까요?","a":"찰흙","w":["바람","노래","그림자"]},{"q":"초록색을 만들려면 노랑에 어떤 색을 섞어야 할까요?","v":"🟡 + ( ) = 🟢","a":"파랑","w":["빨강","보라","하양"]},{"q":"물을 섞어 맑고 투명하게 칠하는 그림을 무엇이라고 할까요?","a":"수채화","w":["판화","조각","사진"]}],"중":[{"q":"무지개 색의 순서예요. 빈칸에 알맞은 색은 무엇일까요?","v":"빨강 주황 노랑 초록 파랑 ( ) 보라","a":"남색","w":["하양","분홍","갈색"]},{"q":"연못에 핀 〈수련〉을 여러 점 그린 화가는 누구일까요?","a":"클로드 모네","w":["빈센트 반 고흐","파블로 피카소","레오나르도 다 빈치"]},{"q":"〈게르니카〉를 그린 화가는 누구일까요?","a":"파블로 피카소","w":["클로드 모네","빈센트 반 고흐","레오나르도 다 빈치"]},{"q":"김홍도의 〈씨름〉처럼 서민들의 생활 모습을 그린 우리나라 전통 그림을 무엇이라고 할까요?","a":"풍속화","w":["산수화","초상화","추상화"]},{"q":"빨강, 노랑, 파랑 물감을 모두 섞으면 어떤 색에 가까워질까요?","a":"어두운 검은빛","w":["하얀색","노란색","분홍색"]},{"q":"지름이 10cm인 원을 그리려면 컴퍼스를 몇 cm로 벌려야 할까요?","v":"⭕ 지름 10cm","a":"5cm","w":["10cm","20cm","2cm"]},{"q":"알타미라 동굴 벽화는 아주 오래전 어느 시대 사람들이 그린 그림일까요?","a":"선사 시대","w":["조선 시대","현대","르네상스 시대"]},{"q":"연필이나 목탄으로 선과 밝고 어두움만 사용해 그리는 그림을 무엇이라고 할까요?","a":"소묘(데생)","w":["판화","수채화","자수"]},{"q":"한 변이 4cm인 정삼각형의 세 변을 모두 더하면 몇 cm일까요?","v":"🔺 4 + 4 + 4 = ?","a":"12cm","w":["8cm","16cm","4cm"]},{"q":"콜라주는 어떤 방법으로 작품을 만들까요?","a":"여러 재료를 오려 붙여요","w":["물감을 흩뿌려요","찰흙을 빚어요","판에 새겨 찍어요"]}],"상":[{"q":"〈절규〉를 그린 노르웨이 화가는 누구일까요?","a":"에드바르 뭉크","w":["빈센트 반 고흐","폴 고갱","살바도르 달리"]},{"q":"녹아내리는 시계가 나오는 〈기억의 지속〉을 그린 화가는 누구일까요?","a":"살바도르 달리","w":["클로드 모네","파블로 피카소","앙리 마티스"]},{"q":"미술관 입장료가 한 명에 3,000원이에요. 4명이 들어가면 모두 얼마일까요?","v":"🏛️ 3,000 × 4 = ?","a":"12,000원","w":["9,000원","10,000원","7,000원"]},{"q":"물감이 반 통 남았어요. 그중 반을 썼어요. 쓴 양은 한 통의 얼마일까요?","v":"1/2의 반 = ?","a":"1/4통","w":["1/2통","1/3통","3/4통"]},{"q":"빨강, 주황, 노랑처럼 따뜻한 느낌을 주는 색을 무엇이라고 할까요?","a":"난색","w":["한색","무채색","보색"]},{"q":"흰색, 회색, 검정처럼 색깔이 느껴지지 않는 색을 무엇이라고 할까요?","a":"무채색","w":["유채색","난색","보색"]},{"q":"색상환에서 빨강의 맞은편에 있는 보색은 무엇일까요?","a":"초록","w":["파랑","노랑","주황"]},{"q":"〈모나리자〉를 그린 레오나르도 다 빈치는 어느 나라 사람일까요?","a":"이탈리아","w":["프랑스","스페인","네덜란드"]},{"q":"색의 3원색의 수와 무지개 색의 수를 더하면 얼마일까요?","v":"3 + 7 = ?","a":"10","w":["9","11","12"]},{"q":"먹으로 산과 물이 어우러진 경치를 그린 우리나라 전통 그림은 무엇일까요?","a":"산수화","w":["인물화","풍속화","추상화"]}]},{"하":[{"q":"〈별이 빛나는 밤〉을 그린 화가는 누구일까요?","a":"빈센트 반 고흐","w":["클로드 모네","파블로 피카소","살바도르 달리"]},{"q":"빛의 3원색은 빨강, 초록, ( )이에요. 빈칸에 알맞은 색은?","a":"파랑","w":["노랑","보라","주황"]},{"q":"미술에서 '명암'은 무엇의 차이를 말할까요?","a":"밝고 어두움","w":["크고 작음","길고 짧음","빠르고 느림"]},{"q":"도화지를 가로 4칸, 세로 3칸으로 나누면 칸은 모두 몇 개일까요?","v":"4 × 3 = ?","a":"12개","w":["7개","10개","14개"]},{"q":"자기 자신의 얼굴을 그린 그림을 무엇이라고 할까요?","a":"자화상","w":["풍경화","정물화","추상화"]},{"q":"꽃병이나 과일처럼 움직이지 않는 물건을 그린 그림을 무엇이라고 할까요?","a":"정물화","w":["자화상","풍경화","추상화"]},{"q":"찰흙, 돌, 나무 등으로 입체 작품을 만드는 미술 분야는 무엇일까요?","a":"조각","w":["판화","소묘","사진"]},{"q":"다른 색과 섞지 않은 순수한 색을 무엇이라고 할까요?","a":"원색","w":["보색","무채색","파스텔색"]},{"q":"물감이 한 통에 25ml씩 들어 있어요. 4통이면 모두 몇 ml일까요?","v":"25 × 4 = ?","a":"100ml","w":["90ml","75ml","125ml"]},{"q":"그림을 그리는 바탕이 되는 천을 무엇이라고 할까요?","a":"캔버스","w":["앞치마","커튼","손수건"]}],"중":[{"q":"〈인왕제색도〉를 그린 조선 시대 화가는 누구일까요?","a":"정선","w":["김홍도","신윤복","안견"]},{"q":"르네상스 미술이 처음 시작된 나라는 어디일까요?","a":"이탈리아","w":["영국","중국","미국"]},{"q":"빨강과 초록, 파랑과 주황처럼 색상환에서 서로 맞은편에 있는 색을 무엇이라고 할까요?","a":"보색","w":["유사색","무채색","원색"]},{"q":"빨강 물감 1/3통과 파랑 물감 1/4통을 섞었어요. 모두 몇 통일까요?","v":"1/3 + 1/4 = ?","a":"7/12통","w":["2/7통","5/12통","1/7통"]},{"q":"알파벳을 한 칸씩 앞으로 당기면 그림을 그리는 천의 이름이 나와요.","v":"DBOWBT","a":"CANVAS","w":["PAINTS","ARTIST","EASELS"]},{"q":"한 변이 6cm인 정사각형 액자의 둘레는 몇 cm일까요?","v":"🖼️ 6 + 6 + 6 + 6 = ?","a":"24cm","w":["12cm","36cm","18cm"]},{"q":"추상화는 어떤 그림일까요?","a":"색, 선, 모양으로 느낌을 표현한 그림","w":["사진처럼 똑같이 그린 그림","사람 얼굴을 그린 그림","음식만 그린 그림"]},{"q":"소묘에 쓰는, 나무를 태워 만든 검은 재료는 무엇일까요?","a":"목탄","w":["크레파스","분필","물감"]},{"q":"물감 600ml를 3명이 똑같이 나누어 가지면 한 명이 몇 ml를 가질까요?","v":"600 ÷ 3 = ?","a":"200ml","w":["300ml","100ml","150ml"]},{"q":"찰흙 작품을 높은 열에 구워 단단하게 만드는 기구는 무엇일까요?","a":"가마","w":["이젤","팔레트","액자"]}],"상":[{"q":"화가 A, B, C가 〈수련〉, 〈해바라기〉, 〈별이 빛나는 밤〉을 한 점씩 그렸어요. A는 〈해바라기〉도 〈별이 빛나는 밤〉도 그리지 않았고, C는 〈별이 빛나는 밤〉을 그리지 않았어요. B가 그린 그림은 무엇일까요?","a":"〈별이 빛나는 밤〉","w":["〈수련〉","〈해바라기〉"]},{"q":"가까운 것은 크게, 먼 것은 작게 그려서 깊이를 나타내는 방법은 무엇일까요?","a":"원근법","w":["점묘법","명암법","콜라주"]},{"q":"작은 점을 수없이 찍어서 그림을 완성하는 점묘법으로 유명한 화가는 누구일까요?","a":"조르주 쇠라","w":["클로드 모네","폴 고갱","앙리 마티스"]},{"q":"'인상파'라는 이름은 모네의 어떤 작품에서 비롯되었을까요?","a":"〈인상, 해돋이〉","w":["〈절규〉","〈모나리자〉","〈게르니카〉"]},{"q":"세계에서 가장 많은 사람이 찾는 프랑스 파리의 미술관은 어디일까요?","a":"루브르 박물관","w":["프라도 미술관","우피치 미술관","대영 박물관"]},{"q":"다음 중 가장 큰 수는 무엇일까요?","v":"1/2   2/3   3/4   1/4","a":"3/4","w":["1/2","2/3","1/4"]},{"q":"여러 방향에서 본 모습을 한 화면에 함께 그리는, 피카소가 시작한 미술 양식은 무엇일까요?","a":"입체주의(큐비즘)","w":["인상주의","초현실주의","팝아트"]},{"q":"만화, 광고, 유명인 등을 소재로 한 앤디 워홀이 대표하는 미술은 무엇일까요?","a":"팝아트","w":["입체주의","점묘법","인상주의"]},{"q":"알파벳을 한 칸씩 앞으로 당기면 어떤 낱말이 될까요?","v":"QBJOU","a":"PAINT","w":["POINT","PRINT","PLANT"]},{"q":"물감 한 통이 2,500원이에요. 7통을 사고 20,000원을 냈다면 거스름돈은 얼마일까요?","v":"20,000 − (2,500 × 7) = ?","a":"2,500원","w":["3,500원","1,500원","5,000원"]}]}];
+
+const TIME_LIMIT = 30; // 초
 
 const AGES = [
   { name: '5–7세', sub: '유아', icon: '🌈' },
@@ -224,7 +246,10 @@ function makeSession(age, level) {
 
 /* 화면 이동: 선택 → 질문 → 결과. 브라우저(기기) 뒤로가기가 이전 화면으로 돌아간다 */
 function go(state) { history.pushState(state, ''); show(state); }
+let timerId = null;
+function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
 function show(st) {
+  stopTimer();
   const s = st && sessions[st.id];
   if (!st || st.s === 'select' || !s) {
     st = { s: 'select', idx: 0 };
@@ -241,9 +266,10 @@ function show(st) {
 }
 window.addEventListener('popstate', e => show(e.state));
 
-function topbar(s) {
+function topbar(s, withTimer) {
   const L = LEVELS.find(l => l.k === s.level);
-  return `<div class="topbar"><button class="back" type="button" data-act="back">← 뒤로</button>
+  const timer = withTimer ? `<div class="timer" id="timer" role="timer" aria-label="남은 시간"><span class="tnum" id="tnum">${TIME_LIMIT}</span><div class="track"><div class="fill" id="tfill"></div></div></div>` : '';
+  return `<div class="topbar"><button class="back" type="button" data-act="back">← 뒤로</button>${timer}
     <div class="chips"><span class="chip">${AGES[s.age].icon} ${AGES[s.age].name}</span><span class="chip lvchip" data-lv="${s.level}">${L.stars} ${L.k}</span></div></div>`;
 }
 
@@ -268,7 +294,7 @@ function renderQuiz(s) {
   b.dataset.screen = 'quiz'; b.dataset.age = s.age; delete b.dataset.ok;
   const done = s.picked !== null, q = s.q;
   app.innerHTML = `<div class="screen quiz">
-    ${topbar(s)}
+    ${topbar(s, !done)}
     <div class="stage">
       <div class="qbox">
         <p class="prompt" id="prompt" tabindex="-1" data-focus>${esc(q.q)}</p>
@@ -280,8 +306,29 @@ function renderQuiz(s) {
         return `<button class="choice ${state}" type="button" data-act="choose" data-i="${i}" ${done ? 'disabled' : ''}><span class="num" aria-hidden="true">${i + 1}</span><span>${esc(c)}</span>${mark}</button>`;
       }).join('')}</div>
     </div>
-    ${done ? `<div class="review"><p>이미 푼 문제예요.</p><button class="back" type="button" data-act="toresult">결과 화면으로</button></div>` : ''}
+    ${done ? `<div class="review"><p>${s.picked === -1 ? '⏰ 시간이 지났어요.' : '이미 푼 문제예요.'}</p><button class="back" type="button" data-act="toresult">결과 화면으로</button></div>` : ''}
   </div>`;
+  if (!done) startTimer(s);
+}
+
+function startTimer(s) {
+  const end = Date.now() + TIME_LIMIT * 1000;
+  const num = document.getElementById('tnum'), fill = document.getElementById('tfill'), box = document.getElementById('timer');
+  const tick = () => {
+    const ms = Math.max(0, end - Date.now());
+    num.textContent = Math.ceil(ms / 1000);
+    fill.style.width = (ms / (TIME_LIMIT * 1000) * 100) + '%';
+    box.classList.toggle('low', ms <= 10000);
+    if (ms <= 0) {
+      stopTimer();
+      if (cur.s === 'quiz' && sessions[cur.id] === s && s.picked === null) {
+        s.picked = -1; // 시간 초과 = 오답
+        go({ s: 'result', id: cur.id, idx: cur.idx + 1 });
+      }
+    }
+  };
+  tick();
+  timerId = setInterval(tick, 100);
 }
 
 function renderResult(s) {
@@ -300,7 +347,7 @@ function renderResult(s) {
       ${ok
         ? `<div class="big" aria-hidden="true">🎉</div><h1 tabindex="-1" data-focus>방탈출하셨습니다!</h1><p class="sub">축하합니다! 자물쇠를 모두 풀고 문을 활짝 열었어요.</p>
            <div class="btns"><button class="cta" type="button" data-act="retry">다른 문제 도전하기</button><button class="ghost" type="button" data-act="home">처음으로</button></div>`
-        : `<div class="big wob" aria-hidden="true">🔒</div><h1 tabindex="-1" data-focus>방에 갇혔습니다</h1><p class="sub">다음 기회에 도전하겠습니까?</p>
+        : `<div class="big wob" aria-hidden="true">🔒</div><h1 tabindex="-1" data-focus>방에 갇혔습니다</h1><p class="sub">${s.picked === -1 ? '⏰ 시간이 끝났어요. ' : ''}다음 기회에 도전하겠습니까?</p>
            <div class="btns"><button class="cta" type="button" data-act="retry">네, 다시 도전할래요</button><button class="ghost" type="button" data-act="home">아니요, 처음으로</button></div>`}
     </div>
   </div>`;
@@ -317,6 +364,7 @@ app.addEventListener('click', e => {
   const a = btn.dataset.act;
   if (a === 'age' || a === 'level') {
     if (starting) return;
+    try { screen.orientation.lock('landscape').catch(() => {}); } catch (_) {}
     const key = a === 'age' ? 'age' : 'level';
     sel[key] = a === 'age' ? +btn.dataset.age : btn.dataset.lv;
     app.querySelectorAll(a === 'age' ? '.agebtn' : '.lvbtn').forEach(x => x.setAttribute('aria-pressed', String(x === btn)));

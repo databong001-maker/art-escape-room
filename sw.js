@@ -1,5 +1,5 @@
 // 서비스 워커: 파일을 바꿔 올릴 때마다 VERSION 숫자를 올려 주세요.
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
