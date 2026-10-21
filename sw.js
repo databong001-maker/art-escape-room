@@ -1,5 +1,5 @@
-// 서비스 워커: 초귀염 고양이 보이스 튜닝 버전 v14
-const VERSION = 'v14';
+// 서비스 워커: 특수부호 발음 정제 버전 v15
+const VERSION = 'v15';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 

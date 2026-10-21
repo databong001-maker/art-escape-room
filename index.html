@@ -589,7 +589,6 @@ function getCuteKoreanVoice() {
   if (!('speechSynthesis' in window)) return null;
   const voices = window.speechSynthesis.getVoices();
   const koVoices = voices.filter(v => v.lang.startsWith('ko'));
-  // 안드로이드·iOS·윈도우·맥 등에서 가장 맑고 앙증맞은 여성/자연스러운 음성 최우선 선택
   return koVoices.find(v => /yuna|sora|natural|female|child|google 한국의|seoyeon|ko-kr-x/i.test(v.name)) 
       || koVoices.find(v => /female|woman/i.test(v.name)) 
       || koVoices[0] 
@@ -600,39 +599,53 @@ if ('speechSynthesis' in window) {
   window.speechSynthesis.onvoiceschanged = () => getCuteKoreanVoice();
 }
 
-/* 🐾 감정별 극대화된 귀여운 아기 마법 고양이 TTS 엔진 */
+/* 🐾 기호·물결표·특수문자 완벽 정제 고양이 음성 엔진 */
+function cleanTextForSpeech(str) {
+  if (!str) return '';
+  return str
+    // HTML 태그 제거
+    .replace(/<[^>]*>/g, ' ')
+    // '물결표'로 읽히지 않도록 물결표(~) 및 캐럿(^) 제거
+    .replace(/[~～^]/g, ' ')
+    // 기호가 음성으로 읽히지 않도록 공백/쉼표로 변환
+    .replace(/[―—–\-+=*/×÷()\[\]<>〈〉《》「」『』_·•・→↑↓←↔]/g, ' ')
+    // 이모지 및 특수 그래픽 기호 전부 제거
+    .replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F1E6}-\u{1F1FF}🔴🟡🔵🟢🟣🟠⚫⚪🐘🌸💡✨🪄🐱👑🔒]/gu, ' ')
+    // 쉼표/마침표 앞뒤 공백 정리 및 중복 공백 제거
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function speakLulu(text, mode = 'question') {
   if (!soundEnabled || !('speechSynthesis' in window)) return;
   try {
     window.speechSynthesis.cancel();
-    // 특수문자 및 기호 정제 (자연스러운 쉼표 및 느낌표 리듬 보존)
-    const cleanText = text.replace(/<[^>]*>/g, '').replace(/[🔴🟡🔵🟢🟣🟠⚫⚪🐘🌸💡✨🪄🐱👑🔒]/g, '');
-    const utter = new SpeechSynthesisUtterance(cleanText);
+    
+    // 특수문자 발음 완전 차단 정제
+    const clean = cleanTextForSpeech(text);
+    if (!clean) return;
+
+    const utter = new SpeechSynthesisUtterance(clean);
     utter.lang = 'ko-KR';
 
     const selectedVoice = getCuteKoreanVoice();
     if (selectedVoice) utter.voice = selectedVoice;
 
     if (mode === 'happy_win') {
-      // 🎉 성공 시: 초고음 앙증맞은 환호 톤 (피치 1.82, 속도는 살짝 느리게 또박또박 0.88)
-      utter.pitch = 1.82;
+      utter.pitch = 1.8;
       utter.rate = 0.88;
     } else if (mode === 'sad_fail') {
-      // 😿 오답 시: 시무룩하면서도 귀엽게 칭얼거리는 아기 고양이 톤 (피치 1.70, 속도 0.86)
-      utter.pitch = 1.70;
+      utter.pitch = 1.68;
       utter.rate = 0.86;
     } else if (mode === 'timeout') {
-      // ⏰ 시간초과 시: 깜짝 놀라 허둥지둥하는 톤 (피치 1.85, 속도 0.98)
-      utter.pitch = 1.85;
-      utter.rate = 0.98;
+      utter.pitch = 1.82;
+      utter.rate = 0.95;
     } else if (mode === 'hint') {
-      // 🪄 힌트 안내 톤
-      utter.pitch = 1.65;
+      utter.pitch = 1.62;
       utter.rate = 0.92;
     } else {
-      // 📝 기본 질문 낭독: 또박또박 밝고 맑은 어린이 톤
       utter.pitch = 1.35;
-      utter.rate = 0.98;
+      utter.rate = 0.96;
     }
 
     window.speechSynthesis.speak(utter);
@@ -1053,7 +1066,7 @@ function renderQuiz() {
         lulu.className = 'lulu-svg-wrap panic';
         speech.textContent = '으앙, 시간이 얼마 안 남았다냥! 💦';
       }
-      speakLulu("꺄앙! 시간이 얼마 안 남았다냥! 어서 골라라옹~!", 'timeout');
+      speakLulu("꺄앙, 시간이 얼마 안 남았다냥! 어서 골라라옹!", 'timeout');
       playSound('tick');
     } else if (remain < 5 && remain > 0) {
       playSound('tick');
@@ -1072,18 +1085,16 @@ function renderResult(isSuccess, isTimeOut = false) {
     playSound('success');
     fireMagnificentFireworks();
     setTimeout(() => {
-      // 👑 초귀염 승리 대사 (초고음 + 사랑스러운 감탄사)
-      speakLulu("와아아~! 꺄앙! 대~단하다냥! 자물쇠가 딸깍 풀렸다옹~! 방탈출 대성공이다냥! 냐호~!", 'happy_win');
+      // 물결표 없는 자연스러운 억양의 감탄사
+      speakLulu("와아아, 꺄앙! 정말 대단하다냥! 자물쇠가 딸깍 풀렸다옹! 방탈출 대성공이다냥! 냐호!", 'happy_win');
     }, 180);
   } else {
     playSound('fail');
     setTimeout(() => {
       if (isTimeOut) {
-        // ⏰ 시간초과 귀여운 아쉬움 대사
         speakLulu("꺄앙! 째깍째깍 시간이 다 가버렸다냥! 다시 도전해보자옹, 냐옹!", 'timeout');
       } else {
-        // 😿 오답 시 사랑스럽고 시무룩한 고양이 대사
-        speakLulu("냐앙... 아쉽다옹... 문이 덜컹 잠겼다냥! 루루랑 한 번 더 해보자냥, 응?", 'sad_fail');
+        speakLulu("냐앙, 아쉽다옹. 문이 덜컹 잠겼다냥! 루루랑 한 번 더 해보자냥, 응?", 'sad_fail');
       }
     }, 180);
   }
@@ -1144,7 +1155,7 @@ app.addEventListener('click', (e) => {
         if (isOpen) {
           lulu.className = 'lulu-svg-wrap hinting';
           speech.textContent = '루루의 마법 힌트를 줄게냥! 🪄';
-          speakLulu("냐옹~! 루루가 힌트를 알려주겠다옹! " + session.item.hint, 'hint');
+          speakLulu("냐옹! 루루가 힌트를 알려주겠다옹! " + session.item.hint, 'hint');
         } else {
           lulu.className = 'lulu-svg-wrap normal';
           speech.textContent = '비밀 암호를 함께 풀어보자냥! ✨';
