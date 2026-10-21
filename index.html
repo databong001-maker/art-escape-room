@@ -1,1568 +1,898 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>마법 미술 아틀리에 방탈출</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="icons/icon-192.png" type="image/png">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>마법 미술 방탈출 ✨</title>
+<meta name="theme-color" content="#FFD1E3">
+<meta name="description" content="루루와 함께하는 달콤 마법 미술 방탈출">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500;700;900&display=swap">
+<style>
+:root {
+  --bg-gradient: linear-gradient(135deg, #FFEBF2 0%, #FFF0F8 45%, #EBF4FF 100%);
+  --card-bg: rgba(255, 255, 255, 0.94);
+  --pink-main: #FF4E8E;
+  --pink-dark: #D82265;
+  --pink-soft: #FFE4EE;
+  --purple-main: #8F55FF;
+  --purple-dark: #6C2FE0;
+  --yellow-main: #FFB800;
+  --yellow-dark: #D49000;
+  --text-main: #3C2946;
+  --text-sub: #7A6685;
+  --font-magic: 'Jua', cursive, sans-serif;
+  --font-text: 'Noto Sans KR', sans-serif;
+}
 
-  <!-- 사랑스러운 구글 폰트 (Jua & Noto Sans KR & Fredoka) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;800&family=Jua&family=Noto+Sans+KR:wght@600;800&display=swap" rel="stylesheet">
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  width: 100vw; height: 100vh; height: 100dvh;
+  overflow: hidden;
+  font-family: var(--font-text);
+  color: var(--text-main);
+  background: var(--bg-gradient);
+}
 
-  <style>
-    :root {
-      --bg-gradient: radial-gradient(circle at 50% 10%, #FFF5F9 0%, #F5EBFF 55%, #F0F4FF 100%);
-      --glass-bg: rgba(255, 255, 255, 0.88);
-      --glass-border: rgba(255, 209, 230, 0.9);
-      --glass-shadow: 0 16px 36px rgba(255, 126, 179, 0.16);
-      
-      --pink-core: #FF5A8D;
-      --pink-deep: #DE2E68;
-      --pink-light: #FFEBF2;
-      --purple-core: #9D62F3;
-      --purple-deep: #7737DC;
-      --purple-light: #F4EEFF;
-      --gold-spark: #FFB703;
-      
-      --text-main: #3F2C46;
-      --text-muted: #8E7A97;
-      
-      --font-display: 'Jua', cursive, sans-serif;
-      --font-body: 'Noto Sans KR', sans-serif;
-      --font-num: 'Fredoka', cursive, sans-serif;
-    }
+.bg-sparkles {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(255, 126, 179, 0.22) 0%, transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(162, 155, 254, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 234, 167, 0.2) 0%, transparent 45%);
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+#app {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+}
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: var(--bg-gradient);
-      color: var(--text-main);
-      font-family: var(--font-body);
-      position: relative;
-    }
+.screen {
+  flex: 1;
+  display: flex; flex-direction: column;
+  padding: clamp(10px, 2vh, 20px) clamp(14px, 2.8vw, 36px);
+  gap: clamp(10px, 1.8vh, 18px);
+  height: 100%;
+}
 
-    /* 은은하게 빛나는 마법 오로라 배경 구름 */
-    .aurora-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-    .aurora-circle {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(70px);
-      opacity: 0.55;
-      animation: floatAurora 9s ease-in-out infinite alternate;
-    }
-    .aurora-1 { width: 450px; height: 450px; background: #FFD1E3; top: -100px; left: -100px; }
-    .aurora-2 { width: 420px; height: 420px; background: #E0CEFF; bottom: -80px; right: -80px; animation-delay: 2s; }
-    .aurora-3 { width: 320px; height: 320px; background: #FFE8AC; top: 30%; right: 15%; animation-delay: 4.5s; opacity: 0.4; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  flex: none; height: clamp(48px, 7vh, 60px);
+}
+.back-btn, .sfx-toggle, .hint-btn {
+  border: none; cursor: pointer; outline: none;
+  font-family: var(--font-magic); font-size: clamp(15px, 2vh, 19px);
+  padding: 0 clamp(16px, 2vw, 24px); height: 100%;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  transition: transform .12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .12s;
+}
+.back-btn {
+  background: #FFF; color: var(--pink-main);
+  border: 3px solid var(--pink-main);
+  box-shadow: 0 4px 0 var(--pink-dark);
+}
+.back-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--pink-dark); }
 
-    @keyframes floatAurora {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(25px, 20px) scale(1.08); }
-      100% { transform: translate(-20px, -25px) scale(0.95); }
-    }
+.timer-wrap {
+  flex: 1; max-width: 480px; height: 100%;
+  background: #FFF; border-radius: 999px;
+  border: 3px solid #E4D5EC;
+  box-shadow: 0 4px 12px rgba(143, 85, 255, 0.15);
+  display: flex; align-items: center; padding: 4px 14px; gap: 10px;
+  position: relative;
+}
+.timer-icon {
+  font-size: clamp(22px, 3.5vh, 32px); line-height: 1;
+  display: inline-block;
+  transition: transform .2s ease;
+}
+.timer-bar-bg {
+  flex: 1; height: clamp(12px, 1.8vh, 16px);
+  background: #F1E8F8; border-radius: 999px; overflow: hidden;
+  position: relative;
+}
+.timer-bar-fill {
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, #FF6EA7, #A855F7, #6366F1);
+  border-radius: 999px;
+  transition: width .1s linear;
+}
+.timer-sec {
+  font-family: var(--font-magic); font-size: clamp(20px, 3vh, 28px);
+  min-width: 2.2ch; text-align: right; color: var(--purple-dark);
+}
 
-    /* 메인 앱 레이아웃 (스크롤 없는 1화면 고정) */
-    #app {
-      position: relative;
-      z-index: 2;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      padding: clamp(10px, 2.2vh, 20px) clamp(12px, 2.8vw, 30px);
-    }
+.timer-wrap.danger {
+  border-color: #FF2E7E;
+  box-shadow: 0 0 18px rgba(255, 46, 126, 0.5);
+  animation: heartPulse .45s infinite alternate;
+}
+.timer-wrap.danger .timer-icon { animation: shake .2s infinite; }
+.timer-wrap.danger .timer-bar-fill { background: linear-gradient(90deg, #FF1744, #FF5252); }
+.timer-wrap.danger .timer-sec { color: #FF1744; }
 
-    button {
-      font-family: inherit;
-      color: inherit;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s;
-    }
-    button:active {
-      transform: translateY(4px) scale(0.96) !important;
-      box-shadow: 0 2px 0 rgba(0,0,0,0.12) !important;
-    }
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+@keyframes shake {
+  0% { transform: rotate(-10deg) scale(1.1); }
+  50% { transform: rotate(10deg) scale(1.2); }
+  100% { transform: rotate(-10deg) scale(1.1); }
+}
 
-    /* 말랑말랑 3D 젤리 보석 버튼 */
-    .crystal-btn {
-      border-radius: clamp(18px, 2.6vw, 30px);
-      box-shadow: 0 8px 0 var(--btn-shadow, rgba(0,0,0,0.12)), 0 16px 24px rgba(222, 46, 104, 0.12);
-      backdrop-filter: blur(12px);
-    }
+.hint-btn {
+  background: linear-gradient(135deg, #FFE169, #FFAC1C);
+  color: #5D3B00; border: 3px solid #FFF;
+  box-shadow: 0 4px 0 var(--yellow-dark);
+}
+.hint-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--yellow-dark); }
 
-    /* 1. 메인 선택 화면 */
-    .screen-select {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: clamp(10px, 2.2vh, 22px);
-      height: 100%;
-    }
+.select-screen {
+  flex: 1; display: flex; flex-direction: column;
+  gap: clamp(10px, 2vh, 22px);
+  max-width: 1100px; margin: 0 auto; width: 100%;
+  justify-content: center;
+}
+.section-title {
+  font-family: var(--font-magic);
+  font-size: clamp(22px, 3.2vh, 32px);
+  margin: 0; text-align: center; color: var(--pink-dark);
+  text-shadow: 0 2px 0 #FFF;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.cards-grid {
+  display: grid; gap: clamp(10px, 1.8vh, 18px);
+  width: 100%;
+}
+.cards-age { grid-template-columns: repeat(4, 1fr); }
+.cards-level { grid-template-columns: repeat(3, 1fr); }
 
-    .select-section {
-      display: flex;
-      flex-direction: column;
-      gap: clamp(6px, 1.3vh, 12px);
-    }
-    .select-section.age-sec { flex: 3.2; }
-    .select-section.lv-sec { flex: 2.1; }
+.jelly-card {
+  background: var(--card-bg);
+  border-radius: clamp(18px, 2.5vh, 28px);
+  border: 4px solid #FFF;
+  box-shadow: 0 clamp(6px, 1vh, 10px) 0 #DEC4E0, 0 8px 24px rgba(150, 110, 180, 0.15);
+  cursor: pointer; outline: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: clamp(10px, 1.8vh, 20px) 8px;
+  gap: 4px;
+  transition: transform .15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .15s, border-color .15s;
+}
+.jelly-card:hover { transform: translateY(-4px); }
+.jelly-card:active, .jelly-card[aria-pressed="true"] {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #B998BE, 0 4px 12px rgba(150, 110, 180, 0.15);
+}
+.jelly-card[aria-pressed="true"] {
+  background: linear-gradient(145deg, #FFF0F6, #FFE2EF);
+  border-color: var(--pink-main);
+  box-shadow: 0 4px 0 var(--pink-dark);
+}
+.jelly-card .j-icon { font-size: clamp(34px, 5.5vh, 58px); line-height: 1.1; }
+.jelly-card .j-main { font-family: var(--font-magic); font-size: clamp(18px, 2.8vh, 26px); color: var(--text-main); }
+.jelly-card .j-sub { font-size: clamp(12px, 1.7vh, 15px); font-weight: 700; color: var(--pink-main); }
 
-    .sec-header {
-      font-family: var(--font-display);
-      font-size: clamp(20px, 3vh, 32px);
-      color: var(--pink-core);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-shadow: 0 2px 4px rgba(255, 90, 141, 0.18);
-    }
-    .sec-header .badge-tag {
-      background: linear-gradient(135deg, #FF6EA7, #FF4582);
-      color: #FFF;
-      font-size: 0.6em;
-      padding: 3px 10px;
-      border-radius: 999px;
-      box-shadow: 0 3px 8px rgba(255, 69, 130, 0.35);
-    }
+.jelly-card.lv[aria-pressed="true"] {
+  background: linear-gradient(145deg, #F3EDFF, #E7DAFF);
+  border-color: var(--purple-main);
+  box-shadow: 0 4px 0 var(--purple-dark);
+}
+.jelly-card.lv .j-main { color: var(--purple-dark); font-size: clamp(24px, 3.6vh, 34px); }
+.jelly-card.lv .j-stars { font-size: clamp(15px, 2.2vh, 22px); }
 
-    .age-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: clamp(10px, 1.8vw, 20px);
-    }
+.quiz-screen {
+  flex: 1; display: flex; flex-direction: column;
+  gap: clamp(10px, 1.8vh, 16px);
+  height: 100%;
+}
+.quiz-body {
+  flex: 1; display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(14px, 2.5vw, 30px);
+  align-items: stretch; min-height: 0;
+}
+.question-card {
+  background: var(--card-bg);
+  border-radius: clamp(20px, 3vh, 32px);
+  border: 5px solid #FFF;
+  box-shadow: 0 clamp(8px, 1.2vh, 14px) 0 #DEC4E0, 0 12px 30px rgba(150, 110, 180, 0.15);
+  padding: clamp(14px, 2.5vh, 28px);
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; gap: clamp(8px, 1.5vh, 16px);
+  position: relative; overflow: hidden;
+}
+.cat-mascot {
+  position: absolute; top: clamp(8px, 1.5vh, 16px); left: clamp(12px, 2vw, 22px);
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-magic); font-size: clamp(12px, 1.6vh, 15px); color: var(--pink-dark);
+  background: #FFF; padding: 4px 12px; border-radius: 999px;
+  border: 2px solid var(--pink-soft);
+  animation: luluFloat 2.5s ease-in-out infinite;
+}
+@keyframes luluFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
 
-    .age-card {
-      flex-direction: column;
-      background: var(--glass-bg);
-      border: 4px solid #FFE4EE;
-      --btn-shadow: #FFB3CB;
-      padding: clamp(8px, 1.8vh, 18px);
-      gap: clamp(3px, 0.7vh, 8px);
-      position: relative;
-      overflow: hidden;
-    }
-    .age-card::after {
-      content: '';
-      position: absolute;
-      top: -30%;
-      left: -30%;
-      width: 60%;
-      height: 60%;
-      background: radial-gradient(circle, rgba(255,255,255,0.8), transparent 70%);
-      pointer-events: none;
-    }
-    .age-card .icon-wrap {
-      font-size: clamp(36px, 7vh, 76px);
-      line-height: 1;
-      filter: drop-shadow(0 6px 10px rgba(255, 120, 160, 0.35));
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .age-card:hover .icon-wrap {
-      transform: scale(1.18) rotate(8deg);
-    }
-    .age-card .name {
-      font-family: var(--font-display);
-      font-size: clamp(18px, 2.8vh, 30px);
-      color: var(--text-main);
-      line-height: 1.1;
-    }
-    .age-card .sub-tag {
-      font-size: clamp(12px, 1.8vh, 17px);
-      color: #9C7BA6;
-      font-weight: 800;
-    }
-    .age-card.active {
-      background: linear-gradient(145deg, #FFA0C0, #FF5A8D);
-      border-color: #FFC0D5;
-      --btn-shadow: var(--pink-deep);
-      transform: translateY(3px);
-    }
-    .age-card.active .name, .age-card.active .sub-tag { color: #FFFFFF; }
+.q-text {
+  font-family: var(--font-text); font-weight: 900;
+  font-size: clamp(20px, 3.4vh, 34px); line-height: 1.35;
+  color: var(--text-main); margin: 0;
+  word-break: keep-all; text-wrap: balance;
+}
+.q-visual {
+  font-family: var(--font-magic);
+  font-size: clamp(26px, 4.5vh, 46px);
+  background: linear-gradient(135deg, #FFF3F8, #F3EBFF);
+  border: 3px dashed var(--pink-main);
+  padding: clamp(6px, 1.2vh, 14px) clamp(16px, 2.5vw, 32px);
+  border-radius: 20px; color: var(--pink-dark);
+}
 
-    .lv-grid {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: clamp(10px, 1.8vw, 20px);
-    }
+.hint-bubble {
+  width: 90%;
+  background: #FFFDE8;
+  border: 3px solid #FFC837;
+  box-shadow: 0 4px 12px rgba(255, 200, 55, 0.25);
+  border-radius: 18px;
+  padding: clamp(8px, 1.4vh, 14px) 16px;
+  display: none; align-items: center; gap: 10px;
+  font-size: clamp(14px, 2vh, 18px); font-weight: 700; color: #734B00;
+  animation: popBounce .35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+.hint-bubble.open { display: flex; }
+@keyframes popBounce {
+  0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
 
-    .lv-card {
-      flex-direction: column;
-      background: var(--glass-bg);
-      border: 4px solid #EFE6FF;
-      --btn-shadow: #CEB8FF;
-      padding: clamp(6px, 1.5vh, 16px);
-      gap: clamp(2px, 0.6vh, 6px);
-    }
-    .lv-card .stars {
-      font-size: clamp(16px, 2.7vh, 28px);
-      filter: drop-shadow(0 2px 6px rgba(255, 183, 3, 0.6));
-    }
-    .lv-card .name {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 3.8vh, 36px);
-      color: var(--purple-core);
-      line-height: 1;
-    }
-    .lv-card.active {
-      background: linear-gradient(145deg, #B584FF, #9D62F3);
-      border-color: #DEC6FF;
-      --btn-shadow: var(--purple-deep);
-      color: #FFFFFF;
-      transform: translateY(3px);
-    }
-    .lv-card.active .name { color: #FFFFFF; }
+.choices-box {
+  display: grid; grid-template-rows: repeat(4, 1fr);
+  gap: clamp(8px, 1.4vh, 14px);
+}
+.choice-btn {
+  background: #FFF;
+  border: 4px solid #FFF;
+  box-shadow: 0 clamp(4px, 0.8vh, 8px) 0 #DEC4E0, 0 6px 16px rgba(150, 110, 180, 0.1);
+  border-radius: clamp(16px, 2.2vh, 24px);
+  cursor: pointer; outline: none;
+  padding: 0 clamp(14px, 2vw, 24px);
+  display: flex; align-items: center; gap: clamp(10px, 1.5vw, 18px);
+  font-size: clamp(17px, 2.6vh, 26px); font-weight: 700; color: var(--text-main);
+  transition: transform .12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .12s, background .12s;
+  text-align: left;
+}
+.choice-btn:hover {
+  background: #FFF8FC;
+  transform: translateY(-2px);
+}
+.choice-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #DEC4E0;
+}
+.choice-badge {
+  width: clamp(30px, 4.2vh, 42px); height: clamp(30px, 4.2vh, 42px);
+  background: var(--pink-soft); color: var(--pink-main);
+  border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--font-magic); font-size: clamp(15px, 2.2vh, 22px);
+  flex: none;
+}
 
-    /* 2. 퀴즈 화면 */
-    .screen-quiz {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: clamp(8px, 1.8vh, 16px);
-      height: 100%;
-    }
+.result-screen {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  gap: clamp(12px, 2.5vh, 26px);
+  max-width: 800px; margin: 0 auto;
+}
+.result-emblem {
+  font-size: clamp(80px, 15vh, 140px); line-height: 1;
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,0.15));
+}
+.result-title {
+  font-family: var(--font-magic);
+  font-size: clamp(34px, 6vh, 60px);
+  margin: 0; color: var(--pink-dark);
+  text-shadow: 0 3px 0 #FFF;
+}
+.result-desc {
+  font-size: clamp(17px, 2.5vh, 25px); font-weight: 700;
+  margin: 0; color: var(--text-sub);
+}
+.result-btns {
+  display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; justify-content: center;
+}
+.action-btn {
+  font-family: var(--font-magic);
+  font-size: clamp(20px, 2.8vh, 28px);
+  padding: clamp(12px, 2vh, 18px) clamp(28px, 4vw, 44px);
+  border-radius: 999px; border: none; cursor: pointer; outline: none;
+  transition: transform .12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .12s;
+}
+.action-btn.retry {
+  background: linear-gradient(135deg, #FF6EA7, #FF2E7E);
+  color: #FFF; box-shadow: 0 6px 0 var(--pink-dark);
+}
+.action-btn.retry:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--pink-dark); }
+.action-btn.home {
+  background: #FFF; color: var(--purple-main);
+  border: 3px solid var(--purple-main); box-shadow: 0 6px 0 var(--purple-dark);
+}
+.action-btn.home:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--purple-dark); }
 
-    .top-nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      height: clamp(46px, 6.6vh, 62px);
-    }
+#confetti-canvas {
+  position: fixed; inset: 0; width: 100vw; height: 100vh;
+  pointer-events: none; z-index: 999;
+}
 
-    .nav-btn {
-      height: 100%;
-      padding: 0 clamp(16px, 2.4vw, 24px);
-      border-radius: 999px;
-      background: #FFFFFF;
-      border: 3px solid #FFD6E5;
-      font-family: var(--font-display);
-      font-size: clamp(14px, 2vh, 19px);
-      color: var(--pink-core);
-      --btn-shadow: #FFB8CF;
-    }
-
-    /* 영롱한 크리스털 모래시계 타이머 */
-    .magic-timer-wrap {
-      flex: 1;
-      max-width: 560px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.95);
-      border: 3px solid #FFE0EC;
-      box-shadow: 0 6px 20px rgba(255, 126, 179, 0.18);
-      border-radius: 999px;
-      padding: 4px clamp(10px, 1.6vw, 18px);
-      height: 100%;
-      position: relative;
-    }
-
-    .gem-hourglass {
-      font-size: clamp(24px, 3.8vh, 36px);
-      line-height: 1;
-      filter: drop-shadow(0 3px 6px rgba(157, 98, 243, 0.35));
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: inline-block;
-    }
-    .gem-hourglass.heartbeat {
-      animation: crystalHeartbeat 0.32s infinite alternate ease-in-out;
-    }
-    @keyframes crystalHeartbeat {
-      0% { transform: scale(1.1) rotate(-12deg); filter: drop-shadow(0 0 10px #FF3366); }
-      100% { transform: scale(1.42) rotate(12deg); filter: drop-shadow(0 0 18px #FF0055); }
-    }
-
-    .aurora-meter {
-      flex: 1;
-      height: clamp(14px, 2.2vh, 22px);
-      background: #FFF0F6;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 2px solid #FFD6E5;
-      position: relative;
-    }
-    .aurora-bar {
-      height: 100%;
-      width: 100%;
-      background: linear-gradient(90deg, #70E1A5 0%, #38D9A9 50%, #6EE7B7 100%);
-      border-radius: 999px;
-      transition: width 0.1s linear, background 0.3s;
-      box-shadow: 0 0 12px rgba(56, 217, 169, 0.4);
-    }
-    .aurora-bar.warning {
-      background: linear-gradient(90deg, #FFA94D, #FF922B);
-      box-shadow: 0 0 12px rgba(255, 146, 43, 0.5);
-    }
-    .aurora-bar.danger {
-      background: linear-gradient(90deg, #FF6B8B, #FF1A53, #FF0044);
-      box-shadow: 0 0 18px rgba(255, 26, 83, 0.8);
-      animation: barFlame 0.35s infinite alternate ease-in-out;
-    }
-    @keyframes barFlame {
-      from { filter: brightness(1) drop-shadow(0 0 4px #FF1A53); }
-      to { filter: brightness(1.3) drop-shadow(0 0 14px #FF0044); }
-    }
-
-    .timer-digits {
-      font-family: var(--font-num);
-      font-size: clamp(20px, 3vh, 30px);
-      font-weight: 800;
-      color: var(--pink-core);
-      min-width: 2.2ch;
-      text-align: right;
-    }
-    .timer-digits.danger {
-      color: #FF0055;
-      animation: digitHop 0.32s infinite alternate;
-      text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
-    }
-    @keyframes digitHop {
-      from { transform: scale(1); }
-      to { transform: scale(1.28); }
-    }
-
-    .hint-wand-btn {
-      height: 100%;
-      padding: 0 clamp(16px, 2.5vw, 26px);
-      border-radius: 999px;
-      background: linear-gradient(135deg, #FFF4CE, #FFE27D);
-      border: 3px solid #FFD026;
-      color: #8A5900;
-      font-family: var(--font-display);
-      font-size: clamp(15px, 2.2vh, 20px);
-      gap: 8px;
-      --btn-shadow: #DCA90A;
-      box-shadow: 0 6px 0 var(--btn-shadow);
-    }
-    .hint-wand-btn .spark-icon {
-      font-size: 1.25em;
-      animation: wandWiggle 1.4s infinite ease-in-out;
-      display: inline-block;
-    }
-    @keyframes wandWiggle {
-      0%, 100% { transform: rotate(0); }
-      25% { transform: rotate(-16deg) scale(1.15); }
-      75% { transform: rotate(16deg) scale(1.15); }
-    }
-    .hint-wand-btn.open {
-      background: #FFD026;
-      color: #553400;
-    }
-
-    .stage-container {
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1.05fr 1fr;
-      gap: clamp(12px, 2vw, 24px);
-      min-height: 0;
-    }
-
-    .q-card-panel {
-      background: var(--glass-bg);
-      border: 4px solid var(--glass-border);
-      box-shadow: var(--glass-shadow);
-      border-radius: clamp(22px, 3vw, 38px);
-      padding: clamp(14px, 2.6vh, 28px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      gap: clamp(10px, 1.8vh, 18px);
-      overflow-y: auto;
-      position: relative;
-      backdrop-filter: blur(14px);
-    }
-
-    /* 마법소녀 고양이 요정 '루루' */
-    .lulu-mascot {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: linear-gradient(135deg, #FFF0F7, #FBF4FF);
-      padding: 6px 18px;
-      border-radius: 999px;
-      border: 2px solid #FFD6E8;
-      font-family: var(--font-display);
-      font-size: clamp(13px, 1.9vh, 17px);
-      color: var(--pink-core);
-      box-shadow: 0 3px 8px rgba(255, 120, 160, 0.12);
-    }
-    .lulu-avatar {
-      font-size: clamp(22px, 3.2vh, 32px);
-      display: inline-block;
-      animation: luluDance 2s infinite ease-in-out;
-    }
-    @keyframes luluDance {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      30% { transform: translateY(-7px) rotate(-8deg); }
-      60% { transform: translateY(-2px) rotate(8deg); }
-    }
-
-    .q-text {
-      font-family: var(--font-display);
-      font-size: clamp(21px, 3.5vh, 36px);
-      line-height: 1.35;
-      word-break: keep-all;
-      color: var(--text-main);
-    }
-
-    .q-visual-frame {
-      font-family: var(--font-display);
-      font-size: clamp(28px, 5.2vh, 56px);
-      background: linear-gradient(135deg, #FFFFFF, #FAF7FF);
-      border: 3px dashed #DEC8FF;
-      border-radius: 24px;
-      padding: 10px 28px;
-      box-shadow: inset 0 3px 10px rgba(157, 98, 243, 0.1);
-      display: inline-block;
-    }
-
-    .hint-magic-box {
-      width: 100%;
-      background: linear-gradient(135deg, #FFFDF0, #FEF7D2);
-      border: 3px solid #FCD34D;
-      color: #78350F;
-      border-radius: 22px;
-      padding: clamp(10px, 1.6vh, 16px) 18px;
-      font-size: clamp(14px, 2.1vh, 19px);
-      font-weight: 800;
-      line-height: 1.4;
-      word-break: keep-all;
-      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
-      animation: hintPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes hintPop {
-      0% { transform: scale(0.85) translateY(12px); opacity: 0; }
-      100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    /* 보기 카드 4개 */
-    .choices-column {
-      display: grid;
-      grid-template-rows: repeat(4, 1fr);
-      gap: clamp(10px, 1.6vh, 16px);
-    }
-
-    .magic-choice-btn {
-      background: #FFFFFF;
-      border: 4px solid #F0E4FF;
-      --btn-shadow: #D8C2FF;
-      box-shadow: 0 7px 0 var(--btn-shadow), 0 10px 20px rgba(157, 98, 243, 0.1);
-      border-radius: clamp(18px, 2.5vw, 28px);
-      padding: 0 clamp(16px, 2.4vw, 26px);
-      justify-content: flex-start;
-      gap: clamp(14px, 2vw, 22px);
-      font-family: var(--font-display);
-      font-size: clamp(18px, 2.8vh, 32px);
-      color: var(--text-main);
-      text-align: left;
-    }
-    .magic-choice-btn:hover:not(:disabled) {
-      border-color: #CDA4FF;
-      background: #FCF9FF;
-      transform: translateY(-3px);
-    }
-    .magic-choice-btn .order-jewel {
-      width: clamp(30px, 4.4vh, 44px);
-      height: clamp(30px, 4.4vh, 44px);
-      background: linear-gradient(135deg, #F3E8FF, #E9D5FF);
-      border: 2px solid #D8B4FE;
-      border-radius: 50%;
-      font-family: var(--font-num);
-      font-size: clamp(15px, 2.3vh, 22px);
-      font-weight: 800;
-      color: var(--purple-core);
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      box-shadow: 0 2px 5px rgba(157, 98, 243, 0.2);
-    }
-    .magic-choice-btn.correct {
-      background: linear-gradient(135deg, #D5FCE6, #A7F3D0) !important;
-      border-color: #34D399 !important;
-      --btn-shadow: #059669 !important;
-      color: #065F46 !important;
-      animation: successSquish 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .magic-choice-btn.correct .order-jewel {
-      background: #34D399;
-      border-color: #059669;
-      color: #FFFFFF;
-    }
-    .magic-choice-btn.wrong {
-      background: linear-gradient(135deg, #FFE4E8, #FECDD6) !important;
-      border-color: #FB7185 !important;
-      --btn-shadow: #E11D48 !important;
-      color: #881337 !important;
-      animation: wrongShake 0.45s ease-in-out;
-    }
-    .magic-choice-btn.wrong .order-jewel {
-      background: #FB7185;
-      border-color: #E11D48;
-      color: #FFFFFF;
-    }
-    .magic-choice-btn.faded {
-      opacity: 0.35;
-      pointer-events: none;
-    }
-
-    @keyframes successSquish {
-      0%, 100% { transform: scale(1); }
-      35% { transform: scale(1.08, 0.92); }
-      65% { transform: scale(0.96, 1.04); }
-    }
-    @keyframes wrongShake {
-      0%, 100% { transform: translateX(0); }
-      20% { transform: translateX(-10px); }
-      40% { transform: translateX(10px); }
-      60% { transform: translateX(-7px); }
-      80% { transform: translateX(7px); }
-    }
-
-    /* 3. 결과 화면 */
-    .screen-result {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      height: 100%;
-      position: relative;
-    }
-
-    .result-crystal-card {
-      background: var(--glass-bg);
-      border: 5px solid #FFD1E5;
-      box-shadow: 0 20px 50px rgba(255, 90, 141, 0.28);
-      border-radius: clamp(26px, 3.8vw, 46px);
-      padding: clamp(20px, 3.8vh, 44px) clamp(24px, 4.8vw, 60px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: clamp(12px, 2vh, 20px);
-      max-width: 640px;
-      width: 90%;
-      backdrop-filter: blur(16px);
-      animation: popCard 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes popCard {
-      0% { transform: scale(0.75) translateY(50px); opacity: 0; }
-      100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    .res-emblem {
-      font-size: clamp(70px, 13vh, 125px);
-      line-height: 1;
-      animation: emblemFly 1.4s infinite alternate ease-in-out;
-    }
-    @keyframes emblemFly {
-      0% { transform: translateY(0) scale(1) rotate(-5deg); }
-      100% { transform: translateY(-12px) scale(1.15) rotate(5deg); }
-    }
-    .res-emblem.broken {
-      animation: gemCrack 0.6s forwards cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes gemCrack {
-      0% { transform: scale(0.8); }
-      50% { transform: scale(1.4) rotate(15deg); filter: hue-rotate(180deg); }
-      100% { transform: scale(1.1); }
-    }
-
-    .res-headline {
-      font-family: var(--font-display);
-      font-size: clamp(30px, 5.5vh, 52px);
-      color: var(--pink-core);
-      text-shadow: 0 3px 6px rgba(255, 90, 141, 0.2);
-    }
-    .res-headline.fail {
-      color: #9D62F3;
-    }
-
-    .res-comment {
-      font-size: clamp(16px, 2.3vh, 24px);
-      color: var(--text-main);
-      word-break: keep-all;
-      line-height: 1.5;
-    }
-    .res-comment strong {
-      color: var(--pink-deep);
-      background: #FFE6EE;
-      padding: 3px 10px;
-      border-radius: 10px;
-    }
-
-    .res-actions {
-      display: flex;
-      gap: clamp(12px, 2.2vw, 24px);
-      margin-top: 8px;
-    }
-    .action-btn {
-      padding: clamp(12px, 2.2vh, 20px) clamp(26px, 4vw, 48px);
-      border-radius: 999px;
-      font-family: var(--font-display);
-      font-size: clamp(17px, 2.7vh, 26px);
-    }
-    .action-btn.primary {
-      background: linear-gradient(135deg, #FF6EA7, #FF4582);
-      border: 3px solid #FFAAC7;
-      --btn-shadow: var(--pink-deep);
-      color: #FFFFFF;
-      box-shadow: 0 8px 0 var(--btn-shadow);
-    }
-    .action-btn.secondary {
-      background: #FFFFFF;
-      border: 3px solid #E6DBFC;
-      --btn-shadow: #CCB6F6;
-      color: var(--purple-core);
-      box-shadow: 0 8px 0 var(--btn-shadow);
-    }
-
-    /* 초호화 극장급 3D 펄 파티클 폭죽 캔버스 */
-    #fxCanvas {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    /* 사운드 토글 */
-    .sound-pill {
-      position: fixed;
-      top: 14px;
-      right: 14px;
-      z-index: 110;
-      background: rgba(255, 255, 255, 0.95);
-      border: 2px solid #FFD1E5;
-      border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 14px;
-      font-family: var(--font-display);
-      color: var(--pink-core);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 4px 12px rgba(255, 90, 141, 0.15);
-      cursor: pointer;
-    }
-
-    /* 태블릿/모바일 반응형 */
-    @media (max-width: 680px) or (orientation: portrait) {
-      .age-grid { grid-template-columns: repeat(2, 1fr); }
-      .stage-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
-      }
-      .choices-column {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-      }
-    }
-  </style>
+@media (max-aspect-ratio: 1/1) {
+  .quiz-body { grid-template-columns: 1fr; grid-template-rows: 1fr 1.3fr; gap: 10px; }
+  .cards-age { grid-template-columns: repeat(2, 1fr); }
+  .cards-level { grid-template-columns: repeat(3, 1fr); }
+  .cat-mascot { position: static; margin-bottom: -6px; }
+}
+</style>
 </head>
-
 <body>
-  <!-- 사운드 토글 버튼 -->
-  <button type="button" class="sound-pill" onclick="audioFX.toggle()">
-    <span id="sndIcon">🔊</span> <span id="sndLabel">소리 켬</span>
-  </button>
-
-  <!-- 파스텔 오로라 배경 구름 -->
-  <div class="aurora-bg">
-    <div class="aurora-circle aurora-1"></div>
-    <div class="aurora-circle aurora-2"></div>
-    <div class="aurora-circle aurora-3"></div>
-  </div>
-
-  <!-- 풀스크린 화려한 폭죽 & 스노우 펄 캔버스 -->
-  <canvas id="fxCanvas"></canvas>
-
-  <!-- 메인 뷰포트 컨테이너 -->
-  <main id="app"></main>
-
-  <script>
-    const audioFX = {
-      enabled: true,
-      ctx: null,
-
-      init() {
-        if (!this.ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioContext();
-        }
-        if (this.ctx && this.ctx.state === 'suspended') {
-          this.ctx.resume();
-        }
-      },
-
-      toggle() {
-        this.enabled = !this.enabled;
-        const icon = document.getElementById('sndIcon');
-        const label = document.getElementById('sndLabel');
-        if (icon) icon.textContent = this.enabled ? '🔊' : '🔇';
-        if (label) label.textContent = this.enabled ? '소리 켬' : '소리 끔';
-      },
-
-      // 젤리 팝 클릭음
-      playPop() {
-        if (!this.enabled) return;
-        this.init();
-        const t = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(480, t);
-        osc.frequency.exponentialRampToValueAtTime(880, t + 0.1);
-
-        gain.gain.setValueAtTime(0.25, t);
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
-
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(t);
-        osc.stop(t + 0.11);
-      },
-
-      // 마법봉 힌트 샤라랑 차임벨
-      playHintChime() {
-        if (!this.enabled) return;
-        this.init();
-        const t = this.ctx.currentTime;
-        const melody = [523.25, 659.25, 783.99, 1046.50, 1318.51];
-        melody.forEach((freq, idx) => {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(freq, t + idx * 0.05);
-
-          gain.gain.setValueAtTime(0.2, t + idx * 0.05);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.05 + 0.35);
-
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start(t + idx * 0.05);
-          osc.stop(t + idx * 0.05 + 0.36);
-        });
-      },
-
-      // 두근두근 마법 모래시계 째깍/비트
-      playMagicTick(isDanger) {
-        if (!this.enabled) return;
-        this.init();
-        const t = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-
-        osc.type = isDanger ? 'sawtooth' : 'sine';
-        osc.frequency.setValueAtTime(isDanger ? 920 : 600, t);
-        osc.frequency.exponentialRampToValueAtTime(isDanger ? 460 : 300, t + 0.07);
-
-        gain.gain.setValueAtTime(isDanger ? 0.35 : 0.14, t);
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.07);
-
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(t);
-        osc.stop(t + 0.08);
-      },
-
-      // 시간 초과: 퐁! 마법 가루 연기 흩어짐
-      playMagicPoof() {
-        if (!this.enabled) return;
-        this.init();
-        const t = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(220, t);
-        osc.frequency.exponentialRampToValueAtTime(45, t + 0.45);
-
-        gain.gain.setValueAtTime(0.4, t);
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.45);
-
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(t);
-        osc.stop(t + 0.46);
-      },
-
-      // 방탈출 대성공: 찬란한 마법소녀 팡파르
-      playFanfare() {
-        if (!this.enabled) return;
-        this.init();
-        const t = this.ctx.currentTime;
-        const notes = [
-          { f: 523.25, time: 0.00, dur: 0.15 },
-          { f: 659.25, time: 0.12, dur: 0.15 },
-          { f: 783.99, time: 0.24, dur: 0.15 },
-          { f: 1046.50, time: 0.36, dur: 0.40 },
-          { f: 1318.51, time: 0.50, dur: 0.65 }
-        ];
-
-        notes.forEach(n => {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'triangle';
-          osc.frequency.setValueAtTime(n.f, t + n.time);
-
-          gain.gain.setValueAtTime(0.3, t + n.time);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + n.time + n.dur);
-
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start(t + n.time);
-          osc.stop(t + n.time + n.dur + 0.05);
-        });
-      },
-
-      // 오답: 아쉬운 뾱뾱 차임
-      playOops() {
-        if (!this.enabled) return;
-        this.init();
-        const t = this.ctx.currentTime;
-        const drop = [440, 370, 311];
-        drop.forEach((freq, idx) => {
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, t + idx * 0.1);
-
-          gain.gain.setValueAtTime(0.22, t + idx * 0.1);
-          gain.gain.exponentialRampToValueAtTime(0.01, t + idx * 0.1 + 0.16);
-
-          osc.connect(gain);
-          gain.connect(this.ctx.destination);
-          osc.start(t + idx * 0.1);
-          osc.stop(t + idx * 0.1 + 0.18);
-        });
-      }
-    };
-
-    const grandFireworks = {
-      canvas: null,
-      ctx: null,
-      particles: [],
-      animId: null,
-
-      init() {
-        this.canvas = document.getElementById('fxCanvas');
-        if (this.canvas) {
-          this.ctx = this.canvas.getContext('2d');
-          this.resize();
-          window.addEventListener('resize', () => this.resize());
-        }
-      },
-
-      resize() {
-        if (!this.canvas) return;
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-      },
-
-      // 중앙 3연속 대형 버스트 + 화사한 하트/별빛 눈송이 샤워
-      launchVictory() {
-        this.stop();
-        this.particles = [];
-
-        // 1차 중앙 폭죽 버스트
-        this.addBurst(this.canvas.width * 0.5, this.canvas.height * 0.42, 70);
-
-        // 2차 좌/우 딜레이 버스트
-        setTimeout(() => this.addBurst(this.canvas.width * 0.28, this.canvas.height * 0.35, 55), 220);
-        setTimeout(() => this.addBurst(this.canvas.width * 0.72, this.canvas.height * 0.35, 55), 440);
-
-        // 하늘에서 눈처럼 살랑살랑 내리는 펄 샤워 (70개)
-        this.addSnowfall(80);
-
-        this.loop();
-      },
-
-      addBurst(x, y, count) {
-        const palette = ['#FF4D80', '#FF80BF', '#FFD166', '#06D6A0', '#9D62F3', '#4CC9F0', '#FFFFFF'];
-        const shapes = ['star', 'heart', 'gem', 'sparkle'];
-
-        for (let i = 0; i < count; i++) {
-          const angle = Math.random() * Math.PI * 2;
-          const speed = Math.random() * 9 + 3;
-          this.particles.push({
-            x: x,
-            y: y,
-            vx: Math.cos(angle) * speed,
-            vy: Math.sin(angle) * speed - 2.5,
-            gravity: 0.22,
-            drag: 0.965,
-            size: Math.random() * 14 + 10,
-            color: palette[Math.floor(Math.random() * palette.length)],
-            rotation: Math.random() * 360,
-            rotSpeed: Math.random() * 12 - 6,
-            shape: shapes[Math.floor(Math.random() * shapes.length)],
-            alpha: 1,
-            fade: Math.random() * 0.008 + 0.006
-          });
-        }
-      },
-
-      addSnowfall(count) {
-        const colors = ['#FFB6D9', '#FFF3B0', '#CDB4DB', '#B5E2FA', '#FFCBF2'];
-        const shapes = ['heart', 'star', 'ribbon'];
-
-        for (let i = 0; i < count; i++) {
-          this.particles.push({
-            x: Math.random() * this.canvas.width,
-            y: Math.random() * -this.canvas.height * 0.6,
-            vx: Math.random() * 2 - 1,
-            vy: Math.random() * 2.5 + 1.8,
-            gravity: 0.03,
-            drag: 0.99,
-            size: Math.random() * 16 + 12,
-            color: colors[Math.floor(Math.random() * colors.length)],
-            rotation: Math.random() * 360,
-            rotSpeed: Math.random() * 6 - 3,
-            shape: shapes[Math.floor(Math.random() * shapes.length)],
-            alpha: 1,
-            fade: 0.003
-          });
-        }
-      },
-
-      loop() {
-        if (!this.ctx) return;
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-          const p = this.particles[i];
-          p.x += p.vx;
-          p.y += p.vy;
-          p.vx *= p.drag;
-          p.vy = p.vy * p.drag + p.gravity;
-          p.rotation += p.rotSpeed;
-          p.alpha -= p.fade;
-
-          if (p.alpha <= 0 || p.y > this.canvas.height + 60) {
-            this.particles.splice(i, 1);
-            continue;
-          }
-
-          this.ctx.save();
-          this.ctx.globalAlpha = Math.max(0, p.alpha);
-          this.ctx.translate(p.x, p.y);
-          this.ctx.rotate((p.rotation * Math.PI) / 180);
-
-          if (p.shape === 'star') {
-            this.drawStar(0, 0, 5, p.size / 2, p.size / 4, p.color);
-          } else if (p.shape === 'heart') {
-            this.ctx.font = `${p.size * 1.3}px sans-serif`;
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            this.ctx.fillText('💖', 0, 0);
-          } else if (p.shape === 'sparkle') {
-            this.ctx.font = `${p.size * 1.2}px sans-serif`;
-            this.ctx.textAlign = 'center';
-            this.ctx.textBaseline = 'middle';
-            this.ctx.fillText('✨', 0, 0);
-          } else {
-            // 보석 리본 큐브
-            this.ctx.fillStyle = p.color;
-            this.ctx.beginPath();
-            this.ctx.roundRect(-p.size / 2, -p.size / 3, p.size, p.size / 1.5, 4);
-            this.ctx.fill();
-          }
-          this.ctx.restore();
-        }
-
-        if (this.particles.length > 0) {
-          this.animId = requestAnimationFrame(() => this.loop());
-        }
-      },
-
-      drawStar(cx, cy, spikes, outerRadius, innerRadius, color) {
-        let rot = (Math.PI / 2) * 3;
-        let x = cx;
-        let y = cy;
-        const step = Math.PI / spikes;
-
-        this.ctx.beginPath();
-        this.ctx.moveTo(cx, cy - outerRadius);
-        for (let i = 0; i < spikes; i++) {
-          x = cx + Math.cos(rot) * outerRadius;
-          y = cy + Math.sin(rot) * outerRadius;
-          this.ctx.lineTo(x, y);
-          rot += step;
-
-          x = cx + Math.cos(rot) * innerRadius;
-          y = cy + Math.sin(rot) * innerRadius;
-          this.ctx.lineTo(x, y);
-          rot += step;
-        }
-        this.ctx.lineTo(cx, cy - outerRadius);
-        this.ctx.closePath();
-        this.ctx.fillStyle = color;
-        this.ctx.shadowColor = color;
-        this.ctx.shadowBlur = 8;
-        this.ctx.fill();
-        this.ctx.shadowBlur = 0;
-      },
-
-      stop() {
-        if (this.animId) cancelAnimationFrame(this.animId);
-        if (this.ctx && this.canvas) {
-          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        }
-      }
-    };
-
-    const QUIZ_DATABASE = [
-      // 0: 5~7세 (유아)
-      {
-        "하": [
-          { q: "빨강 물감과 노랑 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + 🟡 = ?", a: "🟠 주황", w: ["🟢 초록", "🟣 보라"], hint: "맛있는 귤과 당근 색깔을 떠올려보세요!" },
-          { q: "그림을 그릴 때 손에 쥐고 쓰는 도구는 어느 것일까요?", v: "🎨", a: "🖌️ 붓", w: ["🍴 포크", "👟 신발"], hint: "부드러운 털에 알록달록 물감을 묻혀서 쓱쓱 그려요." },
-          { q: "달콤하고 맛있는 바나나는 무슨 색일까요?", v: "🍌", a: "🟡 노랑", w: ["🔵 파랑", "⚫ 검정"], hint: "귀여운 아기 병아리와 개나리꽃 색깔이에요." },
-          { q: "맑은 날의 시원한 하늘은 무슨 색일까요?", v: "☀️", a: "🔵 파랑", w: ["🔴 빨강", "⚫ 검정"], hint: "첨벙첨벙 신나는 여름 바닷물 색깔이에요." },
-          { q: "동글동글 굴러가는 모양은 어느 것일까요?", a: "🔵 동그라미", w: ["🔺 세모", "🟦 네모"], hint: "뾰족한 모서리가 없고 둥근 공 모양이에요." },
-          { q: "종이에 알록달록 색칠할 때 쓰는 것은 무엇일까요?", v: "📄", a: "🖍️ 크레파스", w: ["🥄 숟가락", "🧦 양말"], hint: "손에 쥐고 도화지에 쓱쓱 칠하는 크레용이에요." },
-          { q: "새콤달콤 빨간 토마토는 무슨 색일까요?", v: "🍅", a: "🔴 빨강", w: ["🟣 보라", "🟤 갈색"], hint: "달콤한 딸기와 사과처럼 예쁜 붉은색이에요." },
-          { q: "뾰족한 곳이 세 군데 있는 모양은 어느 것일까요?", a: "🔺 세모", w: ["🔵 동그라미", "🟦 네모"], hint: "맛있는 피자 한 조각 모양이에요!" },
-          { q: "멋진 그림을 그리는 사람을 무엇이라고 부를까요?", v: "🖼️", a: "🧑‍🎨 화가", w: ["🧑‍🍳 요리사", "🧑‍🚒 소방관"], hint: "팔레트와 붓을 들고 캔버스에 예술을 펼쳐요." },
-          { q: "하늘에서 살랑살랑 내리는 하얀 눈은 무슨 색일까요?", v: "❄️", a: "⚪ 하양", w: ["🟣 보라", "🟤 갈색"], hint: "눈사람을 뭉칠 때 쓰는 뽀얀 눈빛이에요." }
-        ],
-        "중": [
-          { q: "파랑 물감과 노랑 물감을 섞으면 무슨 색이 될까요?", v: "🔵 + 🟡 = ?", a: "🟢 초록", w: ["🟠 주황", "🟣 보라"], hint: "싱그러운 나뭇잎과 푸른 잔디밭 색깔이에요." },
-          { q: "빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + 🔵 = ?", a: "🟣 보라", w: ["🟢 초록", "🟠 주황"], hint: "달콤한 포도송이와 가지 열매 색깔이에요!" },
-          { q: "모양이 혼자 다른 친구는 어느 것일까요?", v: "🔺 🔺 🔵 🔺", a: "🔵 동그라미", w: ["🔺 세모", "🟦 네모"], hint: "혼자만 뾰족한 곳이 없는 둥근 친구예요." },
-          { q: "물감을 촉촉하게 적셔서 칠하는 부드러운 도구는?", v: "💧", a: "🖌️ 붓", w: ["✏️ 연필", "✂️ 가위"], hint: "부드러운 털이 물을 듬뿍 머금을 수 있어요." },
-          { q: "종이를 싹둑싹둑 자를 때 쓰는 도구는?", v: "📄", a: "✂️ 가위", w: ["🖌️ 붓", "🖍️ 크레파스"], hint: "손가락을 끼우고 열었다 닫았다 해요." },
-          { q: "종이를 착 붙일 때 쓰는 끈적한 것은?", v: "📄 + 📄", a: "🧴 풀", w: ["🧽 지우개", "✏️ 연필"], hint: "종이와 종이를 단단히 이어붙여 줘요." },
-          { q: "물감의 기본 3가지 색이에요. 빈칸에 들어갈 색은?", v: "🔴 🔵 ( ? )", a: "🟡 노랑", w: ["🟢 초록", "🟣 보라"], hint: "빨강, 파랑과 함께 빛나는 해님 색깔이에요." },
-          { q: "빨강 물감에 하양 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + ⚪ = ?", a: "🌸 분홍", w: ["🟢 초록", "⚫ 검정"], hint: "예쁜 벚꽃 잎이나 복숭아 같은 사랑스러운 핑크빛이에요." },
-          { q: "검정 물감에 하양 물감을 섞으면 무슨 색이 될까요?", v: "⚫ + ⚪ = ?", a: "🐘 회색", w: ["🌸 분홍", "🟢 초록"], hint: "커다란 아기 코끼리와 돌멩이 색깔이에요." },
-          { q: "멋진 명화와 조각을 보러 가는 예쁜 집은 어디일까요?", v: "🖼️", a: "🏛️ 미술관", w: ["🏥 병원", "🚒 소방서"], hint: "조용히 걸으며 아름다운 그림을 감상하는 전시관이에요." }
-        ],
-        "상": [
-          { q: "무지개에서 빨강 다음에 오는 색은 무엇일까요?", v: "🔴 → ( ? )", a: "🟠 주황", w: ["🟡 노랑", "🟢 초록"], hint: "'빨-주-노-초-파-남-보' 노래를 흥얼거려 보세요!" },
-          { q: "무지개 순서예요. 노랑 다음에 오는 색은?", v: "🔴 🟠 🟡 ( ? )", a: "🟢 초록", w: ["🟣 보라", "🔵 파랑"], hint: "노란색 다음에는 싱그러운 개구리 풀밭 색깔이에요." },
-          { q: "색깔 규칙이에요! 빈칸에 알맞은 색은?", v: "🔴 🔵 🔴 🔵 🔴 ( ? )", a: "🔵 파랑", w: ["🔴 빨강", "🟡 노랑"], hint: "빨강과 파랑이 퐁당퐁당 번갈아 나와요." },
-          { q: "모양 규칙이에요! 빈칸에 들어갈 모양은?", v: "🟦 🟦 🔺 🟦 🟦 ( ? )", a: "🔺 세모", w: ["🟦 네모", "🔵 동그라미"], hint: "네모 2개 뒤에 나오는 모양을 찾아보세요!" },
-          { q: "고흐의 〈해바라기〉 그림에서 해바라기는 무슨 색일까요?", v: "🌻", a: "🟡 노랑", w: ["🔵 파랑", "🟣 보라"], hint: "황금빛 태양을 닮은 화사한 노란색이에요." },
-          { q: "예쁜 보라색을 만들려면 어떤 두 색을 섞어야 할까요?", v: "🟣 = ? + ?", a: "🔴 빨강 + 🔵 파랑", w: ["🔴 빨강 + 🟡 노랑", "🟡 노랑 + 🔵 파랑"], hint: "따뜻한 빨강과 시원한 파랑이 만나면 돼요." },
-          { q: "물감을 짜서 예쁘게 섞는 둥근 판은 무엇일까요?", v: "🎨", a: "🎨 팔레트", w: ["🍽️ 쟁반", "🎒 가방"], hint: "화가들이 손가락을 쏙 끼우고 쓰는 물감 판이에요." },
-          { q: "말랑한 흙을 빚어 가마에 구워 만든 예쁜 그릇은?", v: "🏺", a: "🏺 도자기", w: ["🍞 빵", "🧸 인형"], hint: "고려청자나 조선백자처럼 흙을 빚어 구워요." },
-          { q: "내 발밑에 그림자가 생기려면 꼭 무엇이 비춰야 할까요?", v: "🧍", a: "💡 빛", w: ["🌧️ 비", "🍎 사과"], hint: "어두운 곳에서는 안 보이고, 반짝이는 빛이 비추어야 해요." },
-          { q: "따뜻하고 포근한 느낌이 드는 색은 어느 것일까요?", v: "🔥", a: "🔴 빨강", w: ["🔵 파랑", "🟦 남색"], hint: "활활 타오르는 따뜻한 모닥불 색깔이에요." }
-        ]
-      },
-      // 1: 초 1–2학년 (저학년)
-      {
-        "하": [
-          { q: "팔레트에 물감이 7개 있었는데 5개를 더 샀어요. 모두 몇 개일까요?", v: "🎨 7 + 5 = ?", a: "12", w: ["11", "13", "10"], hint: "7에 3을 더해 10을 만들고 2를 더해보세요!" },
-          { q: "색의 기본이 되는 3원색이에요. 빈칸에 들어갈 색은?", v: "빨강 · 노랑 · ( ? )", a: "파랑", w: ["초록", "보라", "주황"], hint: "시원한 바다와 맑은 하늘의 기본 원색이에요." },
-          { q: "빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + 🔵 = ?", a: "보라", w: ["초록", "주황", "분홍"], hint: "달콤한 포도 젤리와 가지 껍질 색깔이에요." },
-          { q: "다음 중 도화지에 색칠하는 도구가 아닌 것은?", a: "가위", w: ["크레파스", "색연필", "물감"], hint: "종이를 싹둑 자를 때 쓰는 도구예요." },
-          { q: "연필로 스케치한 선을 깨끗하게 지울 때 쓰는 것은?", a: "지우개", w: ["풀", "물감", "자"], hint: "틀린 선을 문지르면 지우개 가루가 나와요." },
-          { q: "색종이를 접어서 하트나 비행기를 만드는 미술 놀이는?", v: "📄 ✈️", a: "종이접기", w: ["줄넘기", "노래 부르기", "달리기"], hint: "모서리를 반듯하게 접어 완성해요." },
-          { q: "노랑 물감과 파랑 물감을 섞으면 무슨 색이 될까요?", v: "🟡 + 🔵 = ?", a: "초록", w: ["보라", "주황", "분홍"], hint: "싱그러운 네잎클로버와 잔디밭 색깔이에요." },
-          { q: "아름다운 그림과 예술품을 감상하는 곳은 어디일까요?", v: "🖼️", a: "미술관", w: ["도서관", "우체국", "수영장"], hint: "멋진 액자가 줄지어 걸려 있는 곳이에요." },
-          { q: "물감 묻은 붓을 깨끗이 씻을 때 필요한 것은?", v: "🖌️", a: "물", w: ["모래", "불", "연필"], hint: "물통에 붓을 담가 찰랑찰랑 헹궈요." },
-          { q: "물감이 10개 있었는데 4개를 다 썼어요. 남은 물감은 몇 개일까요?", v: "🎨 10 − 4 = ?", a: "6", w: ["5", "7", "4"], hint: "10개 손가락 중 4개를 접어보세요!" }
-        ],
-        "중": [
-          { q: "크레파스 12개를 두 친구가 똑같이 나누면 한 명당 몇 개일까요?", v: "🖍️ 12 ÷ 2 = ?", a: "6", w: ["5", "4", "7"], hint: "12의 절반은 6이에요!" },
-          { q: "빨강 크레파스 8개와 파랑 크레파스 6개를 합치면 모두 몇 개일까요?", v: "🖍️ 8 + 6 = ?", a: "14", w: ["13", "15", "12"], hint: "8에 2를 더해 10을 채우고 4를 더해요." },
-          { q: "주황색을 만들려면 빨강 물감에 어떤 색을 섞어야 할까요?", v: "🔴 + ( ? ) = 🟠", a: "노랑", w: ["파랑", "초록", "하양"], hint: "밝은 레몬빛 해님 색깔을 섞어보세요." },
-          { q: "무지개 7색 순서예요. 노랑과 파랑 사이의 색은?", v: "빨강 주황 노랑 ( ? ) 파랑 남색 보라", a: "초록", w: ["하양", "검정", "분홍"], hint: "'빨-주-노-초-파-남-보' 4번째 색이에요." },
-          { q: "유화나 아크릴 그림을 그릴 때 쓰는 튼튼한 하얀 천 판은?", a: "캔버스", w: ["커튼", "방석", "식탁보"], hint: "나무틀에 하얀 천을 팽팽하게 씌운 화판이에요." },
-          { q: "다른 색을 섞어서 만들 수 없는 순수한 기본 원색은?", a: "노랑", w: ["초록", "주황", "보라"], hint: "빨강, 파랑과 함께 가장 기초가 되는 색이에요." },
-          { q: "물감 한 통에 색이 2개씩 들어 있어요. 3통이면 총 몇 개일까요?", v: "🎨 2 × 3 = ?", a: "6", w: ["5", "8", "4"], hint: "2를 3번 더해보세요 (2 + 2 + 2)." },
-          { q: "혼자 색깔이 다른 과일 친구를 찾아보세요.", v: "🍎 🍓 🍅 🍌", a: "🍌 바나나", w: ["🍎 사과", "🍓 딸기", "🍅 토마토"], hint: "나머지는 모두 빨간색 과일/채소예요." },
-          { q: "색종이가 20장 있었는데 8장을 예쁘게 접었어요. 남은 장수는?", v: "📄 20 − 8 = ?", a: "12", w: ["10", "13", "28"], hint: "20에서 8을 쏙 빼보세요." },
-          { q: "하얀 물감에 검정 물감을 톡 떨어뜨려 섞으면 무슨 색이 될까요?", v: "⚪ + ⚫ = ?", a: "회색", w: ["노랑", "빨강", "보라"], hint: "포근한 비둘기와 코끼리 피부 색깔이에요." }
-        ],
-        "상": [
-          { q: "노란 〈해바라기〉를 열정적으로 그린 화가는 누구일까요?", v: "🌻", a: "빈센트 반 고흐", w: ["클로드 모네", "파블로 피카소", "레오나르도 다 빈치"], hint: "노란빛과 밤하늘의 소용돌이를 사랑한 네덜란드 화가예요." },
-          { q: "그림을 완성하는 순서예요. 빈칸에 들어갈 단계는?", v: "밑그림 → 색칠 → ( ? ) → 전시", a: "말리기", w: ["시작하기", "잠자기", "지우기"], hint: "물감이 번지거나 묻지 않도록 뽀송하게 건조해요." },
-          { q: "규칙을 찾아 빈칸에 알맞은 색을 골라보세요.", v: "🔴 🔵 🟡 🔴 🔵 🟡 🔴 🔵 ( ? )", a: "🟡 노랑", w: ["🔴 빨강", "🔵 파랑", "⚪ 하양"], hint: "빨강-파랑-노랑 3색 세트가 반복되고 있어요." },
-          { q: "겨울 얼음처럼 차갑고 시원하게 느껴지는 한색은?", a: "파랑", w: ["빨강", "주황", "노랑"], hint: "시원한 파도와 겨울바람이 떠오르는 색이에요." },
-          { q: "물감이 15개 있었는데 7개를 다 썼어요. 남은 물감은 몇 개일까요?", v: "🎨 15 − 7 = ?", a: "8", w: ["7", "9", "22"], hint: "7에 8을 더하면 15가 돼요." },
-          { q: "네모난 정사각형에는 변이 모두 몇 개 있을까요?", v: "🟦", a: "4개", w: ["3개", "5개", "6개"], hint: "네모난 액자의 네 테두리 선을 세어보세요." },
-          { q: "연필로 쓱 길게 그은 흔적을 조형 요소로 무엇이라 부를까요?", v: "✏️ ────────", a: "선", w: ["점", "면", "원"], hint: "점이 계속 이어지면 곧은 선이 돼요." },
-          { q: "그림을 편하게 그리도록 캔버스를 받쳐 세우는 삼각대는?", a: "이젤(화대)", w: ["접시", "신발", "우산"], hint: "화가들이 서서 그릴 때 나무로 된 받침대예요." },
-          { q: "잡지나 색종이를 오려 붙여서 완성하는 미술 기법은?", v: "✂️ + 🧴", a: "콜라주", w: ["판화", "조각", "소묘"], hint: "'풀로 붙이다'라는 뜻의 프랑스어 기법이에요." },
-          { q: "팔레트에 물감이 6개 있었는데 7개를 선물 받았어요. 모두 몇 개일까요?", v: "🎨 6 + 7 = ?", a: "13", w: ["12", "14", "11"], hint: "6 + 6 = 12보다 하나 더 많은 수예요." }
-        ]
-      },
-      // 2: 초 3–4학년 (중학년)
-      {
-        "하": [
-          { q: "신비로운 미소를 띤 〈모나리자〉를 그린 르네상스 천재 화가는?", a: "레오나르도 다 빈치", w: ["빈센트 반 고흐", "클로드 모네", "파블로 피카소"], hint: "이탈리아 르네상스의 만능 예술가예요." },
-          { q: "다음 중 색의 3원색이 아닌 것은 어느 것일까요?", a: "초록", w: ["빨강", "노랑", "파랑"], hint: "노랑과 파랑을 섞어야 만들어지는 2차색이에요." },
-          { q: "하늘에 뜨는 무지개 색은 일반적으로 몇 가지일까요?", v: "🌈", a: "7가지", w: ["5가지", "6가지", "8가지"], hint: "'빨주노초파남보' 총 일곱 빛깔이에요." },
-          { q: "정사각형의 뾰족한 꼭짓점은 모두 몇 개일까요?", v: "🟦", a: "4개", w: ["3개", "5개", "6개"], hint: "네 변이 서로 만나는 모서리 각의 개수예요." },
-          { q: "채색하기 전에 연필로 뼈대 형태를 그리는 것은?", a: "밑그림(스케치)", w: ["전시", "액자", "서명"], hint: "색을 칠하기 전 기초 바탕 스케치예요." },
-          { q: "다음 중 미술 수업에 쓰는 도구가 아닌 것은?", a: "계산기", w: ["붓", "물감", "팔레트"], hint: "수학 숫자를 계산하는 전자 기기예요." },
-          { q: "물감을 짜서 예쁘게 배합하는 판은 무엇일까요?", v: "🎨", a: "팔레트", w: ["캔버스", "이젤", "조각칼"], hint: "손에 쥐고 물감을 덜어내는 판이에요." },
-          { q: "조각을 만들 때 손으로 쉽게 주무르고 빚을 수 있는 흙은?", a: "찰흙(점토)", w: ["바람", "노래", "그림자"], hint: "물을 묻혀 손으로 조물조물 빚어요." },
-          { q: "초록색을 만들려면 노랑 물감에 어떤 원색을 섞어야 할까요?", v: "🟡 + ( ? ) = 🟢", a: "파랑", w: ["빨강", "보라", "하양"], hint: "시원한 바다빛 파란색을 섞어주세요." },
-          { q: "물을 섞어 맑고 은은하게 번지는 느낌을 주는 그림은?", a: "수채화", w: ["유채화", "판화", "조각"], hint: "물(水)을 사용하는 맑고 투명한 그림이에요." }
-        ],
-        "중": [
-          { q: "무지개 순서예요. 파랑과 보라 사이에 오는 깊은 밤하늘 색은?", v: "빨 · 주 · 노 · 초 · 파 · ( ? ) · 보", a: "남색", w: ["하양", "분홍", "갈색"], hint: "짙푸른 인디고(청남색) 빛깔이에요." },
-          { q: "빛에 따라 달라지는 연못의 〈수련〉을 그린 인상파 화가는?", a: "클로드 모네", w: ["빈센트 반 고흐", "파블로 피카소", "레오나르도 다 빈치"], hint: "'인상주의'라는 이름을 만든 프랑스 화가예요." },
-          { q: "전쟁의 아픔을 흑백 톤으로 담은 〈게르니카〉를 그린 화가는?", a: "파블로 피카소", w: ["클로드 모네", "빈센트 반 고흐", "살바도르 달리"], hint: "입체주의(큐비즘)를 대표하는 화가예요." },
-          { q: "김홍도의 〈씨름〉처럼 서민들의 일상을 재미있게 그린 전통 그림은?", a: "풍속화", w: ["산수화", "초상화", "추상화"], hint: "그 시대의 풍속과 삶을 담은 정겨운 그림이에요." },
-          { q: "빨강, 노랑, 파랑 물감을 모두 섞으면 어떤 색에 가까워질까요?", a: "어두운 흑갈색(검정빛)", w: ["하얀색", "밝은 분홍색", "형광 연두색"], hint: "물감은 섞을수록 빛을 흡수해 어두워져요." },
-          { q: "지름이 10cm인 원을 그리려면 컴퍼스를 몇 cm로 벌려야 할까요?", v: "⭕ 지름 10cm", a: "5cm", w: ["10cm", "20cm", "2.5cm"], hint: "컴퍼스의 폭은 지름의 절반인 '반지름'이에요!" },
-          { q: "알타미라 동굴 벽화는 아주 먼 옛날 어느 시대에 그려졌을까요?", a: "선사 시대(구석기)", w: ["조선 시대", "현대", "르네상스 시대"], hint: "문자가 발명되기 전 원시 인류가 그린 벽화예요." },
-          { q: "연필이나 숯으로 명암과 윤곽만을 표현하는 흑백 그림은?", a: "소묘(데생)", w: ["판화", "수채화", "자수"], hint: "선과 명암으로 입체감을 나타내요." },
-          { q: "한 변이 4cm인 정삼각형의 세 변의 합은 몇 cm일까요?", v: "🔺 4 + 4 + 4 = ?", a: "12cm", w: ["8cm", "16cm", "14cm"], hint: "4를 3번 곱해보세요 (4 × 3)." },
-          { q: "콜라주 기법의 핵심 표현 방법은 무엇일까요?", a: "여러 재료를 오려 붙이기", w: ["물감 흩뿌리기", "진흙으로 빚기", "나무를 깎기"], hint: "신문, 사진, 천 조각 등을 캔버스에 붙여요." }
-        ],
-        "상": [
-          { q: "귀를 막고 공포에 찬 표정을 지은 〈절규〉를 그린 화가는?", v: "😱", a: "에드바르 뭉크", w: ["빈센트 반 고흐", "폴 고갱", "살바도르 달리"], hint: "내면의 불안을 강렬하게 그린 노르웨이 화가예요." },
-          { q: "녹아내리는 시계가 등장하는 〈기억의 지속〉을 그린 화가는?", v: "🕰️", a: "살바도르 달리", w: ["클로드 모네", "파블로 피카소", "앙리 마티스"], hint: "독특한 콧수염의 초현실주의 거장이에요." },
-          { q: "미술관 티켓이 3,000원입니다. 4명이 함께 입장하면 얼마일까요?", v: "🏛️ 3,000 × 4 = ?", a: "12,000원", w: ["9,000원", "10,000원", "7,000원"], hint: "3,000원에 4를 곱해보세요!" },
-          { q: "물감이 1/2통 남았는데, 그 절반을 썼어요. 사용한 양은 얼마일까요?", v: "1/2 × 1/2 = ?", a: "1/4통", w: ["1/2통", "1/3통", "3/4통"], hint: "반의 반은 전체의 4분의 1이에요." },
-          { q: "빨강, 주황, 노랑처럼 포근하고 따뜻한 느낌을 주는 색채 군은?", a: "난색(따뜻한 색)", w: ["한색", "무채색", "보색"], hint: "따뜻할 난(暖) 자를 써요." },
-          { q: "하양, 회색, 검정처럼 색깔 기운 없이 밝고 어두움만 있는 색은?", a: "무채색", w: ["유채색", "난색", "보색"], hint: "채색이 없다는 뜻의 없을 무(無) 자를 써요." },
-          { q: "색상환에서 서로 마주 보며 대비를 이루는 짝꿍 보색 관계는?", a: "빨강과 초록", w: ["빨강과 주황", "파랑과 보라", "노랑과 하양"], hint: "크리스마스 트리의 빨간 열매와 초록 잎을 생각해보세요!" },
-          { q: "〈모나리자〉를 그린 레오나르도 다 빈치의 국적은 어디일까요?", a: "이탈리아", w: ["프랑스", "스페인", "네덜란드"], hint: "피렌체와 로마가 있는 남유럽 장화 모양 나라예요." },
-          { q: "빛의 3원색 수(3)와 무지개 색의 수(7)를 더하면 얼마일까요?", v: "3 + 7 = ?", a: "10", w: ["9", "11", "12"], hint: "두 자릿수가 되는 가장 기본 숫자예요." },
-          { q: "먹의 농담으로 아름다운 산과 강을 그린 전통 한국화는?", a: "산수화", w: ["인물화", "풍속화", "화조화"], hint: "뫼 산(山)과 물 수(水) 자를 써요." }
-        ]
-      },
-      // 3: 초 5–6학년 (고학년)
-      {
-        "하": [
-          { q: "소용돌이치는 별빛의 〈별이 빛나는 밤〉을 그린 화가는 누구일까요?", v: "🌌", a: "빈센트 반 고흐", w: ["클로드 모네", "파블로 피카소", "살바도르 달리"], hint: "감정을 강렬한 붓 터치로 표현한 후기 인상주의 화가예요." },
-          { q: "빛의 3원색은 빨강(R), 초록(G), 그리고 어떤 색일까요?", v: "RGB = Red, Green, ( ? )", a: "파랑(Blue)", w: ["노랑(Yellow)", "보라(Purple)", "하양(White)"], hint: "모니터와 화면을 나타내는 RGB의 마지막 글자예요." },
-          { q: "미술에서 '명암'이란 무엇의 차이를 나타내는 말일까요?", a: "밝고 어두움", w: ["크고 작음", "길고 짧음", "빠르고 느림"], hint: "밝을 명(明)과 어두울 암(暗)이에요." },
-          { q: "도화지를 가로 4칸, 세로 3칸으로 나누면 총 몇 칸이 될까요?", v: "4 × 3 = ?", a: "12개", w: ["7개", "10개", "14개"], hint: "가로와 세로 칸 수를 곱해보세요." },
-          { q: "화가가 거울을 보며 자기 자신의 모습을 그린 그림은?", v: "🪞", a: "자화상", w: ["풍경화", "정물화", "추상화"], hint: "스스로 자(自), 그릴 화(畵)예요." },
-          { q: "꽃병이나 과일 바구니처럼 정지된 사물을 배치해 그린 그림은?", a: "정물화", w: ["자화상", "풍경화", "역사화"], hint: "움직이지 않는 고요한 정물(靜物)을 그려요." },
-          { q: "찰흙으로 빚거나 돌을 깎아 입체로 표현하는 조형 예술은?", a: "조소(조각과 소조)", w: ["판화", "데생", "일러스트"], hint: "평면이 아닌 3차원 공간을 만들어요." },
-          { q: "다른 어떤 색을 섞어도 만들 수 없는 가장 근원적인 색은?", a: "원색", w: ["보색", "무채색", "중간색"], hint: "모든 색채 배합의 으뜸이 되는 색이에요." },
-          { q: "물감이 한 통에 25ml씩 들어 있어요. 4통이면 총 몇 ml일까요?", v: "25 × 4 = ?", a: "100ml", w: ["90ml", "75ml", "125ml"], hint: "25가 4개 모이면 100이 돼요." },
-          { q: "물감을 칠하는 바탕이 되는 팽팽한 하얀 천 판은?", a: "캔버스", w: ["앞치마", "커튼", "스크린"], hint: "나무틀 위에 덧댄 화가들의 화판이에요." }
-        ],
-        "중": [
-          { q: "비 온 뒤 인왕산의 젖은 바위를 그린 〈인왕제색도〉의 조선 화가는?", v: "⛰️", a: "겸재 정선", w: ["단원 김홍도", "혜원 신윤복", "현동자 안견"], hint: "진경산수화의 대가예요." },
-          { q: "14~16세기 르네상스 예술 운동이 처음 꽃피어난 나라는?", a: "이탈리아", w: ["영국", "중국", "독일"], hint: "피렌체와 로마 중심의 남유럽 반도 국가예요." },
-          { q: "색상환에서 서로 정반대 편에 있어 강한 대비를 이루는 관계는?", a: "보색", w: ["유사색", "무채색", "단색"], hint: "서로를 가장 또렷하게 돋보이게 해줘요." },
-          { q: "빨강 물감 1/3통과 파랑 물감 1/4통을 합치면 분수로 몇 통일까요?", v: "1/3 + 1/4 = ?", a: "7/12통", w: ["2/7통", "5/12통", "1/7통"], hint: "분모를 12로 통분해보세요 (4/12 + 3/12)." },
-          { q: "알파벳을 한 글자씩 앞으로 당기면 나타나는 화판의 영문 이름은?", v: "암호: D - B - O - W - B - T", a: "CANVAS", w: ["PAINTS", "ARTIST", "EASELS"], hint: "D 앞은 C, B 앞은 A, O 앞은 N..." },
-          { q: "한 변이 6cm인 정사각형 액자의 둘레 길이는 몇 cm일까요?", v: "🖼️ 6 × 4 = ?", a: "24cm", w: ["12cm", "36cm", "18cm"], hint: "6cm 네 변을 곱해보세요." },
-          { q: "실제 사물 형태 대신 점, 선, 면, 색채로 감정을 표현한 순수 미술은?", a: "추상화", w: ["정밀묘사", "초상화", "극사실주의"], hint: "칸딘스키와 몬드리안이 개척한 예술이에요." },
-          { q: "나무를 태워 만든 숯 스틱으로 부드러운 소묘에 쓰이는 재료는?", a: "목탄(Charcoal)", w: ["크레파스", "분필", "사인펜"], hint: "나무 목(木), 숯 탄(炭) 자를 써요." },
-          { q: "물감 600ml를 세 친구가 똑같이 나누면 한 명당 몇 ml일까요?", v: "600 ÷ 3 = ?", a: "200ml", w: ["300ml", "100ml", "150ml"], hint: "600을 3으로 똑같이 나눠보세요." },
-          { q: "점토 도자기를 1,000도 이상의 높은 고열로 단단히 구워내는 곳은?", a: "가마(Kiln)", w: ["이젤", "팔레트", "석고대"], hint: "도예가들이 불을 지펴 구워내는 가마예요." }
-        ],
-        "상": [
-          { q: "화가 A, B, C가 〈수련〉, 〈해바라기〉, 〈별이 빛나는 밤〉을 그렸습니다. A와 C는 별밤을 그리지 않았습니다. B가 그린 명화는?", a: "〈별이 빛나는 밤〉", w: ["〈수련〉", "〈해바라기〉"], hint: "A와 C 둘 다 아니니 남은 B의 작품이에요!" },
-          { q: "가까운 것은 크게, 먼 것은 작게 그려 공간 깊이감을 주는 기법은?", a: "원근법(투시화법)", w: ["점묘법", "명암법", "모자이크"], hint: "소실점을 향해 선이 모여드는 기법이에요." },
-          { q: "물감을 섞지 않고 수많은 점을 콕콕 찍어 그린 점묘법 화가는?", v: "〈그랑드 자트 섬의 일요일 오후〉", a: "조르주 쇠라", w: ["클로드 모네", "폴 고갱", "앙리 마티스"], hint: "신인상주의 점묘파를 창시한 화가예요." },
-          { q: "'인상주의'라는 명칭의 유래가 된 모네의 작품 제목은?", a: "〈인상, 해돋이〉", w: ["〈절규〉", "〈모나리자〉", "〈게르니카〉"], hint: "제목에 '인상'이라는 단어가 직접 들어가요." },
-          { q: "모나리자와 밀로의 비너스가 있는 프랑스 파리의 세계 최대 박물관은?", v: "🏛️", a: "루브르 박물관", w: ["프라도 미술관", "우피치 미술관", "대영 박물관"], hint: "유리 피라미드 입구로 유명한 파리의 박물관이에요." },
-          { q: "다음 분수 중에서 가장 크기가 큰 수는 어느 것일까요?", v: "1/2,  2/3,  3/4,  1/4", a: "3/4", w: ["1/2", "2/3", "1/4"], hint: "소수로 바꾸면 3/4 = 0.75로 가장 커요." },
-          { q: "사물의 다양한 각도를 한 화면에 입체적으로 재구성한 피카소의 양식은?", a: "입체주의(큐비즘)", w: ["인상주의", "초현실주의", "팝아트"], hint: "육면체(큐브)처럼 다각도 시점을 해체·결합해요." },
-          { q: "마릴린 먼로, 만화, 통조림 광고를 예술로 승화시킨 앤디 워홀의 미술은?", a: "팝아트(Pop Art)", w: ["입체주의", "다다이즘", "야수파"], hint: "대중적인(Popular) 문화 이미지를 다뤄요." },
-          { q: "알파벳을 한 글자씩 앞으로 당기면 나오는 영어 단어는?", v: "암호: Q - B - J - O - U", a: "PAINT", w: ["POINT", "PRINT", "PLANT"], hint: "Q 앞은 P, B 앞은 A, J 앞은 I, O 앞은 N, U 앞은 T예요." },
-          { q: "물감 1통이 2,500원입니다. 7통을 사고 20,000원을 냈을 때 거스름돈은?", v: "20,000 − (2,500 × 7) = ?", a: "2,500원", w: ["3,500원", "1,500원", "5,000원"], hint: "2,500 × 7 = 17,500원입니다." }
-        ]
-      }
-    ];
-
-    const AGES = [
-      { id: 0, title: '5–7세', sub: '유아', icon: '🦄' },
-      { id: 1, title: '초 1–2학년', sub: '저학년', icon: '🌸' },
-      { id: 2, title: '초 3–4학년', sub: '중학년', icon: '🎨' },
-      { id: 3, title: '초 5–6학년', sub: '고학년', icon: '💎' }
-    ];
-
-    const LEVELS = [
-      { id: '하', name: '초급 (하)', stars: '⭐' },
-      { id: '중', name: '중급 (중)', stars: '⭐⭐' },
-      { id: '상', name: '고급 (상)', stars: '⭐⭐⭐' }
-    ];
-
-    const TIME_LIMIT = 30; // 30초
-    const decks = {};
-    const lastDrawn = {};
-
-    function getNextQuestion(ageIdx, levelKey) {
-      const deckKey = `${ageIdx}_${levelKey}`;
-      const questions = QUIZ_DATABASE[ageIdx][levelKey];
-      if (!decks[deckKey] || decks[deckKey].length === 0) {
-        const indices = [...Array(questions.length).keys()];
-        for (let i = indices.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [indices[i], indices[j]] = [indices[j], indices[i]];
-        }
-        if (lastDrawn[deckKey] !== undefined && indices[indices.length - 1] === lastDrawn[deckKey] && indices.length > 1) {
-          indices.unshift(indices.pop());
-        }
-        decks[deckKey] = indices;
-      }
-      const chosenIdx = decks[deckKey].pop();
-      lastDrawn[deckKey] = chosenIdx;
-      return questions[chosenIdx];
-    }
-
-    function shuffle(arr) {
-      const copy = arr.slice();
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-      return copy;
-    }
-
-    const appState = {
-      screen: 'select',
-      selectedAge: null,
-      selectedLevel: null,
-      currentQuiz: null,
-      choices: [],
-      correctIndex: -1,
-      userPick: null,
-      isHintOpen: false,
-      timeLeft: TIME_LIMIT,
-      timerTimer: null,
-      isAnswerChecked: false,
-
-      init() {
-        grandFireworks.init();
-        this.render();
-      },
-
-      setAge(id) {
-        audioFX.playPop();
-        this.selectedAge = id;
-        this.checkReady();
-        this.render();
-      },
-
-      setLevel(id) {
-        audioFX.playPop();
-        this.selectedLevel = id;
-        this.checkReady();
-        this.render();
-      },
-
-      checkReady() {
-        if (this.selectedAge !== null && this.selectedLevel !== null) {
-          setTimeout(() => this.startQuiz(), 220);
-        }
-      },
-
-      goHome() {
-        audioFX.playPop();
-        this.stopTimer();
-        grandFireworks.stop();
-        this.screen = 'select';
-        this.selectedAge = null;
-        this.selectedLevel = null;
-        this.render();
-      },
-
-      startQuiz() {
-        this.stopTimer();
-        grandFireworks.stop();
-        const q = getNextQuestion(this.selectedAge, this.selectedLevel);
-        const choices = shuffle([q.a, ...q.w]);
-
-        this.currentQuiz = q;
-        this.choices = choices;
-        this.correctIndex = choices.indexOf(q.a);
-        this.userPick = null;
-        this.isHintOpen = false;
-        this.isAnswerChecked = false;
-        this.timeLeft = TIME_LIMIT;
-        this.screen = 'quiz';
-
-        this.render();
-        this.runTimer();
-      },
-
-      toggleHint() {
-        audioFX.playHintChime();
-        this.isHintOpen = !this.isHintOpen;
-        this.render();
-      },
-
-      runTimer() {
-        this.stopTimer();
-        const end = Date.now() + TIME_LIMIT * 1000;
-        let lastPlayedSec = TIME_LIMIT;
-
-        this.timerTimer = setInterval(() => {
-          const ms = Math.max(0, end - Date.now());
-          this.timeLeft = Math.ceil(ms / 1000);
-
-          if (this.timeLeft !== lastPlayedSec && this.timeLeft <= 10 && this.timeLeft > 0) {
-            audioFX.playMagicTick(this.timeLeft <= 5);
-            lastPlayedSec = this.timeLeft;
-          }
-
-          const tDigits = document.getElementById('timerDigits');
-          const aBar = document.getElementById('auroraBar');
-          const hGlass = document.getElementById('gemHourglass');
-
-          if (tDigits) {
-            tDigits.textContent = this.timeLeft;
-            tDigits.classList.toggle('danger', this.timeLeft <= 5);
-          }
-          if (aBar) {
-            const pct = (ms / (TIME_LIMIT * 1000)) * 100;
-            aBar.style.width = pct + '%';
-            aBar.classList.toggle('warning', this.timeLeft <= 10 && this.timeLeft > 5);
-            aBar.classList.toggle('danger', this.timeLeft <= 5);
-          }
-          if (hGlass) {
-            hGlass.classList.toggle('heartbeat', this.timeLeft <= 5);
-            hGlass.textContent = this.timeLeft <= 5 ? '💖' : '⏳';
-          }
-
-          if (ms <= 0) {
-            this.stopTimer();
-            this.handleTimeout();
-          }
-        }, 100);
-      },
-
-      stopTimer() {
-        if (this.timerTimer) {
-          clearInterval(this.timerTimer);
-          this.timerTimer = null;
-        }
-      },
-
-      handleTimeout() {
-        if (this.userPick !== null || this.isAnswerChecked) return;
-        audioFX.playMagicPoof();
-        this.userPick = -1;
-        this.isAnswerChecked = true;
-        this.screen = 'result';
-        this.render();
-      },
-
-      selectAnswer(idx) {
-        if (this.isAnswerChecked) return;
-        this.stopTimer();
-        this.userPick = idx;
-        this.isAnswerChecked = true;
-
-        const isCorrect = idx === this.correctIndex;
-        if (isCorrect) {
-          audioFX.playFanfare();
-          grandFireworks.launchVictory();
-        } else {
-          audioFX.playOops();
-        }
-
-        this.render();
-
-        setTimeout(() => {
-          this.screen = 'result';
-          this.render();
-        }, 850);
-      },
-
-      render() {
-        const app = document.getElementById('app');
-        if (!app) return;
-
-        if (this.screen === 'select') {
-          app.innerHTML = this.renderSelectView();
-        } else if (this.screen === 'quiz') {
-          app.innerHTML = this.renderQuizView();
-        } else if (this.screen === 'result') {
-          app.innerHTML = this.renderResultView();
-        }
-      },
-
-      renderSelectView() {
-        return `
-          <div class="screen-select">
-            <div class="select-section age-sec">
-              <div class="sec-header">
-                <span>🎀 참가자 연령을 선택해줘</span>
-                <span class="badge-tag">STEP 1</span>
-              </div>
-              <div class="age-grid">
-                ${AGES.map(a => {
-                  const isSel = this.selectedAge === a.id;
-                  return `
-                    <button type="button" class="age-card crystal-btn ${isSel ? 'active' : ''}" onclick="appState.setAge(${a.id})">
-                      <span class="icon-wrap">${a.icon}</span>
-                      <span class="name">${a.title}</span>
-                      <span class="sub-tag">${a.sub}</span>
-                    </button>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-
-            <div class="select-section lv-sec">
-              <div class="sec-header">
-                <span>✨ 탈출할 방 난이도를 골라봐</span>
-                <span class="badge-tag">STEP 2</span>
-              </div>
-              <div class="lv-grid">
-                ${LEVELS.map(l => {
-                  const isSel = this.selectedLevel === l.id;
-                  return `
-                    <button type="button" class="lv-card crystal-btn ${isSel ? 'active' : ''}" onclick="appState.setLevel('${l.id}')">
-                      <span class="stars">${l.stars}</span>
-                      <span class="name">${l.name}</span>
-                    </button>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          </div>
-        `;
-      },
-
-      renderQuizView() {
-        const q = this.currentQuiz;
-        const isDanger = this.timeLeft <= 5;
-
-        return `
-          <div class="screen-quiz">
-            <div class="top-nav">
-              <button type="button" class="nav-btn crystal-btn" onclick="appState.goHome()">← 뒤로</button>
-              
-              <div class="magic-timer-wrap">
-                <span id="gemHourglass" class="gem-hourglass ${isDanger ? 'heartbeat' : ''}">${isDanger ? '💖' : '⏳'}</span>
-                <div class="aurora-meter">
-                  <div id="auroraBar" class="aurora-bar ${isDanger ? 'danger' : ''}" style="width: ${(this.timeLeft / TIME_LIMIT) * 100}%"></div>
-                </div>
-                <span id="timerDigits" class="timer-digits ${isDanger ? 'danger' : ''}">${this.timeLeft}</span>
-              </div>
-
-              <button type="button" class="hint-wand-btn crystal-btn ${this.isHintOpen ? 'open' : ''}" onclick="appState.toggleHint()">
-                <span class="spark-icon">🪄</span> 힌트 요정
-              </button>
-            </div>
-
-            <div class="stage-container">
-              <div class="q-card-panel">
-                <div class="lulu-mascot">
-                  <span class="lulu-avatar">🐱✨</span>
-                  <span>비밀 암호를 풀어줘냥!</span>
-                </div>
-                <p class="q-text">${q.q}</p>
-                ${q.v ? `<div class="q-visual-frame">${q.v}</div>` : ''}
-                ${this.isHintOpen ? `<div class="hint-magic-box">💡 루루 요정의 속삭임: ${q.hint}</div>` : ''}
-              </div>
-
-              <div class="choices-column">
-                ${this.choices.map((c, i) => {
-                  let cls = '';
-                  if (this.isAnswerChecked) {
-                    if (i === this.correctIndex) cls = 'correct';
-                    else if (i === this.userPick) cls = 'wrong';
-                    else cls = 'faded';
-                  }
-                  return `
-                    <button type="button" class="magic-choice-btn crystal-btn ${cls}" onclick="appState.selectAnswer(${i})" ${this.isAnswerChecked ? 'disabled' : ''}>
-                      <span class="order-jewel">${i + 1}</span>
-                      <span>${c}</span>
-                    </button>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          </div>
-        `;
-      },
-
-      renderResultView() {
-        const isSuccess = this.userPick === this.correctIndex;
-        const isTimeout = this.userPick === -1;
-        const q = this.currentQuiz;
-
-        return `
-          <div class="screen-result">
-            <div class="result-crystal-card">
-              <div class="res-emblem ${!isSuccess ? 'broken' : ''}">
-                ${isSuccess ? '👑💖' : (isTimeout ? '⌛💨' : '🔒😿')}
-              </div>
-              <div class="res-headline ${!isSuccess ? 'fail' : ''}">
-                ${isSuccess ? '마법 방탈출 대성공!' : (isTimeout ? '시간이 모두 지나버렸어!' : '자물쇠가 잠겼어!')}
-              </div>
-              <div class="res-comment">
-                ${isSuccess 
-                  ? '대단해! 마법 크리스털 열쇠를 얻어 비밀 문이 활짝 열렸어 ✨' 
-                  : `아쉽지만 다시 힘내보자! 정답은 <strong>${q.a}</strong> 이었어.`}
-              </div>
-              <div class="res-actions">
-                <button type="button" class="action-btn primary crystal-btn" onclick="appState.startQuiz()">
-                  ${isSuccess ? '다음 방 탈출하기 🚀' : '다시 도전하기 ✨'}
-                </button>
-                <button type="button" class="action-btn secondary crystal-btn" onclick="appState.goHome()">
-                  처음으로 🏠
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-    };
-
-    document.addEventListener('keydown', (e) => {
-      if (appState.screen === 'quiz') {
-        const num = parseInt(e.key, 10);
-        if (num >= 1 && num <= appState.choices.length) {
-          appState.selectAnswer(num - 1);
-        } else if (e.key.toLowerCase() === 'h') {
-          appState.toggleHint();
-        }
-      } else if (appState.screen === 'result') {
-        if (e.key === 'Enter' || e.key === ' ') {
-          appState.startQuiz();
-        }
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      appState.init();
-    });
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+<div class="bg-sparkles"></div>
+<canvas id="confetti-canvas"></canvas>
+<main id="app"></main>
+
+<script>
+const QUIZ_DATABASE = [
+  // [0] 5–7세
+  {
+    하: [
+      { q: "빨강 물감과 노랑 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + 🟡 = ?", a: "🟠 주황", w: ["🟢 초록", "🟣 보라"], hint: "새콤달콤 맛있는 오렌지와 당근 색깔이에요!" },
+      { q: "그림을 그릴 때 쓰는 도구는 어느 것일까요?", v: "🎨", a: "🖌️ 붓", w: ["🍴 포크", "👟 신발"], hint: "물감을 콕 찍어서 하얀 종이에 쓱쓱 문지르는 도구예요." },
+      { q: "달콤한 바나나는 무슨 색일까요?", v: "🍌", a: "🟡 노랑", w: ["🔵 파랑", "⚫ 검정"], hint: "병아리와 개나리꽃처럼 밝고 따뜻한 색이에요." },
+      { q: "맑은 날 하늘은 무슨 색일까요?", v: "☀️", a: "🔵 파랑", w: ["🔴 빨강", "⚫ 검정"], hint: "시원한 바다처럼 넓고 푸른 색이랍니다." },
+      { q: "동글동글한 동그라미 모양은 어느 것일까요?", v: "⭕", a: "🔵 동그라미", w: ["🔺 세모", "🟦 네모"], hint: "뾰족한 모서리가 하나도 없는 훌라후프 모양이에요." },
+      { q: "종이에 알록달록 색칠할 때 쓰는 것은?", v: "📄", a: "🖍️ 크레파스", w: ["🥄 숟가락", "🧦 양말"], hint: "손에 쥐고 스케치북에 칠하는 미술 도구예요." },
+      { q: "맛있는 토마토는 무슨 색일까요?", v: "🍅", a: "🔴 빨강", w: ["🟣 보라", "🟤 갈색"], hint: "사과와 딸기처럼 예쁘고 정열적인 색깔이에요." },
+      { q: "뾰족뾰족한 꼭짓점이 3개 있는 모양은?", v: "📐", a: "🔺 세모", w: ["🔵 동그라미", "🟦 네모"], hint: "맛있는 피자 한 조각이나 고깔모자 모양이에요." },
+      { q: "멋진 그림을 그리는 예술가 선생님을 무엇이라 할까요?", v: "🖼️", a: "🧑‍🎨 화가", w: ["🧑‍🍳 요리사", "🧑‍🚒 소방관"], hint: "붓과 팔레트를 들고 그림을 창작하는 분이에요." },
+      { q: "하늘에서 살랑살랑 내리는 하얀 눈은 무슨 색일까요?", v: "❄️", a: "⚪ 하양", w: ["🟣 보라", "🟤 갈색"], hint: "우유나 백설공주 옷처럼 깨끗한 색이에요." }
+    ],
+    중: [
+      { q: "파랑 물감과 노랑 물감을 섞으면 무슨 색이 될까요?", v: "🔵 + 🟡 = ?", a: "🟢 초록", w: ["🟠 주황", "🟣 보라"], hint: "푸릇푸릇 싱그러운 나뭇잎과 잔디밭 색깔이에요." },
+      { q: "빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + 🔵 = ?", a: "🟣 보라", w: ["🟢 초록", "🟠 주황"], hint: "달콤한 포도 알맹이 같은 신비로운 색이에요." },
+      { q: "모양이 다른 친구 하나는 누구일까요?", v: "🔺 🔺 🔵 🔺", a: "🔵 동그라미", w: ["🔺 세모", "🟦 네모"], hint: "혼자만 모서리가 없고 둥글둥글해요!" },
+      { q: "물감을 콕 찍어 물에 씻어가며 칠하는 도구는?", v: "💧", a: "🖌️ 붓", w: ["✏️ 연필", "✂️ 가위"], hint: "부드러운 털이 달려 있어 물감 그림을 그릴 때 써요." },
+      { q: "종이를 싹둑싹둑 자를 때 쓰는 도구는?", v: "📄", a: "✂️ 가위", w: ["🖌️ 붓", "🖍️ 크레파스"], hint: "두 개의 날이 엇갈리며 종이를 모양내는 도구예요." },
+      { q: "종이 두 장을 착! 붙일 때 쓰는 것은?", v: "📄 + 📄", a: "🧴 풀", w: ["🧽 지우개", "✏️ 연필"], hint: "끈적끈적 접착력이 있어 종이를 이어줘요." },
+      { q: "물감의 기본 3가지 색! 빈칸에 들어갈 색은?", v: "🔴 🔵 ( )", a: "🟡 노랑", w: ["🟢 초록", "🟣 보라"], hint: "빨강, 파랑과 함께 색의 삼원색을 이루는 밝은 색이에요." },
+      { q: "빨강 물감에 하양 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + ⚪ = ?", a: "🌸 분홍", w: ["🟢 초록", "⚫ 검정"], hint: "예쁜 벚꽃 잎이나 복숭아 같은 사랑스러운 색이에요." },
+      { q: "검정 물감에 하양 물감을 섞으면 무슨 색이 될까요?", v: "⚫ + ⚪ = ?", a: "🐘 회색", w: ["🌸 분홍", "🟢 초록"], hint: "멋진 코끼리와 구름 낀 하늘의 은은한 색이에요." },
+      { q: "멋진 그림과 조각을 구경하러 가는 장소는?", v: "🖼️", a: "🏛️ 미술관", w: ["🏥 병원", "🚒 소방서"], hint: "아름다운 예술 작품들이 벽에 전시되어 있는 곳이에요." }
+    ],
+    상: [
+      { q: "무지개에서 빨강 다음에 오는 두 번째 색은?", v: "🔴 → ( )", a: "🟠 주황", w: ["🟡 노랑", "🟢 초록"], hint: "'빨-주-노-초-파-남-보' 노래를 떠올려 보세요!" },
+      { q: "무지개 색 순서 맞히기! 빈칸에 올 색은?", v: "🔴 🟠 🟡 ( )", a: "🟢 초록", w: ["🟣 보라", "🔵 파랑"], hint: "노랑 다음에 싱그러운 숲의 색이 찾아와요." },
+      { q: "규칙을 찾아요! 빈칸에 알맞은 색은?", v: "🔴 🔵 🔴 🔵 🔴 ( )", a: "🔵 파랑", w: ["🔴 빨강", "🟡 노랑"], hint: "빨강과 파랑이 하나씩 번갈아 나오고 있어요." },
+      { q: "규칙을 찾아요! 빈칸에 올 모양은?", v: "🟦 🟦 🔺 🟦 🟦 ( )", a: "🔺 세모", w: ["🟦 네모", "🔵 동그라미"], hint: "네모 두 개 뒤에는 항상 어떤 모양이 나왔나요?" },
+      { q: "유명한 〈해바라기〉 그림 속 꽃은 무슨 색일까요?", v: "🌻", a: "🟡 노랑", w: ["🔵 파랑", "🟣 보라"], hint: "태양을 닮아 밝고 환하게 빛나는 노란 꽃잎이에요." },
+      { q: "보라색을 만들려면 어떤 두 가지 색을 섞어야 할까요?", v: "🟣", a: "🔴 빨강 + 🔵 파랑", w: ["🔴 빨강 + 🟡 노랑", "🟡 노랑 + 🔵 파랑"], hint: "따뜻한 빨강과 차가운 파랑이 만나면 보라가 돼요." },
+      { q: "물감을 짜서 섞는 평평한 나무나 플라스틱 판은?", v: "🎨", a: "🎨 팔레트", w: ["🍽️ 쟁반", "🎒 가방"], hint: "가운데 엄지손가락을 끼우고 물감을 섞는 판이에요." },
+      { q: "찰흙을 빚어 뜨거운 불에 구워 만든 전통 그릇은?", v: "🏺", a: "🏺 도자기", w: ["🍞 빵", "🧸 인형"], hint: "박물관에 가면 볼 수 있는 단단하고 고운 그릇이에요." },
+      { q: "내 그림자가 생기려면 꼭 필요한 것은 무엇일까요?", v: "🧍", a: "💡 빛", w: ["🌧️ 비", "🍎 사과"], hint: "햇빛이나 전등불이 내 몸에 닿아야 그림자가 생겨요." },
+      { q: "모닥불처럼 따뜻한 느낌을 주는 색은 어느 것일까요?", v: "🔥", a: "🔴 빨강", w: ["🔵 파랑", "🟦 남색"], hint: "불꽃이나 태양처럼 활활 타오르는 색이에요." }
+    ]
+  },
+  // [1] 초 1–2학년
+  {
+    하: [
+      { q: "팔레트에 물감이 7개 있었는데 5개를 더 샀어요. 모두 몇 개일까요?", v: "🎨 7 + 5 = ?", a: "12개", w: ["11개", "13개", "10개"], hint: "7에 3을 더하면 10이 되고, 남은 2를 더해보세요!" },
+      { q: "색의 기본이 되는 3원색! 빈칸에 들어갈 색은?", v: "빨강 · 노랑 · ( )", a: "파랑", w: ["초록", "보라", "주황"], hint: "바다와 하늘을 닮은 삼원색 중 하나예요." },
+      { q: "빨강 물감과 파랑 물감을 섞으면 무슨 색이 될까요?", v: "🔴 + 🔵 = ?", a: "보라", w: ["초록", "주황", "분홍"], hint: "포도주스 같은 매혹적인 색깔이 완성돼요." },
+      { q: "다음 중 색칠하는 도구가 아닌 것은 무엇일까요?", a: "가위", w: ["크레파스", "색연필", "물감"], hint: "색을 칠하는 대신 종이를 오려내는 도구예요." },
+      { q: "연필로 쓱쓱 그린 선을 싹싹 지울 때 쓰는 것은?", a: "지우개", w: ["풀", "물감", "자"], hint: "고무 재질로 만들어져 연필 자국을 깨끗하게 지워요." },
+      { q: "색종이를 접어서 비행기나 하트를 만드는 놀이는?", v: "📄", a: "종이접기", w: ["줄넘기", "노래 부르기", "달리기"], hint: "손가락으로 네모난 종이를 곱게 접는 놀이예요." },
+      { q: "노랑 물감과 파랑 물감을 섞으면 무슨 색이 될까요?", v: "🟡 + 🔵 = ?", a: "초록", w: ["보라", "주황", "분홍"], hint: "새싹과 풀잎처럼 푸른 자연의 색이에요." },
+      { q: "멋진 그림이나 조각을 감상하러 가는 전시장소는?", v: "🖼️", a: "미술관", w: ["도서관", "우체국", "수영장"], hint: "아름다운 예술품이 걸려 있는 갤러리예요." },
+      { q: "물감 묻은 붓을 깨끗이 씻을 때 꼭 필요한 것은?", v: "🖌️", a: "물", w: ["모래", "불", "연필"], hint: "물통에 담아 첨벙첨벙 흔들어 씻어내요." },
+      { q: "물감이 10개 있었는데 4개를 다 썼어요. 남은 물감은?", v: "🎨 10 − 4 = ?", a: "6개", w: ["5개", "7개", "4개"], hint: "10에서 4를 거꾸로 세어보세요!" }
+    ],
+    중: [
+      { q: "크레파스 12개를 두 친구가 똑같이 나누면 한 명당 몇 개일까요?", v: "🖍️ 12 ÷ 2 = ?", a: "6개", w: ["5개", "4개", "7개"], hint: "6 더하기 6은 12가 된답니다." },
+      { q: "빨강 크레파스 8개와 파랑 크레파스 6개를 합치면?", v: "🖍️ 8 + 6 = ?", a: "14개", w: ["13개", "15개", "12개"], hint: "8에 2를 더해 10을 만들고 4를 더해보세요." },
+      { q: "주황색을 만들려면 빨강에 어떤 색을 섞어야 할까요?", v: "🔴 + ( ) = 🟠", a: "노랑", w: ["파랑", "초록", "하양"], hint: "햇살처럼 눈부신 노란 물감을 섞어야 해요." },
+      { q: "무지개 색 순서의 빈칸에 알맞은 색은?", v: "빨강 주황 노랑 ( ) 파랑 남색 보라", a: "초록", w: ["하양", "검정", "분홍"], hint: "노랑과 파랑의 사이에 있는 자연의 색이에요." },
+      { q: "그림을 그릴 때 쓰는 하얗고 튼튼한 천 틀의 이름은?", a: "캔버스", w: ["커튼", "방석", "식탁보"], hint: "유화나 아크릴 물감을 칠하는 액자 모양 천이에요." },
+      { q: "다른 색을 섞지 않아도 존재하는 기본 색(원색)은?", a: "노랑", w: ["초록", "주황", "보라"], hint: "보기 중 다른 색을 조합해서 만들 수 없는 근본 색이에요." },
+      { q: "물감 통마다 색이 2개씩 있어요. 3통이면 색은 모두 몇 개?", v: "🎨 2 × 3 = ?", a: "6개", w: ["5개", "8개", "4개"], hint: "2를 3번 더해보세요 (2 + 2 + 2)." },
+      { q: "혼자만 색깔 계열이 다른 과일 하나는?", v: "🍎 🍓 🍅 🍌", a: "🍌 바나나", w: ["🍎 사과", "🍓 딸기", "🍅 토마토"], hint: "나머지 셋은 빨간색이지만, 이 과일은 노란색이에요." },
+      { q: "색종이가 20장 있어요. 8장을 썼다면 남은 종이는?", v: "📄 20 − 8 = ?", a: "12장", w: ["10장", "13장", "28장"], hint: "20에서 8을 쏙 빼면 10과 2가 남아요." },
+      { q: "하얀 물감에 검정 물감을 조금 섞으면 만들어지는 색은?", v: "⚪ + ⚫ = ?", a: "회색", w: ["노랑", "빨강", "보라"], hint: "비둘기 깃털이나 먹구름 같은 차분한 중간색이에요." }
+    ],
+    상: [
+      { q: "빛나는 〈해바라기〉 명화를 그린 네덜란드의 대표 화가는?", v: "🌻", a: "빈센트 반 고흐", w: ["클로드 모네", "파블로 피카소", "레오나르도 다 빈치"], hint: "자신의 귀를 다치기도 했던 열정적인 후기 인상주의 화가예요." },
+      { q: "그림이 완성되는 순서! 빈칸에 알맞은 것은?", v: "밑그림 → 색칠 → ( ) → 전시", a: "말리기", w: ["시작하기", "잠자기", "지우기"], hint: "물감이 번지지 않도록 바람에 뽀송뽀송 말려야 해요." },
+      { q: "반복되는 패턴 규칙! 마지막 괄호에 들어갈 색은?", v: "🔴 🔵 🟡 🔴 🔵 🟡 🔴 🔵 ( )", a: "🟡 노랑", w: ["🔴 빨강", "🔵 파랑", "⚪ 하양"], hint: "빨강-파랑-노랑 순서의 세 번째 짝꿍이에요." },
+      { q: "바다나 얼음처럼 차가운 느낌을 주는 한색은?", a: "파랑", w: ["빨강", "주황", "노랑"], hint: "시원하고 서늘한 얼음장 같은 푸른빛이에요." },
+      { q: "물감이 15개 있었는데 7개를 선물했어요. 남은 것은?", v: "🎨 15 − 7 = ?", a: "8개", w: ["7개", "9개", "22개"], hint: "15에서 5를 빼면 10, 거기서 2를 더 빼보세요." },
+      { q: "반듯한 정사각형에는 변(선분)이 모두 몇 개 있을까요?", v: "🟦", a: "4개", w: ["3개", "5개", "6개"], hint: "네 변의 길이가 모두 똑같은 사각형이에요." },
+      { q: "연필 끝으로 쭉 길게 그어 나타낸 조형 요소는?", v: "✏️ ───────", a: "선", w: ["점", "면", "원"], hint: "점이 연속해서 이어져 나아가는 길이에요." },
+      { q: "화가들이 캔버스를 세워놓고 그릴 수 있게 받쳐주는 받침대는?", a: "이젤", w: ["접시", "신발", "우산"], hint: "나무나 쇠로 된 삼각대 모양의 미술 도구예요." },
+      { q: "잡지나 색종이를 오려 붙여 화면을 구성하는 미술 기법은?", v: "✂️ + 🧴", a: "콜라주", w: ["판화", "조각", "소묘"], hint: "'풀로 붙이다'라는 뜻의 프랑스어에서 유래했어요." },
+      { q: "물감이 6개 있었는데 문구점에서 7개를 더 샀어요. 총합은?", v: "🎨 6 + 7 = ?", a: "13개", w: ["12개", "14개", "11개"], hint: "6과 6을 더하면 12인데, 거기에 1이 더 많아요." }
+    ]
+  },
+  // [2] 초 3–4학년
+  {
+    하: [
+      { q: "신비한 미소의 〈모나리자〉를 그린 르네상스 천재 예술가는?", a: "레오나르도 다 빈치", w: ["빈센트 반 고흐", "클로드 모네", "파블로 피카소"], hint: "이탈리아의 화가이자 과학자였던 만능 천재예요." },
+      { q: "물감의 '색의 3원색'에 포함되지 않는 색깔은?", a: "초록", w: ["빨강", "노랑", "파랑"], hint: "초록은 노랑과 파랑 물감을 섞어서 만들 수 있어요." },
+      { q: "하늘에 뜨는 아름다운 무지개는 몇 가지 색일까요?", v: "🌈", a: "7가지", w: ["5가지", "6가지", "8가지"], hint: "빨주노초파남보, 모두 일곱 가지 빛깔이에요." },
+      { q: "정사각형의 모서리가 만나는 꼭짓점은 모두 몇 개일까요?", v: "🟦", a: "4개", w: ["3개", "5개", "6개"], hint: "네모난 방의 네 귀퉁이를 세어보세요." },
+      { q: "본격적인 색칠에 들어가기 전, 연필로 밑그림을 그리는 작업은?", a: "스케치(데생)", w: ["전시", "액자", "서명"], hint: "도화지 위에 사물의 윤곽과 형태를 먼저 잡는 작업이에요." },
+      { q: "다음 중 미술실에서 쓰지 않는 도구는 무엇일까요?", a: "계산기", w: ["붓", "물감", "팔레트"], hint: "수학 시간에 숫자를 셈할 때 쓰는 전자 기기예요." },
+      { q: "물감을 짜서 농도를 조절하고 섞는 전용 판의 이름은?", v: "🎨", a: "팔레트", w: ["캔버스", "이젤", "붓"], hint: "화가들이 손가락을 쏙 끼우고 들고 있는 판이에요." },
+      { q: "손으로 빚어서 입체적인 조각품을 만드는 찰진 흙은?", a: "찰흙(점토)", w: ["바람", "노래", "그림자"], hint: "부드럽고 끈기가 있어 조소나 도예에 써요." },
+      { q: "초록색 물감을 만들려면 노랑에 어떤 색을 섞어야 할까요?", v: "🟡 + ( ) = 🟢", a: "파랑", w: ["빨강", "보라", "하양"], hint: "차가운 파란색 물감을 톡 떨어뜨려 섞어보세요." },
+      { q: "물에 물감을 풀어 맑고 투명한 느낌을 살리는 그림은?", a: "수채화", w: ["판화", "조각", "사진"], hint: "물의 양을 조절해서 농담을 표현하는 맑은 그림이에요." }
+    ],
+    중: [
+      { q: "무지개 색 순서의 빈칸에 알맞은 색은?", v: "빨강 주황 노랑 초록 파랑 ( ) 보라", a: "남색", w: ["하양", "분홍", "갈색"], hint: "파랑과 보라 사이의 짙은 밤하늘 같은 색이에요." },
+      { q: "아름다운 연못의 〈수련〉 연작을 그린 빛의 인상파 화가는?", a: "클로드 모네", w: ["빈센트 반 고흐", "파블로 피카소", "레오나르도 다 빈치"], hint: "프랑스의 지베르니 정원에서 연못 풍경을 주로 그렸어요." },
+      { q: "입체주의를 창시하고 전쟁의 비극을 다룬 〈게르니카〉를 그린 화가는?", a: "파블로 피카소", w: ["클로드 모네", "빈센트 반 고흐", "레오나르도 다 빈치"], hint: "스페인 출신으로 대상을 여러 각도에서 해체해 그린 화가예요." },
+      { q: "김홍도의 〈씨름〉처럼 서민들의 생활상을 유쾌하게 담은 그림은?", a: "풍속화", w: ["산수화", "초상화", "추상화"], hint: "그 시대의 풍속과 사람들의 살아가는 모습을 담은 그림이에요." },
+      { q: "빨강, 노랑, 파랑 세 가지 물감을 몽땅 섞으면 어떤 색이 될까요?", a: "어두운 흑갈색", w: ["하얀색", "연노랑", "분홍색"], hint: "물감은 섞을수록 빛이 줄어들어 점점 어둡고 검어져요(감산혼합)." },
+      { q: "지름이 10cm인 완벽한 원을 그리려면 컴퍼스를 몇 cm로 벌릴까요?", v: "⭕ 지름 10cm", a: "5cm", w: ["10cm", "20cm", "2cm"], hint: "컴퍼스의 벌린 길이는 지름의 절반인 '반지름'이에요." },
+      { q: "벽에 소와 사슴이 생생하게 그려진 알타미라 동굴 벽화의 시대는?", a: "선사 시대", w: ["조선 시대", "현대", "르네상스"], hint: "아주아주 먼 옛날, 수렵과 채집을 하던 구석기 시대예요." },
+      { q: "연필이나 숯(목탄)의 선과 명암만으로 대상을 정밀하게 그리는 것은?", a: "소묘(데생)", w: ["판화", "수채화", "자수"], hint: "형태감과 입체감을 기르는 미술의 기본 훈련이에요." },
+      { q: "한 변이 4cm인 정삼각형의 둘레 길이는 모두 몇 cm일까요?", v: "🔺 4 + 4 + 4 = ?", a: "12cm", w: ["8cm", "16cm", "4cm"], hint: "길이가 같은 3개의 변을 곱해보세요 (4 × 3)." },
+      { q: "잡지, 사진, 신문 등 다양한 재료를 찢어 붙여 완성하는 기법은?", a: "콜라주", w: ["드리핑", "점묘법", "모자이크"], hint: "붙이기 기법을 통해 독특한 질감을 연출해요." }
+    ],
+    상: [
+      { q: "다리 위에서 귀를 막고 비명을 지르는 〈절규〉를 그린 노르웨이 화가는?", a: "에드바르 뭉크", w: ["빈센트 반 고흐", "폴 고갱", "살바도르 달리"], hint: "인간의 불안과 공포를 강렬한 색채로 표현한 표현주의 화가예요." },
+      { q: "시계가 치즈처럼 녹아내리는 〈기억의 지속〉을 그린 초현실주의 화가는?", a: "살바도르 달리", w: ["클로드 모네", "파블로 피카소", "앙리 마티스"], hint: "꿈속 세계와 기이한 상상을 극사실적으로 그린 콧수염 화가예요." },
+      { q: "미술관 1인 티켓이 3,000원이에요. 우리 가족 4명이 가면 총 얼마일까요?", v: "🏛️ 3,000 × 4 = ?", a: "12,000원", w: ["9,000원", "10,000원", "7,000원"], hint: "3 곱하기 4는 12에 동그라미 세 개를 붙여보세요." },
+      { q: "물감이 1/2통 남았는데, 그 절반을 썼어요. 쓴 양은 전체의 얼마일까요?", v: "1/2 × 1/2 = ?", a: "1/4통", w: ["1/2통", "1/3통", "3/4통"], hint: "반의 반은 네 조각 중의 한 조각이에요." },
+      { q: "빨강, 주황, 노랑처럼 모닥불처럼 따스함을 주는 색채 군은?", a: "난색(따뜻한 색)", w: ["한색", "무채색", "보색"], hint: "따뜻할 '난(暖)' 자를 쓰는 온화한 색들이에요." },
+      { q: "흰색, 회색, 검정처럼 채도와 색상이 없는 맑고 담백한 색은?", a: "무채색", w: ["유채색", "난색", "보색"], hint: "색채가 없다는 뜻의 한자어를 생각해보세요." },
+      { q: "색상환에서 서로 정반대 맞은편에 마주 보고 있는 짝꿍 색을 무엇이라 할까요?", a: "보색", w: ["유사색", "동일색", "원색"], hint: "함께 두면 서로를 가장 또렷하게 돋보이게 해주는 색이에요." },
+      { q: "〈모나리자〉를 그린 레오나르도 다 빈치는 어느 나라 출신일까요?", a: "이탈리아", w: ["프랑스", "스페인", "네덜란드"], hint: "로마와 피렌체, 베네치아가 있는 지중해 나라예요." },
+      { q: "색의 3원색 개수(3)와 무지개 색 개수(7)를 더한 숫자는?", v: "3 + 7 = ?", a: "10", w: ["9", "11", "12"], hint: "손가락 열 개를 모두 펴보세요!" },
+      { q: "먹의 짙고 옅은 농담으로 산과 강을 그린 우리나라 전통 산수 풍경화는?", a: "산수화", w: ["인물화", "풍속화", "추상화"], hint: "뫼 산(山)과 물 수(水)가 어우러진 그림이에요." }
+    ]
+  },
+  // [3] 초 5–6학년
+  {
+    하: [
+      { q: "소용돌이치는 밤하늘의 〈별이 빛나는 밤〉을 그린 화가는?", a: "빈센트 반 고흐", w: ["클로드 모네", "파블로 피카소", "살바도르 달리"], hint: "사이프러스 나무와 노란 별빛을 역동적으로 그린 후기 인상파 화가예요." },
+      { q: "TV나 스마트폰 모니터 화면을 이루는 '빛의 3원색'은 빨강, 파랑, 그리고?", a: "초록(Green)", w: ["노랑", "보라", "주황"], hint: "RGB(Red, Green, Blue) 시스템을 떠올려보세요!" },
+      { q: "미술에서 빛에 의해 생기는 '명암'이란 무엇의 차이를 뜻할까요?", a: "밝고 어두움", w: ["크고 작음", "길고 짧음", "빠르고 느림"], hint: "밝을 '명(明)'과 어두울 '암(暗)'의 합성어예요." },
+      { q: "도화지를 가로 4칸, 세로 3칸으로 바둑판식으로 나누면 칸은 모두 몇 개?", v: "4 × 3 = ?", a: "12칸", w: ["7칸", "10칸", "14칸"], hint: "구구단 4단을 외워보세요. 4 삼은?" },
+      { q: "화가가 거울에 비친 자기 자신의 얼굴 모습을 그린 작품은?", a: "자화상", w: ["풍경화", "정물화", "추상화"], hint: "스스로 '자(自)'에 얼굴 '화상(畵像)'이에요." },
+      { q: "과일, 꽃병, 책처럼 스스로 움직이지 않는 물건들을 배치해 그린 그림은?", a: "정물화", w: ["자화상", "풍경화", "역사화"], hint: "고요할 '정(靜)'에 물건 '물(物)'을 써요." },
+      { q: "돌, 나무, 점토 등을 깎거나 빚어서 3차원 입체 조형을 만드는 분야는?", a: "조각(소조)", w: ["판화", "소묘", "디자인"], hint: "평면이 아니라 사방에서 만질 수 있는 입체 미술이에요." },
+      { q: "다른 어떤 색을 조합해도 만들 수 없는 순수하고 근본적인 원색은?", a: "1차색(원색)", w: ["보색", "무채색", "파스텔색"], hint: "모든 색의 출발점이 되는 색이에요." },
+      { q: "물감이 한 튜브에 25ml씩 들어 있어요. 4통의 총용량은 몇 ml일까요?", v: "25 × 4 = ?", a: "100ml", w: ["90ml", "75ml", "125ml"], hint: "25를 두 번 더하면 50, 네 번 더하면?" },
+      { q: "유화나 아크릴 그림을 그리기 위해 틀에 팽팽하게 당겨 맨 두꺼운 천은?", a: "캔버스", w: ["모시", "실크스카프", "손수건"], hint: "린넨이나 면포로 만든 서양화 전용 바탕재예요." }
+    ],
+    중: [
+      { q: "비 온 뒤 웅장한 바위산의 안개를 그린 〈인왕제색도〉의 조선 화가는?", a: "겸재 정선", w: ["단원 김홍도", "혜원 신윤복", "현동자 안견"], hint: "우리나라 산천을 직접 보고 그린 '진경산수화'의 대가예요." },
+      { q: "다빈치, 미켈란젤로 등 문화 예술이 화려하게 부흥한 '르네상스'의 발원 국가는?", a: "이탈리아", w: ["영국", "독일", "미국"], hint: "피렌체를 중심으로 고대 로마 문화가 부활한 곳이에요." },
+      { q: "빨강-초록, 파랑-주황처럼 색상환에서 정반대에 위치해 대비를 극대화하는 관계는?", a: "보색", w: ["인접색", "유사색", "단색"], hint: "서로를 가장 강렬하게 부각시켜주는 반대색이에요." },
+      { q: "빨강 물감 1/3통과 파랑 물감 1/4통을 섞었어요. 총량은 몇 통일까요?", v: "1/3 + 1/4 = ?", a: "7/12통", w: ["2/7통", "5/12통", "1/7통"], hint: "12로 통분하면 4/12 + 3/12가 됩니다!" },
+      { q: "암호 해독! 알파벳을 알파벳 순서상 한 칸씩 앞으로 당겨보세요: DBOWBT", v: "D(-1) B(-1) O(-1) W(-1) B(-1) T(-1)", a: "CANVAS", w: ["PAINTS", "ARTIST", "EASELS"], hint: "D의 바로 앞 글자는 C, B 앞은 A입니다." },
+      { q: "한 변의 길이가 6cm인 정사각형 액자의 둘레 길이는 총 몇 cm?", v: "6 × 4 = ?", a: "24cm", w: ["12cm", "36cm", "18cm"], hint: "똑같은 길이의 네 변을 모두 더해보세요." },
+      { q: "실제 사물의 구체적인 형태 대신 선, 색, 면 등의 순수 조형으로 감정을 나타낸 그림은?", a: "추상화", w: ["정밀묘사", "인물초상", "기록화"], hint: "칸딘스키와 몬드리안이 개척한 비구상 미술이에요." },
+      { q: "버드나무 가지를 태워 만들어 부드럽고 깊은 흑백 농담을 표현하는 소묘 재료는?", a: "목탄", w: ["분필", "색연필", "크레용"], hint: "나무를 숯처럼 구워 만든 미술 전용 숯가루 막대예요." },
+      { q: "수채화 물감 600ml를 3개의 팔레트에 똑같이 나누어 담으면 한 곳당 몇 ml?", v: "600 ÷ 3 = ?", a: "200ml", w: ["300ml", "150ml", "100ml"], hint: "6을 3으로 나눈 뒤 00을 붙여주세요." },
+      { q: "성형한 도자기나 점토를 1,000도 이상의 높은 고열로 구워내는 가열 장치는?", a: "가마", w: ["난로", "전자레인지", "이젤"], hint: "도예 공방이나 민속촌에 있는 전통 소성 설비예요." }
+    ],
+    상: [
+      { q: "논리 추리! 세 화가 A, B, C가 〈수련〉, 〈해바라기〉, 〈별이 빛나는 밤〉을 그렸어요. A는 〈해바라기〉와 〈별밤〉을 안 그렸고, C는 〈별밤〉을 안 그렸어요. 그럼 B가 그린 작품은?", a: "〈별이 빛나는 밤〉", w: ["〈수련〉", "〈해바라기〉"], hint: "A는 〈수련〉 확정! 그럼 남은 두 작품 중 C가 별밤을 안 그렸으니 별밤을 그린 사람은?" },
+      { q: "가까운 물체는 크게, 먼 것은 작게 그려 2차원 평면에 3차원 깊이감을 주는 기법은?", a: "원근법(투시도법)", w: ["점묘법", "마블링", "스텐실"], hint: "소실점을 활용해 공간의 거리감을 표현하는 방법이에요." },
+      { q: "물감을 팔레트에 섞지 않고 캔버스에 수많은 순수 색 점을 찍어 형태를 빚은 점묘파 화가는?", a: "조르주 쇠라", w: ["클로드 모네", "폴 고갱", "앙리 마티스"], hint: "〈그랑드 자트 섬의 일요일 오후〉를 그린 대표 신인상주의 화가예요." },
+      { q: "'인상주의(Impressionism)'라는 예술 운동의 명칭을 낳은 모네의 역사적 대표작은?", a: "〈인상, 해돋이〉", w: ["〈절규〉", "〈모나리자〉", "〈게르니카〉"], hint: "르아브르 항구의 아침 안개와 붉은 태양을 포착한 그림이에요." },
+      { q: "〈모나리자〉와 〈밀로의 비너스〉가 소장된 프랑스 파리의 세계 최대 규모 박물관은?", a: "루브르 박물관", w: ["프라도 미술관", "우피치 미술관", "오르세 미술관"], hint: "유리 피라미드 입구로 유명한 파리의 명소예요." },
+      { q: "다음 네 분수 중 크기가 가장 큰 대장 분수는 어느 것일까요?", v: "1/2   2/3   3/4   1/4", a: "3/4", w: ["1/2", "2/3", "1/4"], hint: "전체 1(100%)에 가장 가까운 0.75의 크기예요." },
+      { q: "사물을 한 시점에서만 보지 않고 여러 시점을 한 화면에 입체적으로 재구성한 미술 사조는?", a: "입체주의(큐비즘)", w: ["초현실주의", "팝아트", "인상주의"], hint: "피카소와 브라크가 이끈 20세기 혁신적 미술 양식이에요." },
+      { q: "캠벨 수프 통조림, 마릴린 먼로 등 대중문화와 소비사회의 이미지를 예술로 승화시킨 미술은?", a: "팝아트(Pop Art)", w: ["미니멀리즘", "행위예술", "다다이즘"], hint: "앤디 워홀과 로이 리히텐슈타인이 대표하는 대중 예술이에요." },
+      { q: "암호 해독! 알파벳을 사전 순서로 한 글자씩 앞으로 당겨 원래 단어를 맞춰보세요: QBJOU", v: "Q(-1) B(-1) J(-1) O(-1) U(-1)", a: "PAINT", w: ["POINT", "PRINT", "PLANT"], hint: "Q 앞은 P, B 앞은 A, J 앞은 I 입니다!" },
+      { q: "물감 한 개에 2,500원이에요. 7개를 사고 20,000원을 냈다면 받게 될 거스름돈은 얼마?", v: "20,000 − (2,500 × 7) = ?", a: "2,500원", w: ["3,500원", "1,500원", "5,000원"], hint: "2,500 × 7 = 17,500원입니다. 2만 원에서 빼보세요!" }
+    ]
+  }
+];
+
+const AGES = [
+  { name: '5–7세', sub: '귀여운 유아', icon: '🌈' },
+  { name: '초 1–2학년', sub: '깜찍 저학년', icon: '🖍️' },
+  { name: '초 3–4학년', sub: '발랄 중학년', icon: '🎨' },
+  { name: '초 5–6학년', sub: '의젓 고학년', icon: '🖼️' }
+];
+const LEVELS = [
+  { k: '하', stars: '⭐', word: '쉬워요' },
+  { k: '중', stars: '⭐⭐', word: '보통이에요' },
+  { k: '상', stars: '⭐⭐⭐', word: '어려워요' }
+];
+
+const TIME_LIMIT = 30;
+let soundEnabled = true;
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playSound(type) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const t = ctx.currentTime;
+    if (type === 'pop') {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(450, t);
+      o.frequency.exponentialRampToValueAtTime(750, t + 0.08);
+      g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.08);
+    } else if (type === 'hint') {
+      [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'triangle'; o.frequency.setValueAtTime(freq, t + idx * 0.06);
+        g.gain.setValueAtTime(0.15, t + idx * 0.06);
+        g.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.06 + 0.3);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t + idx * 0.06); o.stop(t + idx * 0.06 + 0.3);
+      });
+    } else if (type === 'tick') {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(900, t);
+      g.gain.setValueAtTime(0.12, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.04);
+    } else if (type === 'success') {
+      [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(freq, t + idx * 0.1);
+        g.gain.setValueAtTime(0.22, t + idx * 0.1);
+        g.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.1 + 0.5);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t + idx * 0.1); o.stop(t + idx * 0.1 + 0.5);
+      });
+    } else if (type === 'fail') {
+      [340, 300, 260].forEach((freq, idx) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sawtooth'; o.frequency.setValueAtTime(freq, t + idx * 0.12);
+        g.gain.setValueAtTime(0.15, t + idx * 0.12);
+        g.gain.exponentialRampToValueAtTime(0.001, t + idx * 0.12 + 0.2);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t + idx * 0.12); o.stop(t + idx * 0.12 + 0.2);
       });
     }
-  </script>
+  } catch(e) {}
+}
+
+const canvas = document.getElementById('confetti-canvas');
+const ctx2d = canvas.getContext('2d');
+let particles = [];
+let animId = null;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class ConfettiParticle {
+  constructor(x, y, isBurst = true) {
+    this.x = x; this.y = y;
+    this.isBurst = isBurst;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = isBurst ? (Math.random() * 12 + 6) : (Math.random() * 2 + 1);
+    this.vx = Math.cos(angle) * speed;
+    this.vy = isBurst ? (Math.sin(angle) * speed - 6) : (Math.random() * 3 + 1);
+    this.gravity = isBurst ? 0.35 : 0.04;
+    this.friction = 0.96;
+    this.size = Math.random() * 12 + 8;
+    this.color = ['#FF4E8E', '#FFB800', '#A855F7', '#00D2D3', '#FF6B6B', '#54A0FF', '#FD79A8'][Math.floor(Math.random() * 7)];
+    this.shape = ['circle', 'rect', 'star', 'heart'][Math.floor(Math.random() * 4)];
+    this.rotation = Math.random() * 360;
+    this.rotSpeed = (Math.random() - 0.5) * 10;
+    this.opacity = 1;
+    this.life = isBurst ? (Math.random() * 40 + 70) : (Math.random() * 100 + 120);
+    this.maxLife = this.life;
+  }
+  update() {
+    this.vx *= this.friction;
+    this.vy += this.gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rotation += this.rotSpeed;
+    this.life--;
+    this.opacity = Math.max(0, this.life / this.maxLife);
+  }
+  draw(c) {
+    c.save();
+    c.translate(this.x, this.y);
+    c.rotate((this.rotation * Math.PI) / 180);
+    c.globalAlpha = this.opacity;
+    c.fillStyle = this.color;
+    if (this.shape === 'circle') {
+      c.beginPath(); c.arc(0, 0, this.size / 2, 0, Math.PI * 2); c.fill();
+    } else if (this.shape === 'rect') {
+      c.fillRect(-this.size / 2, -this.size / 2, this.size, this.size * 0.6);
+    } else if (this.shape === 'heart') {
+      c.font = `${this.size * 1.3}px sans-serif`;
+      c.fillText('💖', -this.size / 2, this.size / 2);
+    } else {
+      c.font = `${this.size * 1.3}px sans-serif`;
+      c.fillText('✨', -this.size / 2, this.size / 2);
+    }
+    c.restore();
+  }
+}
+
+function fireMagnificentFireworks() {
+  particles = [];
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight * 0.45;
+  for (let i = 0; i < 90; i++) particles.push(new ConfettiParticle(cx, cy, true));
+  setTimeout(() => {
+    for (let i = 0; i < 60; i++) particles.push(new ConfettiParticle(cx - window.innerWidth * 0.28, cy, true));
+    for (let i = 0; i < 60; i++) particles.push(new ConfettiParticle(cx + window.innerWidth * 0.28, cy, true));
+  }, 220);
+  for (let i = 0; i < 70; i++) {
+    particles.push(new ConfettiParticle(Math.random() * window.innerWidth, -20 - Math.random() * 100, false));
+  }
+  if (!animId) animateConfetti();
+}
+
+function animateConfetti() {
+  ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0 && p.y < window.innerHeight + 50);
+  for (let i = 0; i < particles.length; i++) {
+    particles[i].update();
+    particles[i].draw(ctx2d);
+  }
+  if (particles.length > 0) {
+    animId = requestAnimationFrame(animateConfetti);
+  } else {
+    animId = null;
+    ctx2d.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
+
+const app = document.getElementById('app');
+let session = null;
+let timerInterval = null;
+let curAge = null;
+let curLevel = null;
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function drawQuiz(age, level) {
+  const list = QUIZ_DATABASE[age][level];
+  const item = list[Math.floor(Math.random() * list.length)];
+  const choices = shuffle([item.a, ...item.w]);
+  return { item, choices, ansIdx: choices.indexOf(item.a) };
+}
+
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function renderSelect() {
+  stopTimer();
+  curAge = null; curLevel = null;
+  app.innerHTML = `
+    <div class="screen">
+      <div class="topbar">
+        <h1 style="margin:0;font-family:var(--font-magic);font-size:clamp(22px,3.2vh,30px);color:var(--pink-main);">🎨 마법 미술 방탈출</h1>
+        <button class="sfx-toggle" id="sfx-btn" style="background:#FFF;border:2px solid #E2D6EB;color:var(--purple-dark);">${soundEnabled ? '🔊 소리 켬' : '🔈 조용히'}</button>
+      </div>
+      <div class="select-screen">
+        <div style="display:flex;flex-direction:column;gap:clamp(8px,1.5vh,14px);">
+          <h2 class="section-title"><span>💖 몇 살인가요?</span></h2>
+          <div class="cards-grid cards-age">
+            ${AGES.map((a, i) => `
+              <button class="jelly-card" data-act="sel-age" data-val="${i}">
+                <span class="j-icon">${a.icon}</span>
+                <span class="j-main">${a.name}</span>
+                <span class="j-sub">${a.sub}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:clamp(8px,1.5vh,14px);">
+          <h2 class="section-title"><span>🔮 방 난이도를 선택해봐요!</span></h2>
+          <div class="cards-grid cards-level">
+            ${LEVELS.map(l => `
+              <button class="jelly-card lv" data-act="sel-lv" data-val="${l.k}">
+                <span class="j-stars">${l.stars}</span>
+                <span class="j-main">${l.k}</span>
+                <span class="j-sub" style="color:var(--purple-dark);">${l.word}</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('sfx-btn').addEventListener('click', () => {
+    soundEnabled = !soundEnabled;
+    renderSelect();
+  });
+}
+
+function startQuiz(age, level) {
+  session = drawQuiz(age, level);
+  session.age = age;
+  session.level = level;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  stopTimer();
+  const q = session.item;
+  app.innerHTML = `
+    <div class="screen quiz-screen">
+      <div class="topbar">
+        <button class="back-btn" data-act="home">← 처음으로</button>
+        <div class="timer-wrap" id="timer-box">
+          <span class="timer-icon" id="timer-ico">⏳</span>
+          <div class="timer-bar-bg">
+            <div class="timer-bar-fill" id="timer-fill" style="width:100%;"></div>
+          </div>
+          <span class="timer-sec" id="timer-text">${TIME_LIMIT}</span>
+        </div>
+        <button class="hint-btn" data-act="toggle-hint">🪄 힌트 요정</button>
+      </div>
+
+      <div class="quiz-body">
+        <div class="question-card">
+          <div class="cat-mascot">
+            <span>🐱</span><span>루루의 비밀 단서냥!</span>
+          </div>
+          <p class="q-text">${q.q}</p>
+          ${q.v ? `<div class="q-visual">${q.v}</div>` : ''}
+          <div class="hint-bubble" id="hint-bubble">
+            <span style="font-size:24px;">💡</span>
+            <span>${q.hint}</span>
+          </div>
+        </div>
+
+        <div class="choices-box">
+          ${session.choices.map((c, i) => `
+            <button class="choice-btn" data-act="pick" data-idx="${i}">
+              <span class="choice-badge">${i + 1}</span>
+              <span>${c}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  let remain = TIME_LIMIT;
+  const fill = document.getElementById('timer-fill');
+  const text = document.getElementById('timer-text');
+  const box = document.getElementById('timer-box');
+  const ico = document.getElementById('timer-ico');
+
+  timerInterval = setInterval(() => {
+    remain--;
+    text.textContent = remain;
+    fill.style.width = `${(remain / TIME_LIMIT) * 100}%`;
+    if (remain <= 5) {
+      box.classList.add('danger');
+      ico.textContent = '💓';
+      playSound('tick');
+    }
+    if (remain <= 0) {
+      stopTimer();
+      renderResult(false, true);
+    }
+  }, 1000);
+}
+
+function renderResult(isSuccess, isTimeOut = false) {
+  stopTimer();
+  if (isSuccess) {
+    playSound('success');
+    fireMagnificentFireworks();
+  } else {
+    playSound('fail');
+  }
+
+  app.innerHTML = `
+    <div class="screen">
+      <div class="result-screen">
+        <div class="result-emblem">${isSuccess ? '👑' : (isTimeOut ? '⏰' : '🔒')}</div>
+        <h1 class="result-title">${isSuccess ? '방탈출 대성공! 축하해냥!' : '비밀 문이 굳게 잠겼어요!'}</h1>
+        <p class="result-desc">
+          ${isSuccess 
+            ? '마법 자물쇠를 모두 풀고 아름다운 출구를 열었어요! 정말 대단해요 ✨' 
+            : (isTimeOut ? '시간이 모두 지나버렸어요! 다시 힘을 내서 도전해볼까요?' : '아쉬워요! 조금만 더 신중하게 단서를 찾아보아요!')}
+        </p>
+        <div class="result-btns">
+          <button class="action-btn retry" data-act="retry">✨ 다시 도전하기</button>
+          <button class="action-btn home" data-act="home">🏠 다른 방 고르기</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+app.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-act]');
+  if (!btn) return;
+  const act = btn.dataset.act;
+
+  if (act === 'sel-age') {
+    playSound('pop');
+    curAge = parseInt(btn.dataset.val, 10);
+    app.querySelectorAll('[data-act="sel-age"]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    btn.setAttribute('aria-pressed', 'true');
+    if (curAge !== null && curLevel !== null) startQuiz(curAge, curLevel);
+  } else if (act === 'sel-lv') {
+    playSound('pop');
+    curLevel = btn.dataset.val;
+    app.querySelectorAll('[data-act="sel-lv"]').forEach(b => b.setAttribute('aria-pressed', 'false'));
+    btn.setAttribute('aria-pressed', 'true');
+    if (curAge !== null && curLevel !== null) startQuiz(curAge, curLevel);
+  } else if (act === 'toggle-hint') {
+    playSound('hint');
+    const bubble = document.getElementById('hint-bubble');
+    if (bubble) bubble.classList.toggle('open');
+  } else if (act === 'pick') {
+    const pickedIdx = parseInt(btn.dataset.idx, 10);
+    const isOk = (pickedIdx === session.ansIdx);
+    renderResult(isOk, false);
+  } else if (act === 'retry') {
+    playSound('pop');
+    if (curAge !== null && curLevel !== null) {
+      startQuiz(curAge, curLevel);
+    } else {
+      renderSelect();
+    }
+  } else if (act === 'home') {
+    playSound('pop');
+    renderSelect();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  const n = parseInt(e.key, 10);
+  if (n >= 1 && n <= 4) {
+    const choice = app.querySelector(`.choice-btn[data-idx="${n - 1}"]`);
+    if (choice) choice.click();
+  } else if (e.key === 'h' || e.key === 'H') {
+    const hintBtn = app.querySelector('[data-act="toggle-hint"]');
+    if (hintBtn) hintBtn.click();
+  }
+});
+
+renderSelect();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
 </body>
 </html>
