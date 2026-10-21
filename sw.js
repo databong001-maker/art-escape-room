@@ -1,5 +1,5 @@
 // 서비스 워커: 파일 갱신 시 VERSION 숫자를 변경합니다.
-const VERSION = 'v5';
+const VERSION = 'v6';
 const CACHE_NAME = 'art-escape-' + VERSION;
 const ASSETS_TO_CACHE = [
   './',
