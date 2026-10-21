@@ -1,5 +1,5 @@
-// 서비스 워커: 특수부호 발음 정제 버전 v15
-const VERSION = 'v15';
+// 서비스 워커: 성공/실패 TTS 제거 버전 v16
+const VERSION = 'v16';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 

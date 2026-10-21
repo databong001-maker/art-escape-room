@@ -1084,19 +1084,8 @@ function renderResult(isSuccess, isTimeOut = false) {
   if (isSuccess) {
     playSound('success');
     fireMagnificentFireworks();
-    setTimeout(() => {
-      // 물결표 없는 자연스러운 억양의 감탄사
-      speakLulu("와아아, 꺄앙! 정말 대단하다냥! 자물쇠가 딸깍 풀렸다옹! 방탈출 대성공이다냥! 냐호!", 'happy_win');
-    }, 180);
   } else {
     playSound('fail');
-    setTimeout(() => {
-      if (isTimeOut) {
-        speakLulu("꺄앙! 째깍째깍 시간이 다 가버렸다냥! 다시 도전해보자옹, 냐옹!", 'timeout');
-      } else {
-        speakLulu("냐앙, 아쉽다옹. 문이 덜컹 잠겼다냥! 루루랑 한 번 더 해보자냥, 응?", 'sad_fail');
-      }
-    }, 180);
   }
 
   app.innerHTML = `
