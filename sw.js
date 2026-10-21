@@ -1,5 +1,5 @@
-// 서비스 워커: 파일을 바꿔 올릴 때마다 VERSION 숫자를 올려 주세요.
-const VERSION = 'v6';
+// 서비스 워커: 최신 파일 강제 갱신용 버전 v7
+const VERSION = 'v7';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
@@ -15,7 +15,7 @@ self.addEventListener('activate', e => {
   );
 });
 
-// 같은 사이트 파일은 인터넷이 되면 최신 파일을, 안 되면 저장해 둔 파일을 보여 줍니다.
+// 최신 파일이 있으면 네트워크에서 먼저 받아오고 캐시를 덮어씁니다.
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
