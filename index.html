@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>마법 미술 방탈출 ✨</title>
 <meta name="theme-color" content="#FFD1E3">
-<meta name="description" content="루루와 함께하는 달콤 마법 미술 방탈출">
+<meta name="description" content="마법사 고양이 루루와 함께하는 달콤 미술 방탈출">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -15,7 +15,7 @@
 <style>
 :root {
   --bg-gradient: linear-gradient(135deg, #FFEBF2 0%, #FFF0F8 45%, #EBF4FF 100%);
-  --card-bg: rgba(255, 255, 255, 0.94);
+  --card-bg: rgba(255, 255, 255, 0.95);
   --pink-main: #FF4E8E;
   --pink-dark: #D82265;
   --pink-soft: #FFE4EE;
@@ -56,14 +56,14 @@ html, body {
 .screen {
   flex: 1;
   display: flex; flex-direction: column;
-  padding: clamp(10px, 2vh, 20px) clamp(14px, 2.8vw, 36px);
-  gap: clamp(10px, 1.8vh, 18px);
+  padding: clamp(10px, 2vh, 18px) clamp(12px, 2.6vw, 32px);
+  gap: clamp(8px, 1.6vh, 16px);
   height: 100%;
 }
 
 .topbar {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  flex: none; height: clamp(48px, 7vh, 60px);
+  flex: none; height: clamp(46px, 6.8vh, 58px);
 }
 .back-btn, .sfx-toggle, .hint-btn {
   border: none; cursor: pointer; outline: none;
@@ -190,13 +190,13 @@ html, body {
 
 .quiz-screen {
   flex: 1; display: flex; flex-direction: column;
-  gap: clamp(10px, 1.8vh, 16px);
+  gap: clamp(8px, 1.5vh, 14px);
   height: 100%;
 }
 .quiz-body {
   flex: 1; display: grid;
   grid-template-columns: 1.1fr 1fr;
-  gap: clamp(14px, 2.5vw, 30px);
+  gap: clamp(12px, 2.2vw, 26px);
   align-items: stretch; min-height: 0;
 }
 .question-card {
@@ -204,48 +204,123 @@ html, body {
   border-radius: clamp(20px, 3vh, 32px);
   border: 5px solid #FFF;
   box-shadow: 0 clamp(8px, 1.2vh, 14px) 0 #DEC4E0, 0 12px 30px rgba(150, 110, 180, 0.15);
-  padding: clamp(14px, 2.5vh, 28px);
-  display: flex; flex-direction: column; justify-content: center; align-items: center;
-  text-align: center; gap: clamp(8px, 1.5vh, 16px);
+  padding: clamp(12px, 2vh, 24px);
+  display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+  text-align: center; gap: clamp(6px, 1.2vh, 12px);
   position: relative; overflow: hidden;
 }
-.cat-mascot {
-  position: absolute; top: clamp(8px, 1.5vh, 16px); left: clamp(12px, 2vw, 22px);
-  display: flex; align-items: center; gap: 6px;
-  font-family: var(--font-magic); font-size: clamp(12px, 1.6vh, 15px); color: var(--pink-dark);
-  background: #FFF; padding: 4px 12px; border-radius: 999px;
-  border: 2px solid var(--pink-soft);
-  animation: luluFloat 2.5s ease-in-out infinite;
+
+/* ================= 귀여운 마법사 고양이 루루 캐릭터 스타일 ================= */
+.lulu-character-stage {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%; flex: none;
 }
-@keyframes luluFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+.lulu-svg-wrap {
+  width: clamp(70px, 11vh, 96px); height: clamp(70px, 11vh, 96px);
+  position: relative; filter: drop-shadow(0 4px 8px rgba(143, 85, 255, 0.25));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.lulu-speech {
+  background: #FFF; border: 2.5px solid var(--pink-main);
+  border-radius: 16px; padding: 6px 14px;
+  font-family: var(--font-magic); font-size: clamp(13px, 1.8vh, 16px); color: var(--pink-dark);
+  box-shadow: 0 4px 10px rgba(255, 78, 142, 0.15);
+  position: relative; max-width: 260px;
+}
+.lulu-speech::before {
+  content: ''; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+  border-width: 6px 8px 6px 0; border-style: solid;
+  border-color: transparent var(--pink-main) transparent transparent;
+}
+
+/* 루루 애니메이션: 평소 (고민 및 살랑살랑) */
+.lulu-svg-wrap.normal { animation: luluBreathe 3s ease-in-out infinite; }
+.lulu-svg-wrap.normal .cat-ear-l { transform-origin: 32px 38px; animation: earTwitch 3.2s infinite; }
+.lulu-svg-wrap.normal .cat-tail { transform-origin: 22px 76px; animation: tailWag 2s ease-in-out infinite; }
+.lulu-svg-wrap.normal .cat-wand { transform-origin: 75px 65px; animation: wandIdle 2.5s ease-in-out infinite; }
+
+/* 루루 애니메이션: 힌트 요정 마법 발동! */
+.lulu-svg-wrap.hinting { animation: luluCast 0.6s ease-in-out infinite alternate; }
+.lulu-svg-wrap.hinting .cat-wand { transform-origin: 75px 65px; animation: wandWave 0.35s ease-in-out infinite alternate; }
+.lulu-svg-wrap.hinting .magic-stars { display: block !important; animation: sparkleSpin 0.7s linear infinite; }
+.lulu-svg-wrap.hinting .cat-eye-open { display: none; }
+.lulu-svg-wrap.hinting .cat-eye-happy { display: block !important; }
+
+/* 루루 애니메이션: 5초 전 위기 (땀 뻘뻘, 허둥지둥) */
+.lulu-svg-wrap.panic { animation: luluPanic 0.25s infinite; }
+.lulu-svg-wrap.panic .cat-sweat { display: block !important; animation: sweatDrop 0.6s infinite; }
+
+/* 루루 애니메이션: 방탈출 성공 댄스 */
+.lulu-svg-wrap.happy { animation: luluVictory 0.5s ease-in-out infinite alternate; }
+.lulu-svg-wrap.happy .cat-crown { display: block !important; }
+.lulu-svg-wrap.happy .cat-eye-open { display: none; }
+.lulu-svg-wrap.happy .cat-eye-happy { display: block !important; }
+
+@keyframes luluBreathe {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.02); }
+}
+@keyframes earTwitch {
+  0%, 85%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(-8deg); }
+  95% { transform: rotate(4deg); }
+}
+@keyframes tailWag {
+  0%, 100% { transform: rotate(-10deg); }
+  50% { transform: rotate(18deg); }
+}
+@keyframes wandIdle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-12deg); }
+}
+@keyframes wandWave {
+  0% { transform: rotate(-35deg) scale(1.1); }
+  100% { transform: rotate(25deg) scale(1.3); }
+}
+@keyframes sparkleSpin {
+  0% { transform: rotate(0deg) scale(0.8); opacity: 0.6; }
+  50% { transform: rotate(180deg) scale(1.2); opacity: 1; }
+  100% { transform: rotate(360deg) scale(0.8); opacity: 0.6; }
+}
+@keyframes luluPanic {
+  0% { transform: translate(-2px, 1px) rotate(-3deg); }
+  50% { transform: translate(2px, -1px) rotate(3deg); }
+  100% { transform: translate(-2px, 1px) rotate(-3deg); }
+}
+@keyframes sweatDrop {
+  0% { opacity: 0; transform: translateY(-4px); }
+  50% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(8px); }
+}
+@keyframes luluVictory {
+  0% { transform: translateY(0) scale(1) rotate(-4deg); }
+  100% { transform: translateY(-16px) scale(1.08) rotate(4deg); }
 }
 
 .q-text {
   font-family: var(--font-text); font-weight: 900;
-  font-size: clamp(20px, 3.4vh, 34px); line-height: 1.35;
+  font-size: clamp(18px, 3vh, 30px); line-height: 1.35;
   color: var(--text-main); margin: 0;
   word-break: keep-all; text-wrap: balance;
 }
 .q-visual {
   font-family: var(--font-magic);
-  font-size: clamp(26px, 4.5vh, 46px);
+  font-size: clamp(24px, 4vh, 42px);
   background: linear-gradient(135deg, #FFF3F8, #F3EBFF);
   border: 3px dashed var(--pink-main);
-  padding: clamp(6px, 1.2vh, 14px) clamp(16px, 2.5vw, 32px);
-  border-radius: 20px; color: var(--pink-dark);
+  padding: clamp(4px, 1vh, 10px) clamp(14px, 2.2vw, 28px);
+  border-radius: 18px; color: var(--pink-dark);
 }
 
 .hint-bubble {
-  width: 90%;
+  width: 95%;
   background: #FFFDE8;
   border: 3px solid #FFC837;
   box-shadow: 0 4px 12px rgba(255, 200, 55, 0.25);
-  border-radius: 18px;
-  padding: clamp(8px, 1.4vh, 14px) 16px;
-  display: none; align-items: center; gap: 10px;
-  font-size: clamp(14px, 2vh, 18px); font-weight: 700; color: #734B00;
+  border-radius: 16px;
+  padding: clamp(6px, 1.2vh, 12px) 14px;
+  display: none; align-items: center; gap: 8px;
+  font-size: clamp(13px, 1.8vh, 16px); font-weight: 700; color: #734B00;
   animation: popBounce .35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 .hint-bubble.open { display: flex; }
@@ -266,53 +341,43 @@ html, body {
   cursor: pointer; outline: none;
   padding: 0 clamp(14px, 2vw, 24px);
   display: flex; align-items: center; gap: clamp(10px, 1.5vw, 18px);
-  font-size: clamp(17px, 2.6vh, 26px); font-weight: 700; color: var(--text-main);
+  font-size: clamp(17px, 2.5vh, 25px); font-weight: 700; color: var(--text-main);
   transition: transform .12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .12s, background .12s;
   text-align: left;
 }
-.choice-btn:hover {
-  background: #FFF8FC;
-  transform: translateY(-2px);
-}
-.choice-btn:active {
-  transform: translateY(3px);
-  box-shadow: 0 2px 0 #DEC4E0;
-}
+.choice-btn:hover { background: #FFF8FC; transform: translateY(-2px); }
+.choice-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #DEC4E0; }
 .choice-badge {
-  width: clamp(30px, 4.2vh, 42px); height: clamp(30px, 4.2vh, 42px);
+  width: clamp(30px, 4.2vh, 40px); height: clamp(30px, 4.2vh, 40px);
   background: var(--pink-soft); color: var(--pink-main);
   border-radius: 50%; display: grid; place-items: center;
-  font-family: var(--font-magic); font-size: clamp(15px, 2.2vh, 22px);
+  font-family: var(--font-magic); font-size: clamp(15px, 2.2vh, 20px);
   flex: none;
 }
 
 .result-screen {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center; text-align: center;
-  gap: clamp(12px, 2.5vh, 26px);
+  gap: clamp(10px, 2vh, 22px);
   max-width: 800px; margin: 0 auto;
-}
-.result-emblem {
-  font-size: clamp(80px, 15vh, 140px); line-height: 1;
-  filter: drop-shadow(0 10px 16px rgba(0,0,0,0.15));
 }
 .result-title {
   font-family: var(--font-magic);
-  font-size: clamp(34px, 6vh, 60px);
+  font-size: clamp(32px, 5.5vh, 54px);
   margin: 0; color: var(--pink-dark);
   text-shadow: 0 3px 0 #FFF;
 }
 .result-desc {
-  font-size: clamp(17px, 2.5vh, 25px); font-weight: 700;
+  font-size: clamp(16px, 2.3vh, 22px); font-weight: 700;
   margin: 0; color: var(--text-sub);
 }
 .result-btns {
-  display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap; justify-content: center;
+  display: flex; gap: 16px; margin-top: 6px; flex-wrap: wrap; justify-content: center;
 }
 .action-btn {
   font-family: var(--font-magic);
-  font-size: clamp(20px, 2.8vh, 28px);
-  padding: clamp(12px, 2vh, 18px) clamp(28px, 4vw, 44px);
+  font-size: clamp(19px, 2.6vh, 26px);
+  padding: clamp(12px, 1.8vh, 16px) clamp(26px, 3.6vw, 40px);
   border-radius: 999px; border: none; cursor: pointer; outline: none;
   transition: transform .12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow .12s;
 }
@@ -333,10 +398,10 @@ html, body {
 }
 
 @media (max-aspect-ratio: 1/1) {
-  .quiz-body { grid-template-columns: 1fr; grid-template-rows: 1fr 1.3fr; gap: 10px; }
+  .quiz-body { grid-template-columns: 1fr; grid-template-rows: 1.1fr 1.3fr; gap: 10px; }
   .cards-age { grid-template-columns: repeat(2, 1fr); }
   .cards-level { grid-template-columns: repeat(3, 1fr); }
-  .cat-mascot { position: static; margin-bottom: -6px; }
+  .lulu-character-stage { justify-content: center; }
 }
 </style>
 </head>
@@ -667,6 +732,134 @@ function animateConfetti() {
   }
 }
 
+function getLuluSvg(mode = 'normal') {
+  return `
+  <svg viewBox="0 0 100 100" class="lulu-svg" width="100%" height="100%" style="overflow:visible;">
+    <defs>
+      <linearGradient id="luluHatGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#B27BFF"/>
+        <stop offset="100%" stop-color="#7B3FE4"/>
+      </linearGradient>
+      <linearGradient id="luluCapeGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FF75AC"/>
+        <stop offset="100%" stop-color="#E63980"/>
+      </linearGradient>
+      <linearGradient id="luluStarGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#FFF385"/>
+        <stop offset="100%" stop-color="#FFAC1C"/>
+      </linearGradient>
+      <radialGradient id="blushGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#FF5B84" stop-opacity="0.75"/>
+        <stop offset="100%" stop-color="#FF5B84" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <!-- 통통하고 보들보들한 꼬리 -->
+    <path class="cat-tail" d="M22 78 C8 78 8 62 16 58 C22 55 26 65 24 74" fill="none" stroke="#FFCEB8" stroke-width="7" stroke-linecap="round"/>
+    <path class="cat-tail" d="M16 58 C18 55 22 57 23 60" fill="none" stroke="#FFAE8C" stroke-width="6" stroke-linecap="round"/>
+
+    <!-- 몸통 (모찌 체형) -->
+    <ellipse cx="50" cy="76" rx="25" ry="18" fill="#FFF7F2"/>
+    <ellipse cx="50" cy="78" rx="17" ry="12" fill="#FFEAE0"/>
+
+    <!-- 마법 케이프 (핑크빛 리본 망토) -->
+    <path d="M28 66 C42 75 58 75 72 66 L68 83 C50 89 50 89 32 83 Z" fill="url(#luluCapeGrad)"/>
+    <circle cx="50" cy="69" r="4" fill="#FFDC49" stroke="#FFF" stroke-width="1.2"/>
+
+    <!-- 발 (솜방망이) -->
+    <ellipse cx="38" cy="88" rx="6" ry="4" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.2"/>
+    <ellipse cx="62" cy="88" rx="6" ry="4" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.2"/>
+
+    <!-- 귀 (양쪽) -->
+    <path class="cat-ear-l" d="M26 38 L34 16 C39 26 42 32 44 36 Z" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.5"/>
+    <path class="cat-ear-l" d="M29 35 L35 22 C38 28 40 32 41 34 Z" fill="#FFABC1"/>
+    <path class="cat-ear-r" d="M74 38 L66 16 C61 26 58 32 56 36 Z" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.5"/>
+    <path class="cat-ear-r" d="M71 35 L65 22 C62 28 60 32 59 34 Z" fill="#FFABC1"/>
+
+    <!-- 동글동글 사랑스러운 얼굴 -->
+    <ellipse cx="50" cy="48" rx="26" ry="23" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.5"/>
+
+    <!-- 핑크 볼터치 (사랑스러움 강조) -->
+    <ellipse cx="33" cy="55" rx="6.5" ry="4" fill="url(#blushGlow)"/>
+    <ellipse cx="67" cy="55" rx="6.5" ry="4" fill="url(#blushGlow)"/>
+    <text x="31" y="56" font-size="6" fill="#FF4E8E" opacity="0.8">♥</text>
+    <text x="65" y="56" font-size="6" fill="#FF4E8E" opacity="0.8">♥</text>
+
+    <!-- [눈 1] 평소 만화 눈 (초롱초롱 보석 하이라이트) -->
+    <g class="cat-eye-open">
+      <ellipse cx="38" cy="47" rx="4.5" ry="5.8" fill="#321D38"/>
+      <ellipse cx="62" cy="47" rx="4.5" ry="5.8" fill="#321D38"/>
+      <!-- 반짝이 하이라이트 -->
+      <circle cx="39.5" cy="45" r="2.2" fill="#FFFFFF"/>
+      <circle cx="36.5" cy="49.5" r="1.1" fill="#FFFFFF"/>
+      <circle cx="63.5" cy="45" r="2.2" fill="#FFFFFF"/>
+      <circle cx="60.5" cy="49.5" r="1.1" fill="#FFFFFF"/>
+      <!-- 속눈썹 -->
+      <path d="M34 43 Q38 40 42 43" fill="none" stroke="#321D38" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M58 43 Q62 40 66 43" fill="none" stroke="#321D38" stroke-width="1.5" stroke-linecap="round"/>
+    </g>
+
+    <!-- [눈 2] 마법/기쁠 때 반달 웃음 눈 -->
+    <g class="cat-eye-happy" style="display:none;">
+      <path d="M33 48 Q38 41 43 48" fill="none" stroke="#321D38" stroke-width="3" stroke-linecap="round"/>
+      <path d="M57 48 Q62 41 67 48" fill="none" stroke="#321D38" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- [눈 3] 위기/놀람 동공지진 눈 -->
+    <g class="cat-eye-panic" style="display:none;">
+      <circle cx="38" cy="47" r="5" fill="#FFF" stroke="#321D38" stroke-width="1.8"/>
+      <circle cx="38" cy="47" r="2.2" fill="#321D38"/>
+      <circle cx="62" cy="47" r="5" fill="#FFF" stroke="#321D38" stroke-width="1.8"/>
+      <circle cx="62" cy="47" r="2.2" fill="#321D38"/>
+      <path d="M33 40 L42 42" stroke="#321D38" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M67 40 L58 42" stroke="#321D38" stroke-width="1.6" stroke-linecap="round"/>
+    </g>
+
+    <!-- 핑크빛 앙증맞은 코 & 토끼 고양이 입 (ω) -->
+    <polygon points="48.5,52 51.5,52 50,54" fill="#FF5B84"/>
+    <path d="M46 54.5 Q48 57.5 50 55 Q52 57.5 54 54.5" fill="none" stroke="#321D38" stroke-width="1.8" stroke-linecap="round"/>
+
+    <!-- 볼 수염 -->
+    <line x1="22" y1="52" x2="16" y2="51" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="22" y1="55" x2="15" y2="56" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="78" y1="52" x2="84" y2="51" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="78" y1="55" x2="85" y2="56" stroke="#DFB9A5" stroke-width="1.5" stroke-linecap="round"/>
+
+    <!-- 마법사 고깔 모자 (리본 + 별 퐁퐁) -->
+    <path d="M28 29 Q50 35 72 29 Q63 12 68 2 Q47 10 28 29 Z" fill="url(#luluHatGrad)"/>
+    <path d="M29 30 Q50 36 71 30" stroke="#FFDC49" stroke-width="3" fill="none"/>
+    <circle cx="68" cy="2" r="4.5" fill="#FFF385" stroke="#FFAE00" stroke-width="1.2"/>
+
+    <!-- 황금 왕관 (방탈출 성공 시) -->
+    <g class="cat-crown" style="display:none;">
+      <polygon points="34,16 41,2 50,11 59,2 66,16" fill="#FFB800" stroke="#FFF" stroke-width="1.8"/>
+      <circle cx="41" cy="3" r="2.5" fill="#FF2E7E"/>
+      <circle cx="50" cy="11" r="2.5" fill="#8F55FF"/>
+      <circle cx="59" cy="3" r="2.5" fill="#00D2D3"/>
+    </g>
+
+    <!-- 땀방울 (위기 시) -->
+    <g class="cat-sweat" style="display:none;">
+      <path d="M74 38 Q78 30 82 38 Q82 43 78 43 Q74 43 74 38 Z" fill="#48CAE4"/>
+    </g>
+
+    <!-- 마법봉을 쥔 솜방망이 손 -->
+    <g class="cat-wand">
+      <ellipse cx="70" cy="67" rx="5" ry="4.5" fill="#FFF7F2" stroke="#EAC7B4" stroke-width="1.2"/>
+      <line x1="70" y1="67" x2="87" y2="44" stroke="#D89A12" stroke-width="3" stroke-linecap="round"/>
+      <polygon points="87,39 89,44 94,45 90,49 91,54 87,51 83,54 84,49 80,45 85,44" fill="url(#luluStarGrad)" stroke="#FF8A00" stroke-width="1"/>
+      <circle cx="87" cy="46" r="2.2" fill="#FFF"/>
+    </g>
+
+    <!-- 마법 스파크 파티클 (힌트 시) -->
+    <g class="magic-stars" style="display:none;">
+      <text x="82" y="34" font-size="13">✨</text>
+      <text x="69" y="30" font-size="11">⭐</text>
+      <text x="88" y="60" font-size="12">💖</text>
+    </g>
+  </svg>`;
+}
+
 const app = document.getElementById('app');
 let session = null;
 let timerInterval = null;
@@ -763,13 +956,19 @@ function renderQuiz() {
 
       <div class="quiz-body">
         <div class="question-card">
-          <div class="cat-mascot">
-            <span>🐱</span><span>루루의 비밀 단서냥!</span>
+          <!-- 살아 움직이는 고양이 마법사 루루 무대 -->
+          <div class="lulu-character-stage">
+            <div class="lulu-svg-wrap normal" id="lulu-mascot">
+              ${getLuluSvg('normal')}
+            </div>
+            <div class="lulu-speech" id="lulu-speech">비밀 암호를 함께 풀어보자냥! ✨</div>
           </div>
+
           <p class="q-text">${q.q}</p>
           ${q.v ? `<div class="q-visual">${q.v}</div>` : ''}
+
           <div class="hint-bubble" id="hint-bubble">
-            <span style="font-size:24px;">💡</span>
+            <span style="font-size:22px;">💡</span>
             <span>${q.hint}</span>
           </div>
         </div>
@@ -791,14 +990,22 @@ function renderQuiz() {
   const text = document.getElementById('timer-text');
   const box = document.getElementById('timer-box');
   const ico = document.getElementById('timer-ico');
+  const lulu = document.getElementById('lulu-mascot');
+  const speech = document.getElementById('lulu-speech');
 
   timerInterval = setInterval(() => {
     remain--;
     text.textContent = remain;
     fill.style.width = `${(remain / TIME_LIMIT) * 100}%`;
+
+    // 5초 이하 위기 애니메이션
     if (remain <= 5) {
       box.classList.add('danger');
       ico.textContent = '💓';
+      if (lulu) {
+        lulu.className = 'lulu-svg-wrap panic';
+        speech.textContent = '으앙, 시간이 얼마 안 남았다냥! 💦';
+      }
       playSound('tick');
     }
     if (remain <= 0) {
@@ -820,12 +1027,14 @@ function renderResult(isSuccess, isTimeOut = false) {
   app.innerHTML = `
     <div class="screen">
       <div class="result-screen">
-        <div class="result-emblem">${isSuccess ? '👑' : (isTimeOut ? '⏰' : '🔒')}</div>
-        <h1 class="result-title">${isSuccess ? '방탈출 대성공! 축하해냥!' : '비밀 문이 굳게 잠겼어요!'}</h1>
+        <div class="lulu-svg-wrap ${isSuccess ? 'happy' : 'panic'}" style="width:110px;height:110px;">
+          ${getLuluSvg(isSuccess ? 'happy' : 'panic')}
+        </div>
+        <h1 class="result-title">${isSuccess ? '방탈출 대성공! 축하해냥! 👑' : '비밀 문이 굳게 잠겼어요! 🔒'}</h1>
         <p class="result-desc">
           ${isSuccess 
-            ? '마법 자물쇠를 모두 풀고 아름다운 출구를 열었어요! 정말 대단해요 ✨' 
-            : (isTimeOut ? '시간이 모두 지나버렸어요! 다시 힘을 내서 도전해볼까요?' : '아쉬워요! 조금만 더 신중하게 단서를 찾아보아요!')}
+            ? '루루와 함께 마법 자물쇠를 모두 풀었어요! 정말 최고예요 ✨' 
+            : (isTimeOut ? '시간이 모두 지나버렸다냥! 다시 힘을 내서 도전해볼까요?' : '아쉬워요! 조금만 더 신중하게 단서를 찾아보아요!')}
         </p>
         <div class="result-btns">
           <button class="action-btn retry" data-act="retry">✨ 다시 도전하기</button>
@@ -856,7 +1065,20 @@ app.addEventListener('click', (e) => {
   } else if (act === 'toggle-hint') {
     playSound('hint');
     const bubble = document.getElementById('hint-bubble');
-    if (bubble) bubble.classList.toggle('open');
+    const lulu = document.getElementById('lulu-mascot');
+    const speech = document.getElementById('lulu-speech');
+    if (bubble) {
+      const isOpen = bubble.classList.toggle('open');
+      if (lulu) {
+        if (isOpen) {
+          lulu.className = 'lulu-svg-wrap hinting';
+          speech.textContent = '루루의 마법 힌트를 줄게냥! 🪄';
+        } else {
+          lulu.className = 'lulu-svg-wrap normal';
+          speech.textContent = '비밀 암호를 함께 풀어보자냥! ✨';
+        }
+      }
+    }
   } else if (act === 'pick') {
     const pickedIdx = parseInt(btn.dataset.idx, 10);
     const isOk = (pickedIdx === session.ansIdx);

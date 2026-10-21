@@ -1,5 +1,5 @@
-// 서비스 워커: 최신 파일 강제 갱신용 버전 v7
-const VERSION = 'v7';
+// 서비스 워커: 최신 귀여운 모찌 루루 캐릭터 적용 버전 v9
+const VERSION = 'v9';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
