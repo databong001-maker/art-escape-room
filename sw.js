@@ -1,5 +1,5 @@
-// 서비스 워커: 덱 순환 중복 방지 & 초쉬운 힌트 탑재 버전 v13
-const VERSION = 'v13';
+// 서비스 워커: 초귀염 고양이 보이스 튜닝 버전 v14
+const VERSION = 'v14';
 const CACHE = 'art-escape-' + VERSION;
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png'];
 
@@ -15,7 +15,7 @@ self.addEventListener('activate', e => {
   );
 });
 
-// 최신 파일이 있으면 네트워크에서 먼저 받아오고 캐시를 덮어씁니다.
+// 최신 파일이 있으면 네트워크에서 먼저 받아오고 캐시를 갱신합니다.
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;

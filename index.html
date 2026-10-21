@@ -10,7 +10,7 @@
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500;700;900&display=swap">
 <style>
 :root {
@@ -378,7 +378,6 @@ html, body {
 <main id="app"></main>
 
 <script>
-/* 132개 전 문항 (기존 미술 120개 + 할로윈 단서 암호 12개) & 아주 쉽고 직관적인 힌트 */
 const QUIZ_DATABASE = [
   // [0] 5–7세 (유아)
   {
@@ -586,37 +585,54 @@ function getAudioCtx() {
   return audioCtx;
 }
 
-function getBestKoreanVoice() {
+function getCuteKoreanVoice() {
   if (!('speechSynthesis' in window)) return null;
   const voices = window.speechSynthesis.getVoices();
   const koVoices = voices.filter(v => v.lang.startsWith('ko'));
-  return koVoices.find(v => /yuna|natural|google|sora|child|female/i.test(v.name)) || koVoices[0] || null;
+  // 안드로이드·iOS·윈도우·맥 등에서 가장 맑고 앙증맞은 여성/자연스러운 음성 최우선 선택
+  return koVoices.find(v => /yuna|sora|natural|female|child|google 한국의|seoyeon|ko-kr-x/i.test(v.name)) 
+      || koVoices.find(v => /female|woman/i.test(v.name)) 
+      || koVoices[0] 
+      || null;
 }
 
 if ('speechSynthesis' in window) {
-  window.speechSynthesis.onvoiceschanged = () => getBestKoreanVoice();
+  window.speechSynthesis.onvoiceschanged = () => getCuteKoreanVoice();
 }
 
+/* 🐾 감정별 극대화된 귀여운 아기 마법 고양이 TTS 엔진 */
 function speakLulu(text, mode = 'question') {
   if (!soundEnabled || !('speechSynthesis' in window)) return;
   try {
     window.speechSynthesis.cancel();
-    const cleanText = text.replace(/<[^>]*>/g, '').replace(/[🔴🟡🔵🟢🟣🟠⚫⚪🐘🌸💡✨🪄🐱]/g, '');
+    // 특수문자 및 기호 정제 (자연스러운 쉼표 및 느낌표 리듬 보존)
+    const cleanText = text.replace(/<[^>]*>/g, '').replace(/[🔴🟡🔵🟢🟣🟠⚫⚪🐘🌸💡✨🪄🐱👑🔒]/g, '');
     const utter = new SpeechSynthesisUtterance(cleanText);
     utter.lang = 'ko-KR';
 
-    const selectedVoice = getBestKoreanVoice();
+    const selectedVoice = getCuteKoreanVoice();
     if (selectedVoice) utter.voice = selectedVoice;
 
-    if (mode === 'comic') {
-      utter.pitch = 1.58; 
+    if (mode === 'happy_win') {
+      // 🎉 성공 시: 초고음 앙증맞은 환호 톤 (피치 1.82, 속도는 살짝 느리게 또박또박 0.88)
+      utter.pitch = 1.82;
+      utter.rate = 0.88;
+    } else if (mode === 'sad_fail') {
+      // 😿 오답 시: 시무룩하면서도 귀엽게 칭얼거리는 아기 고양이 톤 (피치 1.70, 속도 0.86)
+      utter.pitch = 1.70;
+      utter.rate = 0.86;
+    } else if (mode === 'timeout') {
+      // ⏰ 시간초과 시: 깜짝 놀라 허둥지둥하는 톤 (피치 1.85, 속도 0.98)
+      utter.pitch = 1.85;
+      utter.rate = 0.98;
+    } else if (mode === 'hint') {
+      // 🪄 힌트 안내 톤
+      utter.pitch = 1.65;
       utter.rate = 0.92;
-    } else if (mode === 'panic') {
-      utter.pitch = 1.62;
-      utter.rate = 1.08;
     } else {
-      utter.pitch = 1.25;
-      utter.rate = 1.0;
+      // 📝 기본 질문 낭독: 또박또박 밝고 맑은 어린이 톤
+      utter.pitch = 1.35;
+      utter.rate = 0.98;
     }
 
     window.speechSynthesis.speak(utter);
@@ -887,8 +903,6 @@ function shuffle(arr) {
   return a;
 }
 
-/* ================= 🎴 중복 방지 카드 덱(Deck) 순환 시스템 ================= */
-// 각 연령·난이도별로 인덱스 더미(덱)를 유지하여, 모든 문제를 다 풀 때까지 중복 없이 새로운 문제가 출제됩니다.
 const quizDecks = {};
 const lastPickedIndices = {};
 
@@ -896,10 +910,8 @@ function drawQuiz(age, level) {
   const key = `${age}_${level}`;
   const list = QUIZ_DATABASE[age][level];
 
-  // 더미가 비어있으면 전체 문제를 다시 무작위로 섞어서 채웁니다.
   if (!quizDecks[key] || quizDecks[key].length === 0) {
     quizDecks[key] = shuffle([...Array(list.length).keys()]);
-    // 바로 직전에 푼 문제와 새 덱의 첫 문제가 같으면 순서를 바꿔줍니다.
     if (quizDecks[key].length > 1 && quizDecks[key][quizDecks[key].length - 1] === lastPickedIndices[key]) {
       quizDecks[key].unshift(quizDecks[key].pop());
     }
@@ -909,7 +921,6 @@ function drawQuiz(age, level) {
   lastPickedIndices[key] = pickedIndex;
   const item = list[pickedIndex];
 
-  // 보기(선택지) 섞기
   const choices = shuffle([item.a, ...item.w]);
   return { item, choices, ansIdx: choices.indexOf(item.a) };
 }
@@ -1042,7 +1053,7 @@ function renderQuiz() {
         lulu.className = 'lulu-svg-wrap panic';
         speech.textContent = '으앙, 시간이 얼마 안 남았다냥! 💦';
       }
-      speakLulu("으... 앙...! 시간이 얼마 안 남았다냥! 서둘러라옹!", 'panic');
+      speakLulu("꺄앙! 시간이 얼마 안 남았다냥! 어서 골라라옹~!", 'timeout');
       playSound('tick');
     } else if (remain < 5 && remain > 0) {
       playSound('tick');
@@ -1061,15 +1072,18 @@ function renderResult(isSuccess, isTimeOut = false) {
     playSound('success');
     fireMagnificentFireworks();
     setTimeout(() => {
-      speakLulu("와... 아...! 대단하다냥! 자물쇠가 풀렸다옹! 방탈출 대성공이다냥~!", 'comic');
+      // 👑 초귀염 승리 대사 (초고음 + 사랑스러운 감탄사)
+      speakLulu("와아아~! 꺄앙! 대~단하다냥! 자물쇠가 딸깍 풀렸다옹~! 방탈출 대성공이다냥! 냐호~!", 'happy_win');
     }, 180);
   } else {
     playSound('fail');
     setTimeout(() => {
       if (isTimeOut) {
-        speakLulu("으... 앙...! 땡! 시간이 다 끝나버렸다냥... 다시 한번 도전해보자옹!", 'comic');
+        // ⏰ 시간초과 귀여운 아쉬움 대사
+        speakLulu("꺄앙! 째깍째깍 시간이 다 가버렸다냥! 다시 도전해보자옹, 냐옹!", 'timeout');
       } else {
-        speakLulu("어... 라...? 틀려버렸다냥... 조금만 더 힘내서 다시 풀어보자옹!", 'comic');
+        // 😿 오답 시 사랑스럽고 시무룩한 고양이 대사
+        speakLulu("냐앙... 아쉽다옹... 문이 덜컹 잠겼다냥! 루루랑 한 번 더 해보자냥, 응?", 'sad_fail');
       }
     }, 180);
   }
@@ -1099,7 +1113,7 @@ app.addEventListener('click', (e) => {
   const luluClick = e.target.closest('#lulu-mascot');
   if (luluClick && session && session.item) {
     playSound('pop');
-    speakLulu(session.item.q);
+    speakLulu(session.item.q, 'question');
     return;
   }
 
@@ -1130,7 +1144,7 @@ app.addEventListener('click', (e) => {
         if (isOpen) {
           lulu.className = 'lulu-svg-wrap hinting';
           speech.textContent = '루루의 마법 힌트를 줄게냥! 🪄';
-          speakLulu("냐옹~! 힌트를 알려주겠다옹! " + session.item.hint, 'comic');
+          speakLulu("냐옹~! 루루가 힌트를 알려주겠다옹! " + session.item.hint, 'hint');
         } else {
           lulu.className = 'lulu-svg-wrap normal';
           speech.textContent = '비밀 암호를 함께 풀어보자냥! ✨';
